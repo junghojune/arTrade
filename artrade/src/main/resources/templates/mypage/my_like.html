@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<!--      todo: th:activeTab='수정' -->
+      layout:decorate="~{fragments/mypage.html}" th:with="activeTab='index', title='Welcome!'">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style>
+        th, td {
+            margin: auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="mypage-content">
+    <div class="mypage-like">
+        <div class="container m-3">
+            <div>
+                <h2>관심 작품</h2>
+
+                <!--                네비게이션 -->
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">전체 보기</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">경매 중</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">판매 완료</a>
+                    </li>
+                </ul>
+
+                <!--            테이블 시작 -->
+                <table class="table table-sm">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th></th>
+                        <th>작품 정보</th>
+                        <th>작품 상태</th>
+                        <th>
+                            <a>선택</a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            <img src="https://picsum.photos/70/70.jpg">
+                        </td>
+                        <td>
+                            <div>
+                                <b>A</b><br/><small>2021.08.11<br/>
+                                <i class="fas fa-heart"></i> 20
+                                <i class="fas fa-comment"></i> 3</small>
+                            </div>
+                        </td>
+                        <td>경매 중</td>
+                        <td>
+                            <input type="checkbox" class="form-check-input" value=""/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>
+                            <img src="https://picsum.photos/70/70?random=1.jpg">
+                        </td>
+                        <td>
+                            <div>
+                                <b>A</b><br/><small>2021.08.11<br/>
+                                <i class="fas fa-heart"></i> 20
+                                <i class="fas fa-comment"></i> 3</small>
+                            </div>
+                        </td>
+                        <td>판매 완료</td>
+                        <td>
+                            <input type="checkbox" class="form-check-input" value=""/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <button class="btn btn-danger float-right">삭제하기</button>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+</div>
+</div>
+</body>
+</html>

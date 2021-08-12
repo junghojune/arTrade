@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/common_layout.html}" th:with="activeTab='index', title='Welcome!'">
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+        a p{
+            font-family: 'Nanum Gothic';
+            font-size: 10px;
+        }
+        .menu-name{
+            font-family: 'Open Sans Condensed';
+            font-size: 20px;
+        }
+        .card {
+            border: none;
+        }
+
+        .card:hover {
+            transform: scale(1.01);
+            transition: all 0.5s ease-in-out;
+            cursor: pointer;
+            z-index: 1;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @media screen and (max-width: 768px){
+            .card:hover{
+                transform: none;
+                transition: none;
+                cursor: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+
+    <!-- 네비게이션 바 (로그인, 마이페이지, 찜, 검색 등등)-->
+    <div id="scroll-1">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto" style="font-size: 12px">
+                <li class="nav-item" th:classappend="${activeTab == 'login'} ? active">
+                    <form class="form-inline" th:action="@{/login}">
+                        <button class="nav-link btn btn-sm" style="border:1px solid grey"
+                                type="submit" sec:authorize="!isAuthenticated()">로그인하기</button>
+                    </form>
+                </li>
+                <a>&emsp;&emsp;&emsp;</a>
+<!--                    로그인 했을 때, '닉네임(작가님 or 회원님 )' -->
+<!--                <li class="nav-item" sec:authorize="isAuthenticated()">-->
+<!--                        <a sec:authentication="name">${#authentication?.name}&nbsp;(${#authentication?.type}님)</a>-->
+<!--                </li>-->
+                <li class="nav-item" th:classappend="${activeTab == 'mypage'} ? active"
+                    sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{'/mypage/' + ${#authentication?.name}}" sec:authentication="name">마이페이지</a>
+                </li>
+                <li class="nav-item" th:classappend="${activeTab == 'join'} ? active"
+                    sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/signup}" sec:authorize="!isAuthenticated()">회원가입</a>
+                </li>
+
+                <li class="nav-item" th:classappend="${activeTab == 'like'}? active">
+                    <a class="nav-link" th:href="@{/like}">찜</a>
+                </li>
+                <li class="nav-item" th:classappend="${activeTab == 'logout'} ? active">
+                    <form class="form-inline" th:action="@{/logout}" th:method="post">
+                        <button class="nav-link btn btn-dark btn-sm" type="submit"
+                                style="border:0; background-color: transparent; font-size: 12px"
+                                sec:authorize="isAuthenticated()">로그아웃</button>
+                    </form>
+                </li>
+            </ul>
+
+                <!-- 검색 -->
+                <div class="nav_search">
+                    <form class="form-inline" action="#">
+                        <div style="background: #f5f5f5; height:30px; width:180px; border-radius:20px;">
+                  <span>
+                  	<img src="https://imgur.com/1COF58H.png" style="width:30px; padding:3px">
+                  </span>
+                            <span><input type="text" placeholder="검색" id="search" style="width:120px; height:30px; border:0 solid black; background-color:#f5f5f5"></span>
+                        </div>
+                    </form>
+                </div>
+        </div>
+    </nav>
+    </div>
+<!--    네비게이션 끝 -->
+
+<!--이미지 슬라이더 - fragments 에 따로 빼서 작성함 -->
+    <div id="scroll-2">
+    <div th:replace="~{fragments/imageslider :: imageSlider(${activeTab})}"></div>
+    </div>
+<!-- 이미지 슬라이더 끝-->
+
+<!-- 메뉴 버튼 -->
+    <div class="container my-5" id="scroll-3">
+        <div class="row" style="display: flex; text-align: center">
+            <div class="col-4">
+                <a class="card" th:href="@{/}">
+                    <div><img src="https://picsum.photos/400/530?random=1&grayscale&blur=3"><br/></div>
+                    <strong class="menu-name">ABOUT</strong>
+                    <p>홈페이지 소개<br/>페이지 맵</p>
+                </a>
+            </div>
+            <div class="col-4">
+                <a class="card" th:href="@{/exhibition}">
+                    <div><img src="https://picsum.photos/400/530?random=2&grayscale&blur=3"><br/></div>
+                    <strong class="menu-name">EXHIBITION</strong>
+                    <p>다양한 테마들로 구성된 온라인 전시회!<br/>지금 바로 입장하세요</p>
+                </a>
+            </div>
+            <div class="col-4">
+                <a class="card" th:href="@{/openmarket}">
+                    <div><img src="https://picsum.photos/400/530?random=3&grayscale&blur=3"><br/></div>
+                    <strong class="menu-name">MARKET</strong>
+                    <p style="font-family: 'Open Sans Condensed'">오픈마켓에서는 매일 경매가 열립니다<br/>놓치지 마세요</p>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- 메뉴 버튼 끝 -->
+
+</div>
+</body>
+</html>

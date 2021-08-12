@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/mypage.html}" th:with="activeTab='comment', title='Welcome!'">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="mypage-content">
+    <div class="container m-5">
+        <h2>작성 댓글 보기</h2>
+        <p>Total : 12</p>
+
+        <table class="table table-sm">
+            <thead class="thead-light">
+            <tr>
+                <th>번호</th>
+                <th>내용</th>
+                <th>날짜</th>
+                <th>추천수</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>댓글 내용~~~~</td>
+                <td>2021.08.11</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>222222</td>
+                <td>2021.08.11</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>33333333</td>
+                <td>2021.08.11</td>
+                <td>0</td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <button class="btn btn-outline-danger float-right">삭제하기</button>
+
+    </div>
+</div>
+</div>
+</body>
+</html>
