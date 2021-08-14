@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/common_layout}" >
+<head>
+
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css}" >
+    <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css}" >
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css}" >
+    <link rel="stylesheet" th:href="@{/css/member/login.css}" >
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css}">
+
+    <script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
+
+</head>
+<body>
+<div layout:fragment="content">
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+        <!-- White Container -->
+        <div class="container bg-white rounded mt-2 mb-2 px-0">
+          <!-- Main Heading -->
+          <div class="row justify-content-center align-items-center pt-3 mb-3">
+            <h1><strong>Sign Up</strong></h1>
+          </div>
+          <div class="pt-3 pb-3">
+
+            <form class="needs-validation" th:object="${signUpForm}" th:action="@{/signup}" method="post" name="signupForm" novalidate>
+              <!-- User Name Input -->
+              <div class="form-group row justify-content-center px-3 pb-3">
+                <div class="col-9 px-0"> <input type="text" th:field="*{username}" placeholder="&#xf007; &nbsp; Id" class="form-control border-info placeicon" th:classappend="${#fields.hasErrors('username') } ? 'is-invalid'" id="username" required>
+                <div th:if="${#fields.hasErrors('username')}" th:class="${#fields.hasErrors('username')}? 'invalid-feedback'" th:each="err : ${#fields.errors('username')}" th:text="${err}">
+                  Invalid userName</div>
+                </div>
+              </div><!-- Password Input -->
+              <div class="form-group row justify-content-center px-3 pb-3">
+                <div class="col-9 px-0"> <input type="password" th:field="*{password}" placeholder="&#xf084; &nbsp; 비밀번호" class="form-control border-info placeicon" th:classappend="${#fields.hasErrors('password') } ? 'is-invalid'" id="password"  required>
+                  <div th:if="${#fields.hasErrors('password')}" th:class="${#fields.hasErrors('password')}? 'invalid-feedback'" th:each="err : ${#fields.errors('password')}" th:text="${err}">
+                  Invalid password</div>
+                </div>
+              </div> <!-- PasswordCheck Input -->
+              <div class="form-group row justify-content-center px-3 pb-3">
+                <div class="col-9 px-0"> <input type="password" th:field="*{passwordCheck}" placeholder="&#xf084; &nbsp; 비밀번호" class="form-control border-info placeicon" th:classappend="${#fields.hasErrors('passwordCheck') } ? 'is-invalid'" id="passwordCheck"  required>
+                  <div th:if="${#fields.hasErrors('passwordCheck')}" th:class="${#fields.hasErrors('passwordCheck')}? 'invalid-feedback'" th:each="err : ${#fields.errors('passwordCheck')}" th:text="${err}">
+                    Invalid password</div>
+                </div>
+              </div> <!-- nickname Input -->
+              <div class="form-group row justify-content-center px-3 pb-3">
+                <div class="col-9 px-0"> <input type="text"  th:field="*{nickname}"placeholder="&#xf040; NickName" class="form-control border-info placeicon" th:classappend="${#fields.hasErrors('nickname') } ? 'is-invalid'" id="nickname" required>
+                  <div th:if="${#fields.hasErrors('nickname')}" th:class="${#fields.hasErrors('nickname')}? 'invalid-feedback'" th:each="err : ${#fields.errors('nickname')}" th:text="${err}">
+                    Invalid password</div>
+                </div>
+              </div>
+              <!-- 본인확인 이메일 -->
+              <div class="form-group row justify-content-center px-3 pb-3">
+                <div class="col-9 px-0"> <input type="text" th:field="*{email}" placeholder="&#xf007; &nbsp; 본인 확인 이메일" class="form-control border-info placeicon" th:classappend="${#fields.hasErrors('email') } ? 'is-invalid'" id="email" required>
+                  <div th:if="${#fields.hasErrors('email')}" th:class="${#fields.hasErrors('email')}? 'invalid-feedback'" th:each="err : ${#fields.errors('email')}" th:text="${err}">
+                    Invalid email</div>
+                </div>
+              </div><!-- 작가로 가입하기 Input -->
+              <div class="form-group row justify-content-center px-3 pb-3">
+                <div class="col-9">
+                  <div class="row">
+                    <div class="col-6 px-0">
+                      <div class="custom-control custom-checkbox mb-3"> <input id="isWriter"  th:field="*{isWriter}" th:value="true" type="checkbox" class="custom-control-input checkbox-muted"> <label for="isWriter" class="custom-control-label text-muted" >작가로 가입하기</label> </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row justify-content-center">
+                <div class="col-3 px-3"> <input type="submit" value="가입하기" class="btn btn-block btn-outline-info"> </div>
+              </div>
+
+            </form>
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
