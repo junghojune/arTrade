@@ -1,5 +1,6 @@
 package com.megait.artrade.configuration;
 
+import com.megait.artrade.authentication.MemberUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -20,9 +21,12 @@ import javax.sql.DataSource;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
+    final private MemberUserService memberUserService;
     private final DataSource dataSource;
     // DataSource : DBCP (DataBase Connection Pool)
-    //  spring-data-jpa 의존성이 있다면 DataSource 빈은 자동으로 IoC 컨테이너에 등록된다.
+    // spring-data-jpa 의존성이 있다면 DataSource 빈은 자동으로 IoC 컨테이너에 등록된다.
+
+   // final private MemberUserService memberUserService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -32,7 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // 다음 URL 은 인증 없이 요청 가능
                 .mvcMatchers("/", "/login", "/signup", "/check-email", "/email-check-token",
                         "/mypage", "/openmarket",
-                        "/mypage/*"
+                        "/mypage/*" ,"/oauth2/**"
                 ).permitAll()
 
                 // '/item' 으로 시작하는 자원은 get 요청만 가능
@@ -54,7 +58,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logout") // 안해도 기본값이 이미 '/logout'임
                 .invalidateHttpSession(true)
-                .logoutSuccessUrl("/");
+                .logoutSuccessUrl("/")
+
+                .and()
+                .oauth2Login()
+                .loginPage("/login")
+
+                .and()
+                .rememberMe()
+                .userDetailsService(memberUserService)
+                .tokenRepository(tokenRepository()); //  리멤버미 기능
 
     }
 

@@ -44,7 +44,7 @@
                 </div>
               </div> <!-- PasswordCheck Input -->
               <div class="form-group row justify-content-center px-3 pb-3">
-                <div class="col-9 px-0"> <input type="password" th:field="*{passwordCheck}" placeholder="&#xf084; &nbsp; 비밀번호" class="form-control border-info placeicon" th:classappend="${#fields.hasErrors('passwordCheck') } ? 'is-invalid'" id="passwordCheck"  required>
+                <div class="col-9 px-0"> <input type="password" th:field="*{passwordCheck}" placeholder="&#xf084; &nbsp; 재확인 비밀번호" class="form-control border-info placeicon" th:classappend="${#fields.hasErrors('passwordCheck') } ? 'is-invalid'" id="passwordCheck"  required>
                   <div th:if="${#fields.hasErrors('passwordCheck')}" th:class="${#fields.hasErrors('passwordCheck')}? 'invalid-feedback'" th:each="err : ${#fields.errors('passwordCheck')}" th:text="${err}">
                     Invalid password</div>
                 </div>
