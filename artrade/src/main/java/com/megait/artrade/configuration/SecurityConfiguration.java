@@ -34,7 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
 
                 // 다음 URL 은 인증 없이 요청 가능
-                .mvcMatchers("/", "/login", "/signup", "/check-email", "/email-check-token",
+                .mvcMatchers("/", "/login", "/signup", "/check-email", "/email_check_token",
                         "/mypage", "/openmarket",
                         "/mypage/*" ,"/oauth2/**"
                 ).permitAll()

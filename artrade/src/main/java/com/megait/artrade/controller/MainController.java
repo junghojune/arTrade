@@ -8,6 +8,7 @@ import com.megait.artrade.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -41,6 +43,31 @@ public class MainController {
         return "member/loginForm";
     }
 
+    @Transactional
+    @GetMapping("/email_check_token")
+    public String emailCheckToken(String token , String email , Model model){
+        Optional<Member> optional = memberRepository.findByEmail(email);
+
+        if(optional.isEmpty()){
+            model.addAttribute("error", "잘못된 이메일");
+            System.out.println("email" + email  +", Member email" + optional.get() + "해당하는 메일 없음");
+            return "member/checked_email";
+        }
+
+        Member member = optional.get();
+
+        if(!(member.isValidToken(token))){
+            model.addAttribute("error" , "잘못된 토큰");
+            System.out.println("token" + token +", Member token" + member.getEmailCheckToken());
+            return "member/checked_email";
+        }
+
+        model.addAttribute("username" , member.getUsername());
+        member.completeSingUp();
+        return "member/checked_email";
+
+    }
+
     @GetMapping("/signup")
     public String signupForm(Model model) {
         model.addAttribute("signUpForm", new SignUpForm());
@@ -62,6 +89,8 @@ public class MainController {
 
         return "redirect:/";
     }
+
+
 
 
     @GetMapping("/mypage")

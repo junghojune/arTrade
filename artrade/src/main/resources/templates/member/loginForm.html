@@ -27,13 +27,13 @@
                 <div class="container bg-white rounded mt-2 mb-2 px-0">
                     <!-- Main Heading -->
                     <div class="row justify-content-center align-items-center pt-3">
-                        <h1><strong>Login</strong></h1>
+                        <h1><strong>로그인</strong></h1>
                     </div>
                     <div class="pt-3 pb-3">
                         <form class="form-horizontal" th:action="@{/login}" method="post">
                             <!-- User Name Input -->
                             <div class="form-group row justify-content-center px-3">
-                                <div class="col-9 px-0"> <input type="text" placeholder="&#xf007; &nbsp; Email" class="form-control border-info placeicon" name="username"> </div>
+                                <div class="col-9 px-0"> <input type="text" placeholder="&#xf007; &nbsp; 아이디" class="form-control border-info placeicon" name="username"> </div>
                             </div> <!-- Password Input -->
                             <div class="form-group row justify-content-center px-3">
                                 <div class="col-9 px-0"> <input type="password" placeholder="&#xf084; &nbsp; &#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" class="form-control border-info placeicon" name="password"> </div>
@@ -45,16 +45,16 @@
                                 <div class="col-9">
                                     <div class="row">
                                         <div class="col-6 px-0">
-                                            <div class="custom-control custom-checkbox mb-3"> <input id="remember-me"   name = "remember-me" type="checkbox" class="custom-control-input checkbox-muted"> <label for="remember-me" class="custom-control-label text-muted">Remember Me</label> </div>
+                                            <div class="custom-control custom-checkbox mb-3"> <input id="remember-me"   name = "remember-me" type="checkbox" class="custom-control-input checkbox-muted"> <label for="remember-me" class="custom-control-label text-muted">로그인 상태 유지</label> </div>
                                         </div> <!-- Forgot Password Link -->
-                                        <div class="col-6 px-0 text-right"> <span><a href="#" class="text-danger"><b>Forgot Password?</b></a></span> </div>
+                                        <div class="col-6 px-0 text-right"> <span><a href="#" class="text-muted"><b>비밀번호를 잊어버리셨나요?</b></a></span> </div>
                                     </div>
                                 </div>
                             </div>
 
                            <!-- Log in Button -->
                             <div class="form-group row justify-content-center">
-                                <div class="col-3 px-3"> <input type="submit" value="Log in" class="btn btn-block btn-outline-info"> </div>
+                                <div class="col-9 px-3"> <input type="submit" value="로그인" class="btn btn-block btn-outline-info"> </div>
                             </div>
                             <!-- error Message -->
                             <div class="row">
@@ -77,18 +77,17 @@
                     <div class="mx-0 px-0 bg-light">
                         <div class="pt-4">
                             <div class="row justify-content-center pt-3">
-                                <h3><strong>Login</strong></h3>
+                                <h3><strong>SNS 간편로그인</strong></h3>
                             </div>
-                            <div class="row justify-content-center">
-                                <h5>With your social media account</h5>
-                            </div> <!-- Social Media Login buttons -->
+                             <!-- Social Media Login buttons -->
                             <div class="row justify-content-center pt-4">
                                 <div class="col-10">
-
                                     <div class="row justify-content-center">
-                                        <div class="col-7 col-sm-4 px-1 pb-1"><a th:href="@{/oauth2/authorization/naver}"><img height="38px"  width="150px" src="/images/naver_login_button.png"></a></div><!-- Naver Connect -->
-                                        <div class="col-7 col-sm-4 px-1 pb-1"> <a th:href="@{/oauth2/authorization/facebook}" class="btn btn-block btn-social btn-facebook"> <span class="fa fa-facebook"></span> Facebook </a> </div><!-- Facebook Connect -->
-                                        <div class="col-7 col-sm-4 px-1 pb-1"> <a th:href="@{/oauth2/authorization/google}" class="btn btn-block btn-social btn-google"> <span class="fa fa-google-plus"></span> Google+ </a> </div><!-- Google Connect -->
+                                        <div class="tile-icon"> <a th:href="@{/oauth2/authorization/naver}"><img height="40px"  width="40px" src="/images/naver_login.png"></a></div><!-- Naver Connect -->
+                                        <div class="col-1"></div>
+                                        <div class="tile-icon"> <a th:href="@{/oauth2/authorization/facebook}" ><img  src="/images/facebook_login.svg"></a></div><!-- Facebook Connect -->
+                                        <div class="col-1"></div>
+                                        <div class="tile-icon"> <a th:href="@{/oauth2/authorization/google}" ><img  src="/images/google_login.svg"> </a> </div><!-- Google Connect -->
                                     </div>
                                 </div>
                             </div>
@@ -98,10 +97,10 @@
                         </div> <!-- Register Now -->
                         <div class="pt-2">
                             <div class="row justify-content-center">
-                                <h5>Don't have an Account?<span><a  class="text-danger"> Register Now!</a></span></h5>
+                                <h5>계정이 없으신가요? <span><a class="text-danger"> 지금 가입하세요!</a></span></h5>
                             </div>
                             <div class="row justify-content-center align-items-center pt-4 pb-5">
-                                <div class="col-4"> <a th:href="@{/signup}" class="btn btn-block btn-light btn-outline-info"> REGISTER </a> </div>
+                                <div class="col-9"> <a th:href="@{/signup}" class="btn btn-block btn-light btn-outline-info"> 회원가입 </a> </div>
                             </div>
                         </div>
                     </div>

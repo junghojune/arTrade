@@ -7,3 +7,20 @@
     border: #dee2e6
 }
 
+a h1{
+    font-family: 'Nanum Gothic';
+
+}
+
+.tile-icon {
+    align-items: center;
+    background-color:lightgrey;
+    border-radius: 50%;
+    display: flex;
+    flex-shrink: 0;
+    height:48px;
+    justify-content: center;
+    margin-top: 16px;
+    width: 48px;
+}
+

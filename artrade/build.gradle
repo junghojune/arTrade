@@ -38,6 +38,9 @@ dependencies {
 	// thymeleaf 템플릿 레이아웃
 	implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect'
 
+	// 메일서비스
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 }
 
 test {

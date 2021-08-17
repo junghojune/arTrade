@@ -2,6 +2,7 @@ package com.megait.artrade.member;
 
 
 
+import com.megait.artrade.authentication.EmailService;
 import com.megait.artrade.authentication.MemberUser;
 import com.megait.artrade.authentication.SignUpForm;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +15,13 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
-
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -27,7 +29,7 @@ public class MemberService {
     @Profile("local")
     public void createNewMember(){
 
-        Member member = Member.builder()
+        Member  member = Member.builder()
                 .username("admin")
                 .email("admin@test.com")
                 .password(passwordEncoder.encode("Password!"))
@@ -37,6 +39,7 @@ public class MemberService {
                 .build();
 
         Member newMember = memberRepository.save(member);
+        emailService.sendEmail(newMember);
 
     }
 
@@ -57,8 +60,7 @@ public class MemberService {
             member.setSellerAuthority(true);
         }
         Member newMember = memberRepository.save(member);
-
-
+        emailService.sendEmail(newMember);
         return newMember;
     }
 
@@ -76,6 +78,8 @@ public class MemberService {
         SecurityContextHolder.getContext().setAuthentication(token);
 
     }
+
+
 
 
 }

@@ -25,14 +25,14 @@
         <div class="container bg-white rounded mt-2 mb-2 px-0">
           <!-- Main Heading -->
           <div class="row justify-content-center align-items-center pt-3 mb-3">
-            <h1><strong>Sign Up</strong></h1>
+            <h1><strong>회원가입</strong></h1>
           </div>
           <div class="pt-3 pb-3">
 
             <form class="needs-validation" th:object="${signUpForm}" th:action="@{/signup}" method="post" name="signupForm" novalidate>
               <!-- User Name Input -->
               <div class="form-group row justify-content-center px-3 pb-3">
-                <div class="col-9 px-0"> <input type="text" th:field="*{username}" placeholder="&#xf007; &nbsp; Id" class="form-control border-info placeicon" th:classappend="${#fields.hasErrors('username') } ? 'is-invalid'" id="username" required>
+                <div class="col-9 px-0"> <input type="text" th:field="*{username}" placeholder="&#xf007; &nbsp; 아이디" class="form-control border-info placeicon" th:classappend="${#fields.hasErrors('username') } ? 'is-invalid'" id="username" required>
                 <div th:if="${#fields.hasErrors('username')}" th:class="${#fields.hasErrors('username')}? 'invalid-feedback'" th:each="err : ${#fields.errors('username')}" th:text="${err}">
                   Invalid userName</div>
                 </div>
@@ -50,7 +50,7 @@
                 </div>
               </div> <!-- nickname Input -->
               <div class="form-group row justify-content-center px-3 pb-3">
-                <div class="col-9 px-0"> <input type="text"  th:field="*{nickname}"placeholder="&#xf040; NickName" class="form-control border-info placeicon" th:classappend="${#fields.hasErrors('nickname') } ? 'is-invalid'" id="nickname" required>
+                <div class="col-9 px-0"> <input type="text"  th:field="*{nickname}"placeholder="&#xf040; 닉네임" class="form-control border-info placeicon" th:classappend="${#fields.hasErrors('nickname') } ? 'is-invalid'" id="nickname" required>
                   <div th:if="${#fields.hasErrors('nickname')}" th:class="${#fields.hasErrors('nickname')}? 'invalid-feedback'" th:each="err : ${#fields.errors('nickname')}" th:text="${err}">
                     Invalid password</div>
                 </div>

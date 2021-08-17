@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 
 @Data
@@ -51,6 +52,23 @@ public class Member {
 
     private String provider;
 
+    private String emailCheckToken;
+
+    public void generateEmailCheckToken(){
+       emailCheckToken = UUID.randomUUID().toString();
+    }
+
+    public boolean isValidToken(String token){
+        if(emailCheckToken == null){
+            return false;
+        }
+        System.out.println("!(emailCheckToken == null)"+emailCheckToken);
+        return emailCheckToken.equals(token);
+    }
+
+    public void completeSingUp(){
+        emailVerified=true;
+    }
 
 
 }
