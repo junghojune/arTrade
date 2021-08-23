@@ -38,7 +38,6 @@ public class Work {
 
     private boolean checkToken;
 
-    @Enumerated(EnumType.STRING)
     private CategoryType category;
 
     @OneToOne
@@ -47,4 +46,21 @@ public class Work {
     private AuctionStatusType status;
 
     private int popularity;
+
+    @Override
+    public String toString() {
+        return "Work{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", copyrightHolder=" + copyrightHolder +
+                ", seller=" + seller +
+                ", uploadAt=" + uploadAt +
+                ", checkToken=" + checkToken +
+                ", category=" + category +
+                ", status=" + status +
+                ", popularity=" + popularity +
+                '}';
+    }
 }

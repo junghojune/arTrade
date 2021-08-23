@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,7 +44,7 @@ public class Member {
     private boolean isSellerAuthority;
 
     @OneToMany
-    private List<Work> works;
+    private List<Work> works = new ArrayList<>();
 
     private String walletId;
 

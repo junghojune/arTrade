@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -35,7 +36,7 @@ public class OnlineExhibit {
     private LocalDateTime endTime;
 
     @OneToMany
-    private List<Work> works;
+    private List<Work> works = new ArrayList<>();
 
     private int displayOrder;
 
