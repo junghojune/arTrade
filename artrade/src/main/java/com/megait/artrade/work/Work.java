@@ -26,7 +26,7 @@ public class Work {
 
     private String contents;
 
-    private String imageUrl;
+    private String filePath;
 
     @ManyToOne
     private Member copyrightHolder;
@@ -53,7 +53,7 @@ public class Work {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
+                ", imageUrl='" + filePath + '\'' +
                 ", copyrightHolder=" + copyrightHolder +
                 ", seller=" + seller +
                 ", uploadAt=" + uploadAt +
