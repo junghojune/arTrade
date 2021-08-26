@@ -162,6 +162,16 @@ public class MainController {
         return "mypage/my_like";
     }
 
+// 오픈마켓 들어가기
+
+    @GetMapping("/openMarket")
+    public String openMarket(@AuthenticationMember Member member, Model model) {
+        List<Work> workList = workService.getAllWorkList();
+
+        model.addAttribute("workList", workList);
+        return "auction/market";
+    }
+
 
 
 
@@ -188,11 +198,6 @@ public class MainController {
         }
         return "auction/workdetail";
     }
-
-
-
-
-
 
     @GetMapping("/regauction")
     public String registerAuction( @AuthenticationMember Member member , Model model){
@@ -330,10 +335,13 @@ public class MainController {
         OfferPrice offerPrice2 = auctionService.saveOfferPrice(offerPrice);
         List<OfferPrice> list = auction.getOfferPrice();
         list.add(offerPrice2);
-        auctionService.saveAuction(auction);
 
         JsonObject object = new JsonObject();
         double maxPrice = auctionService.findMaxPrice(id);
+        auction.setWiningBid(maxPrice);
+
+        auctionService.saveAuction(auction);
+
         object.addProperty("maxPrice", Double.toString(maxPrice));
         object.addProperty("status", "경매 제안이 완료되었습니다");
         return object.toString();

@@ -41,6 +41,8 @@ public class AuctionService {
                 }
             }
         }
+
+
          return maxPrice;
     }
 

@@ -57,12 +57,19 @@ public class WorkService {
     }
 
 
+
     public Work saveWork(Work work){
         return workRepository.save(work);
     }
 
     public Auction saveAuction(Auction auction){
         return auctionRepository.save(auction);
+    }
+
+    public List<Work> getAllWorkList() {
+
+        return workRepository.findAll();
+
     }
 
 }
