@@ -5,6 +5,8 @@
       layout:decorate="~{layout/common_layout}"
       th:with="activeTab='workdetail', title='Welcome!'">
 <head>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
 
 
@@ -249,9 +251,10 @@
         });
       },
       save:function (){
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
         let data = {
           offerPrice: $("#price").val()
-
         };
         console.log(data); // 자바스크립트 오브젝트
         console.log(JSON.stringify(data));
@@ -260,7 +263,11 @@
           url: "/auction/suggest/detail/[[${work.id}]]",
           data: JSON.stringify(data),
           contentType: "application/json; charset=utf-8",
-          dataType: "json"
+          dataType: "json",
+          beforeSend : function(xhr)
+          {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+            xhr.setRequestHeader(header, token);
+          },
         }).done(function (resp) {
           $('#priceSuggest').html(resp.maxPrice);
           $('.modal-body').html(resp.status);

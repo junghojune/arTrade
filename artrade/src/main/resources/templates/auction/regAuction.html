@@ -5,6 +5,8 @@
       layout:decorate="~{layout/common_layout}" >
 
 <head>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
   <script th:src="@{/js/work/regauction.js}"></script>
 
@@ -27,7 +29,7 @@
             <p>Modal body text goes here.</p>
           </div>
           <div class="modal-footer">
-            <button type="button"  class="btn btn-block btn-outline-info" id="resultbtn" >결과 버튼</button>
+            <button type="button"  class="btn btn-block btn-outline-info" data-dismiss="modal" id="resultbtn" >결과 버튼</button>
           </div>
         </div>
       </div>
