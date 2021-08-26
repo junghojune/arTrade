@@ -1,10 +1,13 @@
 package com.megait.artrade.controller;
 
+import com.megait.artrade.authentication.AuthenticationMember;
 import com.megait.artrade.authentication.SignUpForm;
 import com.megait.artrade.authentication.SignUpFormValidator;
 import com.megait.artrade.member.Member;
 import com.megait.artrade.member.MemberRepository;
 import com.megait.artrade.member.MemberService;
+import com.megait.artrade.work.Work;
+import com.megait.artrade.work.WorkService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -12,12 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.filechooser.FileSystemView;
 import javax.validation.Valid;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 
 @Controller
@@ -28,6 +33,8 @@ public class MainController {
     private final MemberService memberService;
 
     private final MemberRepository memberRepository;
+
+    private final WorkService workService;
 
     @InitBinder("signUpForm")
     protected void initBinder(WebDataBinder binder) {
@@ -90,7 +97,35 @@ public class MainController {
         return "redirect:/";
     }
 
+    @GetMapping("/workUpload")
+    public String upload(@AuthenticationMember Member member){
+        return "work/uploadForm";
+    }
 
+
+    @PostMapping("/workUpload")
+    public String uploadMulti(@RequestParam("uploadFile") MultipartFile file, @AuthenticationMember Member member
+            , @RequestParam("title") String title, @RequestParam("contents") String contents) throws Exception {
+        String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
+        String basePath = rootPath + "/testFileUpload";
+
+
+
+        if (!file.isEmpty()) {
+            String originalName = file.getOriginalFilename();
+            String originalFileExtension = originalName.substring(originalName.lastIndexOf("."));
+            String originalFileTilte = originalName.substring(0, originalName.lastIndexOf("."));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+            String currentDate = simpleDateFormat.format(new Date());
+            String storedFileName = currentDate + "-" + originalFileTilte + originalFileExtension;
+            String filePath = basePath + "/" + storedFileName;
+            Work work = workService.processNewWork(member, title, contents, filePath);
+            File dest = new File(filePath);
+            file.transferTo(dest);
+        }
+
+        return "redirect:/";
+    }
 
 
     @GetMapping("/mypage")

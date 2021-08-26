@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/common_layout}" >
+<head>
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css}" >
+  <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css}" >
+  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css}" >
+  <link rel="stylesheet" th:href="@{/css/member/login.css}" >
+
+  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css}">
+  <script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
+
+
+
+
+</head>
+<body>
+<div layout:fragment="content">
+  <!-- TODO  화면 구성 다시 이쁘게 하기! -->
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+        <!-- White Container -->
+        <div class="container bg-white rounded mt-2 mb-2 px-0">
+          <!-- Main Heading -->
+          <div class="row justify-content-center align-items-center pt-3 mb-3">
+            <h1><strong>작품올리기</strong></h1>
+          </div>
+          <div class="pt-3 pb-3">
+
+            <form class="needs-validation" th:action="@{/workUpload}" method="post" name="signupForm" novalidate enctype="multipart/form-data">
+
+              <img src="https://dummyimage.com/500x500/ffffff/000000.png&text=preview+image" id="img_section" style="width: 500px; height: 500px;">
+              <br>
+              <input name = "uploadFile" type="file" id="upload_file" accept="image/*" required=true value="업로드">
+              <script>
+                const reader = new FileReader();
+
+                reader.onload = (readerEvent) => {
+                  document.querySelector("#img_section").setAttribute("src", readerEvent.target.result);
+                  //파일을 읽는 이벤트가 발생하면 img_section의 src 속성을 readerEvent의 결과물로 대체함
+                };
+
+                document.querySelector("#upload_file").addEventListener("change", (changeEvent) => {
+                  //upload_file 에 이벤트리스너를 장착
+
+                  const imgFile = changeEvent.target.files[0];
+                  reader.readAsDataURL(imgFile);
+                  //업로드한 이미지의 URL을 reader에 등록
+                })
+              </script>
+              <br>
+
+              <input type="text" name = "title"  placeholder="제목">
+
+              <br>
+
+              <textarea class="form-control" name="contents" id="contents" rows="3" placeholder="내용을 입력해주세요." ></textarea>
+
+
+
+              <div class="form-group row justify-content-center">
+                <div class="col-3 px-3"> <input type="submit" value="작품올리기" class="btn btn-block btn-outline-info"> </div>
+              </div>
+
+            </form>
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

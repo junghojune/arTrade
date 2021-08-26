@@ -70,6 +70,11 @@
                     <a class="nav-link" th:href="@{/signup}" sec:authorize="!isAuthenticated()">회원가입</a>
                 </li>
 
+                <li class="nav-item" th:classappend="${activeTab == 'upload'}? active"
+                    sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/workUpload}">작품올리기</a>
+                </li>
+
                 <li class="nav-item" th:classappend="${activeTab == 'like'}? active">
                     <a class="nav-link" th:href="@{/like}">찜</a>
                 </li>
