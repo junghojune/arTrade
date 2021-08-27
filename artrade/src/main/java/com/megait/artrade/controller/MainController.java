@@ -9,6 +9,7 @@ import com.megait.artrade.member.Member;
 import com.megait.artrade.member.MemberRepository;
 import com.megait.artrade.member.MemberService;
 import com.megait.artrade.offerprice.OfferPrice;
+import com.megait.artrade.offerprice.OfferPriceService;
 import com.megait.artrade.offerprice.UploadVo;
 import com.megait.artrade.work.Work;
 import com.megait.artrade.work.WorkService;
@@ -52,6 +53,8 @@ public class MainController {
     private final MemberRepository memberRepository;
 
     private final WorkService workService;
+
+    private final OfferPriceService offerPriceService;
 
     @InitBinder("signUpForm")
     protected void initBinder(WebDataBinder binder) {
@@ -423,6 +426,16 @@ public class MainController {
                 .build();
         Auction auction_ = workService.saveAuction(auction);
 
+        OfferPrice offerPrice = OfferPrice.builder()
+                  .offerAt(LocalDateTime.now())
+                  .auction(auction_)
+                  .offerPrice(uploadVo.getDefaultValue())
+                  .member(member)
+                  .build();
+
+
+        OfferPrice offerPrice_ = offerPriceService.saveOfferPrice(offerPrice);
+        auction_.setOfferPrice(List.of(offerPrice_));
 
         work.setAuction(auction_);
         workService.saveWork(work);
