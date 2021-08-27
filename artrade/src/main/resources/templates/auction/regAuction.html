@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/common_layout}" >
+
+<head>
+
+  <script th:src="@{/js/work/regauction.js}"></script>
+
+</head>
+<body>
+
+<div layout:fragment="content">
+
+  <div class="container">
+
+    <div class="modal" id="UploadModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">arTrade</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Modal body text goes here.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button"  class="btn btn-block btn-outline-info" id="resultbtn" >결과 버튼</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+      <fieldset>
+        <legend>작품 선택</legend>
+
+
+        <div class="form-group" >
+          <label for="workSelect" > 나의 작품 </label>
+          <select class="form-select" id="workSelect">
+            <span th:if="${status} == 'Exist'">
+               <div th:each="work:${workList}">
+                <option th:text="${work.title}" th:value="${work.id}">작품1</option>
+               </div>
+            </span>
+            <spab th:unless="${status} == 'Exist'">
+               <option>등록된 작품이 없습니다.</option>
+            </spab >
+          </select>
+
+        </div>
+
+        <div class="row m-0">
+          <div class="col-4 mb-4"></div>
+          <div class="col-3 mb-4 ">
+            <div class="btn btn-block btn-outline-info" id="checkNFT">NFT 등록여부검사 </div>
+          </div>
+          <div class="col-4 mb-4"></div>
+        </div>
+
+
+        <div class="form-group">
+          <label for="workExplanation">작품 설명</label>
+
+          <textarea class="form-control" id="workExplanation" rows="3" placeholder="내용을 입력해주세요." readonly ></textarea>
+          <small id="emailHelp" class="form-text text-muted">- NFT 등록된 작품만 오픈 마켓에 경매 작품으로 등록할 수 있습니다.</small>
+        </div>
+
+
+        <label class="form-label mt-4">초기 경매가 가격</label>
+        <div class="form-group">
+          <div class="input-group mb-3">
+            <span class="input-group-text">$</span>
+            <input type="text"  class="form-control" aria-label="Amount (to the nearest dollar)"  id="defaultValue" required>
+            <span class="input-group-text">.00</span>
+          </div>
+        </div>
+
+
+
+          <p><input type="date"  th:min="${now}" th:max="${nextMonth}"  id="date" required></p>
+          <p><input type="time"    value="13:10:20"  id="time" required></p>
+
+
+
+        <div class="row m-0">
+          <div class="col-4 mb-4"></div>
+          <div class="col-3 mb-4 ">
+            <div class="btn btn-block btn-outline-info" id="upload" disabled="disabled">업로드 </div>
+          </div>
+          <div class="col-4 mb-4"></div>
+        </div>
+
+      </fieldset>
+
+
+
+
+
+  </div>
+</div>
+</body>
+
+</html>

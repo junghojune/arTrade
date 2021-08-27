@@ -41,6 +41,8 @@ dependencies {
 	// 메일서비스
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+	implementation 'com.google.code.gson:gson'
+
 }
 
 test {

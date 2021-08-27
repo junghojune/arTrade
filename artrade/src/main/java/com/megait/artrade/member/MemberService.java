@@ -36,6 +36,7 @@ public class MemberService {
                 .nickname("테스트 관리자")
                 .type(MemberType.일반회원)
                 .registerDateTime(LocalDateTime.now())
+                .walletId("aaaa")
                 .build();
 
         Member newMember = memberRepository.save(member);
@@ -77,6 +78,13 @@ public class MemberService {
 
         SecurityContextHolder.getContext().setAuthentication(token);
 
+    }
+
+    public Member getMember(Long id){
+        Member member = memberRepository.findById(id).orElseThrow(() -> {
+            return new IllegalArgumentException("해당 멤버를 조회할 수 없습니다");
+        });
+        return member;
     }
 
 

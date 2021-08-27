@@ -1,11 +1,15 @@
 package com.megait.artrade.controller;
 
+import com.megait.artrade.action.Auction;
+import com.megait.artrade.action.AuctionService;
 import com.megait.artrade.authentication.AuthenticationMember;
 import com.megait.artrade.authentication.SignUpForm;
 import com.megait.artrade.authentication.SignUpFormValidator;
 import com.megait.artrade.member.Member;
 import com.megait.artrade.member.MemberRepository;
 import com.megait.artrade.member.MemberService;
+import com.megait.artrade.offerprice.OfferPrice;
+import com.megait.artrade.offerprice.UploadVo;
 import com.megait.artrade.work.Work;
 import com.megait.artrade.work.WorkService;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +25,27 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.swing.filechooser.FileSystemView;
 import javax.validation.Valid;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+
+import com.google.gson.JsonObject;
+
+
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 public class MainController {
+
+
+
+    private final AuctionService auctionService;
 
     private final MemberService memberService;
 
@@ -143,5 +160,288 @@ public class MainController {
     @GetMapping("/mypage/like")
     public String mylike(){
         return "mypage/my_like";
+    }
+
+// 오픈마켓 들어가기
+
+    @GetMapping("/openMarket")
+    public String openMarket(@AuthenticationMember Member member, Model model) {
+        List<Work> workList = workService.getAllWorkList();
+
+        model.addAttribute("workList", workList);
+        return "auction/market";
+    }
+
+
+
+
+
+
+//    경매
+
+
+    @GetMapping("/auction/{id}")
+    public String auctionPage(@PathVariable Long id , @AuthenticationMember Member member ,Model model){
+
+        if(member !=null){
+            model.addAttribute("member", member);
+        }
+
+        try{
+            Work work = workService.getWork(id);
+            double maxPrice = auctionService.findMaxPrice(id);
+            model.addAttribute("work", work);
+            model.addAttribute("maxPrice", Double.toString(maxPrice));
+
+        }catch(IllegalArgumentException e){
+            e.printStackTrace();
+        }
+        return "auction/workdetail";
+    }
+
+    @GetMapping("/regauction")
+    public String registerAuction( @AuthenticationMember Member member , Model model){
+
+
+        model.addAttribute("uploadVo" ,new UploadVo());
+        model.addAttribute("now" , LocalDate.now());
+        model.addAttribute("nextMonth" , LocalDate.now().plusMonths(1));
+        Member member_ = memberService.getMember(member.getId());
+
+        List<Work> workList = member_.getWorks();
+        if(workList.size() == 0){
+            model.addAttribute("status","notExist");
+            model.addAttribute("workList" ,"등록된 작품이 없습니다");
+        }else{
+            model.addAttribute("status","Exist");
+            model.addAttribute("workList" , workList);
+        }
+
+        return "auction/regAuction";
+    }
+
+
+
+
+
+    @ResponseBody
+    @GetMapping("/auction/computeAutionTime/{id}")
+    public String computeAutionTime(@PathVariable Long id){
+
+        JsonObject object = new JsonObject();
+        Work work = null;
+        try{ work = workService.getWork(id);
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
+
+
+        LocalDateTime closingTime = LocalDateTime.now();
+        if (work != null) {
+            Auction auction = work.getAuction();
+            if(auction == null) {
+                object.addProperty("status", "notExistAuction");
+                object.addProperty("result", "해당 작품에 등록된 경매가 없습니다");
+                return object.toString();
+            }else{
+                closingTime = auction.getAuctionClosingTime();
+            }
+        }
+
+        LocalDateTime localDateTimeNow = LocalDateTime.now();
+
+
+        int year =  localDateTimeNow.getYear();
+        int month = localDateTimeNow.getMonth().getValue();
+        int day = localDateTimeNow.getDayOfMonth();
+        int hour = localDateTimeNow.getHour();
+        int minute = localDateTimeNow.getMinute();
+        int second = localDateTimeNow.getSecond();
+
+        LocalDateTime remainDateTime = closingTime
+                .minusYears(year)
+                .minusMonths(month)
+                .minusDays(day)
+                .minusHours(hour)
+                .minusMinutes(minute)
+                .minusSeconds(second);
+
+        String days = String.valueOf(remainDateTime.getDayOfMonth());
+        String hours = String.valueOf(remainDateTime.getHour());
+        String minutes = String.valueOf(remainDateTime.getMinute());
+        String seconds = String.valueOf(remainDateTime.getSecond());
+
+
+        object.addProperty("days", days);
+        object.addProperty("hours", hours);
+        object.addProperty("minutes", minutes);
+        object.addProperty("seconds", seconds);
+
+        return object.toString();
+    }
+
+
+    @ResponseBody
+    @GetMapping("/auction/suggest")
+    public String suggestAuctionPrice(@AuthenticationMember Member member){
+        JsonObject object = new JsonObject();
+        if(member == null){
+            object.addProperty("status","notLogin");
+            object.addProperty("message","로그인이 필요한 기능입니다.");
+            object.addProperty("guide","로그인 페이지로 이동");
+            return object.toString();
+        }
+
+        if(member.getWalletId() == null){
+            object.addProperty("status","notWallet");
+            object.addProperty("message","등록된 가상화폐가 없습니다. ");
+            object.addProperty("guide","지갑 생성하기");
+            return object.toString();
+        }
+
+        try{
+            object.addProperty("status","offer");
+            object.addProperty("message", "경매가 제시하기");
+            object.addProperty("guide","제안하기");
+
+        }catch (IllegalArgumentException e){
+            object.addProperty("message", e.getMessage());
+        }
+
+        return object.toString();
+    }
+
+
+
+    @ResponseBody
+    @PostMapping("/auction/suggest/detail/{id}")
+    public String suggestAuctionPriceDetail(@RequestBody OfferPrice offerPrice , @PathVariable Long id , @AuthenticationMember Member member ){
+
+        Work work = null;
+        Auction auction = null;
+        try{
+
+            work = workService.getWork(id);
+            auction = work.getAuction();
+            Member member_ =memberService.getMember(member.getId());
+
+            offerPrice.setAuction(auction);
+            offerPrice.setMember(member_);
+
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
+
+        OfferPrice offerPrice2 = auctionService.saveOfferPrice(offerPrice);
+        List<OfferPrice> list = auction.getOfferPrice();
+        list.add(offerPrice2);
+
+        JsonObject object = new JsonObject();
+        double maxPrice = auctionService.findMaxPrice(id);
+        auction.setWiningBid(maxPrice);
+
+        auctionService.saveAuction(auction);
+
+        object.addProperty("maxPrice", Double.toString(maxPrice));
+        object.addProperty("status", "경매 제안이 완료되었습니다");
+        return object.toString();
+    }
+
+
+
+    @ResponseBody
+    @PostMapping("/auction/registration")
+    public String registerAuction(@AuthenticationMember Member member , @RequestBody Work work_ ){
+        System.out.println(work_+"work_");
+        Work work = workService.getWork(work_.getId());
+        Auction auction = work.getAuction();
+
+        boolean checkToken = work.isCheckToken();
+
+
+        JsonObject object = new JsonObject();
+        LocalDate now = LocalDate.now();
+        System.out.println(now);
+        object.addProperty("now", now.toString());
+        object.addProperty("nextMonth", now.plusMonths(1).toString());
+
+        if(member == null){
+            object.addProperty("status","notLogin");
+            object.addProperty("message","로그인이 필요한 기능입니다.");
+            object.addProperty("guide","로그인 페이지로 이동");
+
+            return object.toString();
+        }
+
+        if(checkToken == false){
+            object.addProperty("status","notCheckToken");
+            object.addProperty("message","NFT 등록된 작품만 오픈 마켓에 경매 작품으로 등록할 수 있습니다.");
+            object.addProperty("guide","NFT 발급받기");
+            return object.toString();
+        }
+
+
+        if(auction != null){
+            object.addProperty("status","alreadyUploadedWork");
+            object.addProperty("message","이미 경매에 올라간 작품입니다");
+            object.addProperty("guide","확인");
+            return object.toString();
+        }
+        object.addProperty("status","ok");
+        object.addProperty("message", "등록이 완료되었습니다");
+        object.addProperty("guide"," 확인 ");
+
+        object.addProperty("contents",work.getContents());
+
+        System.out.println(work.getTitle()+"work.getTitle()");
+
+        return object.toString();
+    }
+
+
+    @ResponseBody
+    @PostMapping("/auction/upload")
+    public String uploadWork(@AuthenticationMember Member member , @RequestBody  UploadVo uploadVo  ){
+
+        LocalDate date = uploadVo.getDate();
+        LocalTime time = uploadVo.getTime();
+
+        int year = date.getYear();
+        int month = date.getMonth().getValue();
+        int dayOfMonth = date.getDayOfMonth();
+
+        int hour = time.getHour();
+        int minute = time.getMinute();
+        int second = time.getSecond();
+        Work work = workService.getWork(uploadVo.getId());
+
+
+        Auction auction = Auction.builder()
+                .auctionClosingTime(LocalDateTime.of(year, month, dayOfMonth, hour, minute, second))
+                .winingBid(uploadVo.getDefaultValue())
+                .auctionProduct(work)
+                .build();
+        Auction auction_ = workService.saveAuction(auction);
+
+
+        work.setAuction(auction_);
+        workService.saveWork(work);
+
+        JsonObject object = new JsonObject();
+        if(member == null){
+            object.addProperty("status","notLogin");
+            object.addProperty("message","로그인이 필요한 기능입니다.");
+            object.addProperty("guide","로그인 페이지로 이동");
+            return object.toString();
+        }
+
+
+        object.addProperty("status","ok");
+        object.addProperty("message", "등록이 완료되었습니다");
+        object.addProperty("guide"," 확인 ");
+
+
+
+        return object.toString();
     }
 }
