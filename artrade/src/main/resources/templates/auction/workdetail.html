@@ -1,335 +1,45 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
-
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/common_layout}" th:with="activeTab='workdetail', title='Welcome!'">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
-
-  <title>작품 상세보기</title>
-
-
-  <!-- 댓글 입력하고 등록했을시의 로직-->
-  <script>
-
-
-
-    // 작품 정보를 보여주는 로직
-    //  th:inline="javascript">-->
-    //   $(document).ready(function (){
-    //                  $.ajax({
-    //                       type: 'GET',                    // GET 방식으로 전송-->
-    //                       url: '/auction/[[${work.id}]]', // 요청보낼 주소-->
-    //                          dataType: 'json',            // 응답의 content-type (json 타입으로 받겠다!)-->
-    //                          success: function (result){      // 요청을 성공적으로 했다면-->
-    //                                $('.col-12 p-5').html(image_url);
-    //                             $('')
-    //                               $('.modal-body').html(result.message);
-    //                              $('#exampleModalCenter').modal();
-    //                          }
-    //                      });
-
-
-
-
-    // 타이머 구하는 식
-    var time = 144000;        // 날짜
-
-    // 시간 변수
-    var second = "";
-    var minute = "";
-    var hour = "";
-    var x = setInterval(function(){
-
-      time = time - 1
-
-      if(time < 0){
-        clearInterval(x); //setInterval() 실행을 끝낸다.
-
-        // 경매 종료 버튼으로 바뀌어야 함.
-      }
-
-
-
-      second = time % 60;
-      minute = parseInt((time / 60) % 60);
-      hour = parseInt(time / 3600);
-      day = parseInt(time / 86400);
-
-      document.getElementById("days").innerHTML = day
-      document.getElementById("hours").innerHTML = hour
-      document.getElementById("minutes").innerHTML = minute
-      document.getElementById("seconds").innerHTML = second
-
-
-
-      // 타임아웃시
-
-    }, 1000);
-
-    //댓글 등록
-
-    // 회원 정보 불러올 필요가 없지(세션에 등록되어 있을 테니)
-
-
-
-    // 댓글 저장 TODO - 댓글 로직 짜기
-    $('#submit').on('click',function(){
-
-      $.ajax({
-        url : "comment",
-        type: "POST",
-        data: $("#commentInfo").comment(),
-        success:function(data){
-          $("comments").text(data);
-        },
-        error:function(){
-          alert("comment err");
-        }
-
-      });
-    });
-
-
-
-  </script>
-
-  <style>
-
-    .container-comment{
-      display:flex;
-      background-color:gray;
-      width : 80%
-    }
-    label{
-
-      font-size:1px;
-
-    }
-
-    li{
-      border-bottom : solid 1px black;
-
-    }
-
-
-
-    i{
-      font-size:50px;
-    :10px 10px
-    }
-
-
-    #sidebar{
-      width:200px;
-      height:200px;
-      float:left;
-      padding:10px;
-      /*position : fixed;*/
-
-    }
-
-    #recent-work{
-      margin-top:100px;
-    }
-
-
-    #form-commentInfo{ width: 100%; }
-
-
-    #comments{
-      overflow:scroll; width:900px; height:300px; padding:10px; background-color:white;
-      gap : 10px 10px;
-    }
-    #comment-count{ margin-bottom: 10px; }
-    #contents{
-      width: 70%;
-      margin-top:11px;
-      height: 2em; }
-
-    #submit{
-      background-color: rgb(0, 128,255);
-      margin-right:10px;
-      margin-top: 10px;
-      width: 8em;
-      height: 2.5em;
-      font-size: 15px;
-      font-weight: bold;
-      color: aliceblue;
-      text-align:center;
-    }
-
-
-    h4{
-      margin-bottom :20px;
-    }
-    button{
-      height:50%;
-      width:50%;
-    }
-
-
-
-
-
-    /* 카운트 다운 css*/
-
-
-    .countdown {
-      display: inline-block
-    }
-
-    .countdown .item {
-      display: block;
-      margin: 7px;
-      float: left;
-      text-align: center
-    }
-
-    .countdown .item .days,
-    .countdown .item .hours,
-    .countdown .item .minutes,
-    .countdown .item .seconds {
-      width: 48px;
-      height: 48px;
-      margin-bottom: 5px;
-      border: 1px solid #e1e7ec;
-      border-radius: 7px;
-      font-size: 22px;
-      line-height: 46px
-    }
-
-    .countdown .item .days_ref,
-    .countdown .item .hours_ref,
-    .countdown .item .minutes_ref,
-    .countdown .item .seconds_ref {
-      font-size: 12px;
-      text-transform: uppercase
-    }
-
-    .text-center ,
-    .text-center  {
-      margin-right: 6px;
-      margin-left: 6px
-    }
-
-
-
-
-
-    #workpircture {
-      width: 600px;
-      height: 400px;
-      object-fit: fill
-    }
-
-    /*  #timer{
-
-      }*/
-
-
-  </style>
-
-</head>
-<body>
-
-<div layout:fragment="content">
-
-
-  <!--경매 사진 및 가격제안-->
-  <div class="container-sm-10">
-    <div class="container">
-      <div class="container">
-        <div class="row">
-          <div class="col-7">
-
-            <div class="col-12 p-5"> <img id="workpircture" th:src="@{https://loremflickr.com/320/240?random=2}"> </div>
-            <div class="bg-light">
-              <div class="col-md-4 col-4 ps-30 pe-0 ">
-              </div>
-
-            </div>
-          </div>
-          <div class="col-5 py-5">
-            <div class="row m-0">
-              <div class="col-12 ">
-
-                <p class="h4 m-0">작품A</p>
-                <P class="ps-3 textmuted">Masterpiece A</P>
-
-                <p class="textmuted">created by 작가이름</p>
-
-
-              </div>
-              <div class="col-12 px-0">
-                <div class="row  m-0">
-                  <div class="col-12  my-4">
-                    <p class="fw-bold">현재 경매가</p>
-                  </div>
-                  <div class="col-12 px-4 mb-4">
-                    <p class="h4 m-0"><span class="pe-1">2ETH</span></p>
-
-                  </div>
-                </div>
-              </div>
-              <div class="row m-0">
-                <div class="col-12 mb-4 ">
-                  <div class="btn btn-primary">경매가제시하기 </div>
-                </div>
-              </div>
-=======
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/common_layout}"
       th:with="activeTab='workdetail', title='Welcome!'">
 <head>
-
-
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
   <script th:src="@{/js/work/workdetail.js}"></script>
 
-    <title>작품 상세보기</title>
-    <script>
-      // 타이머
-      timer = setInterval( function () {
+  <title> View details of the work </title>
+<script>
+  // timer
+  timer = setInterval( function () {
 
-        $.ajax ({
-          type: 'GET',
-          url : "/auction/computeAutionTime/[[${work.id}]]",
-          dataType: 'json',
-          success : function (result) {
-            if(result.status === "notExistAuction"){
-              $('#remain_price').html(result.result);
-            }else{
-            $('.days').html(result.days);
-            $('.hours').html(result.hours);
-            $('.minutes').html(result.minutes);
-            $('.seconds').html(result.seconds);
-            }
-          }
-        });
-      }, 1000);
-    </script>
-   <link rel="stylesheet" th:href="@{/css/work/workdetail.css}" >
+    $ . ajax  ( {
+      type: 'GET',
+      url : "/auction/computeAutionTime/[[${work.id}]]",
+      dataType: 'json',
+      success : function (result) {
+        if(result.status === "notExistAuction"){
+          $('#remain_price').html(result.result);
+        }else{
+          $('.days').html(result.days);
+          $('.hours').html(result.hours);
+          $('.minutes').html(result.minutes);
+          $('.seconds').html(result.seconds);
+        }
+      }
+    } ) ;
+  } ,  1000 ) ;
+</script>
+<!--<link rel="stylesheet" th:href="@{/css/work/workdetail.css}" >-->
 
 
-  </head>
+</head>
 <body>
 <div layout:fragment="content">
 
-  <!-- 기본  Modal -->
+  <!-- Default Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -347,7 +57,7 @@
 
 
 
-  <!-- 경매가 제안 Modal -->
+  <!-- Auction Offer Modal -->
   <div class="modal fade" id="auctionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -369,7 +79,7 @@
 
 
 
-  <!--경매 사진 및 가격제안-->
+  <!--Auction photo and price suggestion-->
   <div class="container" >
     <div class="row" >
       <div class="col-7">
@@ -398,7 +108,7 @@
                 <p class="fw-bold" id="remain_price">현재 경매가</p>
               </div>
               <div class="col-12 px-4 mb-4">
-                <p class="h4 m-0"><span class="pe-1" th:text="${work.auction.winingBid}" th:id="priceSuggest" > 2ETH</span></p>
+                <p class="h4 m-0"><span class="pe-1" th:text="${work.auction.winingBid}" th:id="priceSuggest"> 2ETH</span></p>
 
               </div>
             </div>
@@ -406,53 +116,15 @@
           <div class="row m-0">
             <div class="col-12 mb-4 ">
               <div class="btn btn-block btn-outline-info" id="suggest">경매가제시하기 </div>
->>>>>>> a2303dba1c05e6c20f62f4e35de76d6fc8919463
             </div>
           </div>
         </div>
       </div>
-<<<<<<< HEAD
-
-
-
-
-
-      <div class="container py-md-0 py-3" style = "margin-top:50px">
-
-        <!-- 작품 정보 및  가격 제안 -->
-        <!--   <div id = "work-detail"> -->
-
-
-        <!--타이머 -->
-
-        <div class="row justify-content-center">
-          <div class="col-lg-12 mb-30">
-
-            <div class="rounded bg-faded  padding-top-3x padding-bottom-3x">
-              <div class="text-center">
-                <div class="countdown mb-3" data-date-time="12/30/2019 12:00:00">
-                  <div class="item">
-                    <span>남은 경매 시간</span>
-                  </div>
-                  <div class="item">
-                    <div id="days"></div><span class="days_ref">Days</span>
-                  </div>
-                  <div class="item">
-                    <div id="hours"></div><span class="hours_ref">Hours</span>
-                  </div>
-                  <div class="item">
-                    <div id="minutes"></div><span class="minutes_ref">Mins</span>
-                  </div>
-                  <div class="item">
-                    <div id="seconds"></div><span class="seconds_ref">Secs</span>
-                  </div>
-                </div>
-=======
     </div>
 
   </div>
 
-  <!-- 사이드바 -->
+  <!-- Sidebar -->
   <div id = "sidebar" >
     <div class="container">
       <ul class="nav flex-column">
@@ -476,10 +148,10 @@
   </div>
   <div class="container py-md-0 py-3" id="timer" style = " margin-top:50px " >
 
-    <!-- 작품 정보 및  가격 제안 -->
+    <!-- Artwork Information and Price Suggestion -->
     <!--   <div id = "work-detail"> -->
 
-    <!--타이머 -->
+    <!--Timer -->
 
     <div class="row justify-content-center">
       <div class="col-lg-12 mb-30">
@@ -488,217 +160,156 @@
           <div class="text-center">
             <div class="countdown mb-3" data-date-time="12/30/2019 12:00:00">
               <div class="item">
-                <span>남은 경매 시간</span>
-              </div>
-              <div class="item">
-                <div class="days">00</div><span class="days_ref">Days</span>
-              </div>
-              <div class="item">
-                <div class="hours">00</div><span class="hours_ref">Hours</span>
-              </div>
-              <div class="item">
-                <div class="minutes">00</div><span class="minutes_ref">Mins</span>
-              </div>
-              <div class="item">
-                <div class="seconds">00</div><span class="seconds_ref">Secs</span>
->>>>>>> a2303dba1c05e6c20f62f4e35de76d6fc8919463
-              </div>
+                <span> remaining auction time </span>
+            </div>
+            <div class="item">
+              <div class="days">00</div><span class="days_ref">Days</span>
+            </div>
+            <div class="item">
+              <div class="hours">00</div><span class="hours_ref">Hours</span>
+            </div>
+            <div class="item">
+              <div class="minutes">00</div><span class="minutes_ref">Mins</span>
+            </div>
+            <div class="item">
+              <div class="seconds">00</div><span class="seconds_ref">Secs</span>
             </div>
           </div>
-        </div>
-<<<<<<< HEAD
-
-
-        <!--  표현식을 넣을 위치 -->
-        <div>
-          <h4>작품에 관한 설명이 이곳에 작성됩니다. 다음의 작품은 오픈마켓에서
-            작품을 선택하였을 때 보이는 상세내용 입니다. 경매를 통해 작품을 구
-            입할 수 있으며 경매 기간이 끝나는 시점에 가장 높은 경매가로 낙찰됩
-            니다.</h4>
-        </div>
-
-
-
-        <!--댓글 -->
-
-        <!-- 댓글 달릴 창 -->
-        <form id = "commentInfo">
-          <div id="comment-count">댓글 <span id="count">0</span></div>
-          <div id = "comments" class = flex-container>
-            <div class="container mt-3">
-              <!-- Media top -->
-              <div class="media">
-
-
-
-               <i class="fas fa-user align-self-start mr-5" style="width:30px"></i>
-                       <div class="media-body">
-                          <div id = comment-body>
-                              <div id = "member" name = "member">dfdfd</div>
-                              <div id = "comment-result" name = "comments">fdfd</div>
-
-                          </div>
-
-
-              </div>
-
-              </div>
-            </div>
-          </div>
-
-
-          <!-- 댓글 달 창 -->
-          <div class = "container-comment">
-            <label name = "comment"><i class="fas fa-user" ></i></label>
-            <div id="form-commentInfo">
-              <input type="text" name = "contents" id = "contents" placeholder="댓글을 입력해 주세요." >
-              <input type="button" id="submit" value = "댓글 작성" class="btn float-right" >
-            </div>
-
-          </div>
-            </div>
-        </form>
-
-
-        <!--    TODO - 오픈마켓 작업하는 분과 상의해서 작업 요함-->
-        <!-- 최근 본 작품들 -->
-        <div id = "recent-work">
-
-          <h4>보고 있는 작품과 비슷한 작품</h4>
-
-          <div class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1">
-            <div class="card"> <img class="card-img-top" src="https://www.freepnglogos.com/uploads/cucumber-png/cucumber-png-image-purepng-transparent-png-26.png">
-              <div class="card-body">
-                <div class="d-flex align-items-center product"> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="far fa-star"></span> </div>
-                <div class="d-flex align-items-center justify-content-between pt-3">
-                  <div class="d-flex flex-column">
-                    <div class="h6 font-weight-bold">작품A</div>
-                  </div>
-                  <div class="h6 font-weight-bold">2ETH</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 사이드바 -->
-  <div id = "sidebar" >
-    <div class="container-fluid">
-      <ul class="nav flex-column">
-        <button class="nav-item">
-          <i class="far fa-heart"></i>
-        </button>
-        <button class="nav-item">
-          <i class="far fa-comment"></i>
-        </button>
-        <button class="nav-item">
-          <i class="fas fa-share-alt"></i>
-        </button>
-        <button class="nav-item">
-          <i class="fas fa-angle-double-up"></i>
-        </button>
-        <button class="nav-item">
-          <i class="fas fa-angle-double-down"></i>
-        </button>
-      </ul>
+
+  <!-- where to put the expression -->
+  <div class="card">
+    <div class="card-body">
+      A description of the work is written here. The following works are on the open market.
+      These are the details you see when you select a work.
     </div>
   </div>
-=======
-      </div>
+
+
+
+  <!--Comments -->
+<!--  댓글 등록-->
+<script>
+  // 댓글 저장 TODO - 댓글 로직 짜기
+  $('#submit').on('click',function(){
+
+
+  // 입력한 댓글 불러오기
+  let data = {
+    comment : $("#comment-input").val()
+  };
+
+  // 데이터 받아왔는지 로그 출력
+  console.log(data);
+  console.log(JSON.stringify(data));
+
+  // ajax 통신
+  $.ajax({
+  url : "/auction/comment/${comment.id}",  // 데이터 요청할 경로 지정
+  type: "POST",                   // 방식 : POSt
+  data: JSON.stringify(data),     // JSON 데이터를 string화 시킴
+
+  success:function(result){
+  $("comments-result").html(result.id);
+    $("comments-result").html(result.comment);
+    $("comments-result").html(result.nickName);
+    $("comments-result").html(result.time);
+    console.log(result.id);
+    console.log(result.comment);
+    console.log(result.nickName);
+    console.log(result.time);
+
+
+  },
+  });
+  });
+</script>
+
+    <form id = "commentInfo">
+  <!-- Comment window -->
+  <div id="comment-count">댓글 <span id="count">0</span></div>
+  <div id = "comments" class = flex-container></div>
+
+
+  <!-- Comment window -->
+  <div class = "container-comment">
+    <label name = "comment"><i class="fas fa-user"></i></label>
+    <div id="form-commentInfo">
+      <input  id =" comment-input " placeholder =" Please enter a comment. ">
+      <button id="submit" class="btn float-right">댓글 작성</button>
     </div>
 
+  </div>
+    </form>
 
-      <!--  표현식을 넣을 위치 -->
-      <div class="card">
-        <div class="card-body">
-          작품에 관한 설명이 이곳에 작성됩니다. 다음의 작품은 오픈마켓에서
-          작품을 선택하였을 때 보이는 상세내용 입니다.
-        </div>
-      </div>
+  <!-- Recently viewed works -->
+  <div id = "recent-work">
 
+    <h4> Works similar to the work you are looking at </h4>
 
-
-      <!--댓글 -->
-
-      <!-- 댓글 달릴 창 -->
-      <div id="comment-count">댓글 <span id="count">0</span></div>
-      <div id = "comments" class = flex-container></div>
-
-
-      <!-- 댓글 달 창 -->
-      <div class = "container-comment">
-        <label name = "comment"><i class="fas fa-user"></i></label>
-        <div id="form-commentInfo">
-          <input id="comment-input" placeholder="댓글을 입력해 주세요.">
-          <button id="submit" class="btn float-right">댓글 작성</button>
-        </div>
-
-      </div>
-
-
-      <!-- 최근 본 작품들 -->
-      <div id = "recent-work">
-
-        <h4>보고 있는 작품과 비슷한 작품</h4>
-
-        <div class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1">
-          <div class="card"> <img class="card-img-top" src="https://www.freepnglogos.com/uploads/cucumber-png/cucumber-png-image-purepng-transparent-png-26.png">
-            <div class="card-body">
-              <div class="d-flex align-items-center product"> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="far fa-star"></span> </div>
-              <div class="d-flex align-items-center justify-content-between pt-3">
-                <div class="d-flex flex-column">
-                  <div class="h6 font-weight-bold">작품A</div>
-                </div>
-                <div class="h6 font-weight-bold">2ETH</div>
-              </div>
-            </div>
+  <div class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1">
+    <div class="card"> <img class="card-img-top" src="https://www.freepnglogos.com/uploads/cucumber-png/cucumber-png-image-purepng-transparent-png-26.png">
+      <div class="card-body">
+        <div class="d-flex align-items-center product"> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="far fa-star"></span> </div>
+        <div class="d-flex align-items-center justify-content-between pt-3">
+          <div class="d-flex flex-column">
+            <div class="h6 font-weight-bold">작품A</div>
           </div>
+          <div class="h6 font-weight-bold">2ETH</div>
         </div>
-
       </div>
-      <!--  </div>  -->
-
-
-
-
     </div>
-
-
   </div>
+
+</div>
+<!--  </div>  -->
+
+
+
+
+</div>
+
+
+</div>
 
 <div layout:fragment="script">
   <script>
 
-    let index= {
+    let  index =  {
       init: function () {
-        $("#offer").on("click", () => { //function(){}, ()=>{}this를 바인딩하기 위해
-          this.save();
-        });
-      },
+        $ ( "#offer" ) . on ( "click" ,  ( )  =>  {  //function(){}, ()=>{} to bind this
+          this . save ( ) ;
+        } ) ;
+      } ,
       save:function (){
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
         let data = {
           offerPrice: $("#price").val()
-
-        };
-        console.log(data); // 자바스크립트 오브젝트
+        } ;
+        console . log ( data ) ;  // javascript object
         console.log(JSON.stringify(data));
-        $.ajax({
+        $ . ajax ( {
           type: "POST",
           url: "/auction/suggest/detail/[[${work.id}]]",
           data: JSON.stringify(data),
           contentType: "application/json; charset=utf-8",
-          dataType: "json"
+          dataType: "json",
+          beforeSend : function(xhr)
+          {    /*Set the csrf value in the header before sending data */
+            xhr.setRequestHeader(header, token);
+          } ,
         }).done(function (resp) {
           $('#priceSuggest').html(resp.maxPrice);
           $('.modal-body').html(resp.status);
           $('#exampleModal').modal();
         }).fail(function (error) {
           alert(JSON.stringify(error));
-        });
+        } ) ;
 
 
       }
@@ -707,7 +318,6 @@
     }
     index.init();
   </script>
->>>>>>> a2303dba1c05e6c20f62f4e35de76d6fc8919463
 </div>
 </body>
 </html>
