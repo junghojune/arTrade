@@ -72,4 +72,12 @@ public class WorkService {
 
     }
 
+    public Work findByTitle(String title){
+        return   workRepository.findByTitle(title).orElseThrow(()->{
+            return  new IllegalArgumentException("작품을 찾을 수 없습니다 ByTitle");
+        });
+
+
+    }
+
 }

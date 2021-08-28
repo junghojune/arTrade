@@ -38,7 +38,7 @@ $(document).ready(function (){
 
 
 
-
+// TODO 주소 수정
 // 모달 안 버튼
 $(document).ready(function (){
     $("#resultbtn").click(function () {

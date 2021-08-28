@@ -185,13 +185,16 @@ public class MainController {
 
 //    경매
 
+    @GetMapping("/auction/search")
+    public String auctionSearchpage(String search,@AuthenticationMember Member member ,Model model){
+        System.out.println(search);
+        Work work = workService.findByTitle(search);
+        return auctionPage(work.getId(), model);
+    }
+
 
     @GetMapping("/auction/{id}")
-    public String auctionPage(@PathVariable Long id , @AuthenticationMember Member member ,Model model){
-
-        if(member !=null){
-            model.addAttribute("member", member);
-        }
+    public String auctionPage(@PathVariable Long id ,Model model){
 
         try{
             Work work = workService.getWork(id);
