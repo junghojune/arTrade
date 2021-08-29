@@ -68,7 +68,7 @@ public class WorkService {
 
     public List<Work> getAllWorkList() {
 
-        return workRepository.findAll();
+        return workRepository.findAllByAuctionIsNotNull();
 
     }
 
