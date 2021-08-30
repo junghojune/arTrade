@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,6 +79,38 @@ public class WorkService {
         });
 
 
+    }
+
+    public List<Work> createWork(Member member){
+
+        String[] title = new String[]{"알파벳A" , "알파벳B", "알파벳C","알파벳D","알파벳E","알파벳F"};
+        Optional<Member> memberOptional = memberRepository.findById(member.getId());
+        Member member_ = memberOptional.get();
+        if(memberOptional.isEmpty()){
+            return null;
+        }
+        List<Work> workList = new ArrayList<>();
+        int number = 0;
+        for(String i : title) {
+            int a = number++;
+            System.out.println( "number++"+a);
+            String s = Integer.toString(a+1);
+            String filename = "/images/work_list/img" + s + ".jpg";
+            Work work = Work.builder()
+                    .title(title[a])
+                    .contents( title[a]+"은 알파벳시리즈 중 하나로 파스텔 톤을 베이스로 하여 만들어진 작품이다.")
+                    .filePath(filename)
+                    .copyrightHolder(member_)
+                    .uploadAt(LocalDateTime.now())
+                    .checkToken(true)
+                    .seller(member_)
+                    .build();
+            workList.add(work);
+        }
+        List<Work> workList_ = workRepository.saveAll(workList);
+        memberOptional.get().setWorks(workList_);
+        memberRepository.save(member_);
+        return workList_;
     }
 
 }

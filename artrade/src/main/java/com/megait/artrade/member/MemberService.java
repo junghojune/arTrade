@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.security.SecureRandom;
@@ -28,9 +29,9 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
 
-    @PostConstruct
-    @Profile("local")
-    public void createNewMember(){
+
+
+    public Member createNewMember(){
 
         Member  member = Member.builder()
                 .username("admin")
@@ -45,7 +46,9 @@ public class MemberService {
         Member newMember = memberRepository.save(member);
         emailService.sendEmail(newMember);
 
+        return newMember;
     }
+
 
     public Member processNewMember(SignUpForm signUpForm){
 
