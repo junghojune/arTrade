@@ -32,12 +32,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
+
         http.authorizeRequests()
 
                 // 다음 URL 은 인증 없이 요청 가능
                 .mvcMatchers("/", "/login", "/signup", "/check-email", "/email_check_token",
                         "/mypage", "/openmarket",
-                        "/mypage/*" ,"/oauth2/**"
+                        "/mypage/*" ,"/oauth2/**" , "/member/findpw" , "/auction/search"
                 ).permitAll()
 
                 // '/item' 으로 시작하는 자원은 get 요청만 가능

@@ -3,12 +3,14 @@ package com.megait.artrade.controller;
 import com.megait.artrade.action.Auction;
 import com.megait.artrade.action.AuctionService;
 import com.megait.artrade.authentication.AuthenticationMember;
+import com.megait.artrade.authentication.EmailService;
 import com.megait.artrade.authentication.SignUpForm;
 import com.megait.artrade.authentication.SignUpFormValidator;
 import com.megait.artrade.member.Member;
 import com.megait.artrade.member.MemberRepository;
 import com.megait.artrade.member.MemberService;
 import com.megait.artrade.offerprice.OfferPrice;
+import com.megait.artrade.offerprice.OfferPriceService;
 import com.megait.artrade.offerprice.UploadVo;
 import com.megait.artrade.work.Work;
 import com.megait.artrade.work.WorkService;
@@ -52,6 +54,10 @@ public class MainController {
     private final MemberRepository memberRepository;
 
     private final WorkService workService;
+
+    private final OfferPriceService offerPriceService;
+
+    private final EmailService emailService;
 
     @InitBinder("signUpForm")
     protected void initBinder(WebDataBinder binder) {
@@ -180,12 +186,16 @@ public class MainController {
 //    경매
 
 
-    @GetMapping("/auction/{id}")
-    public String auctionPage(@PathVariable Long id , @AuthenticationMember Member member ,Model model){
+    @GetMapping("/auction/search")
+    public String auctionSearchpage(String search,@AuthenticationMember Member member ,Model model){
+        System.out.println(search);
+        Work work = workService.findByTitle(search);
+        return auctionPage(work.getId(), model);
+    }
 
-        if(member !=null){
-            model.addAttribute("member", member);
-        }
+
+    @GetMapping("/auction/{id}")
+    public String auctionPage(@PathVariable Long id ,Model model){
 
         try{
             Work work = workService.getWork(id);
@@ -423,6 +433,17 @@ public class MainController {
                 .build();
         Auction auction_ = workService.saveAuction(auction);
 
+        OfferPrice offerPrice = OfferPrice.builder()
+                  .offerAt(LocalDateTime.now())
+                  .auction(auction_)
+                  .offerPrice(uploadVo.getDefaultValue())
+                  .member(member)
+                  .build();
+
+
+        OfferPrice offerPrice_ = offerPriceService.saveOfferPrice(offerPrice);
+        auction_.setOfferPrice(List.of(offerPrice_));
+
 
         work.setAuction(auction_);
         workService.saveWork(work);
@@ -444,4 +465,44 @@ public class MainController {
 
         return object.toString();
     }
+
+    @GetMapping("/member/findpw")
+    public String findPWpage(){
+        return "member/findPW";
+    }
+
+    //비밀번호찾기
+    @ResponseBody
+    @PostMapping("/member/findpw")
+    public String findPw(@RequestBody Member member ) {
+
+
+        JsonObject object = new JsonObject();
+        Member member_ = memberService.getMemberByUserName(member.getUsername());
+
+        // 가입된 아이디가 없으면
+        if (member_ == null) {
+            object.addProperty("status", "fail");
+            object.addProperty("message", "등록되지 않은 아이디입니다.");
+            return object.toString();
+
+        }
+        // 가입된 이메일이 아니면
+        else if (!member_.getEmail().equals(member.getEmail()) ) {
+            object.addProperty("status", "fail");
+            object.addProperty("message", "등록되지 않은 이메일입니다.");
+            return object.toString();
+        } else {
+            String ramdomPassword = memberService.getRamdomPassword(10);
+            // 비밀번호 변경
+            emailService.sendfindPWEmail(member_, ramdomPassword);
+            // 비밀번호 변경 메일 발송
+            object.addProperty("status", "success");
+            object.addProperty("message", "이메일로 임시 비밀번호를 발송하였습니다.");
+
+            return object.toString();
+        }
+    }
+
+
 }
