@@ -10,16 +10,16 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>-->
+<!--  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
 
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
 
 
 
-  <script th:src="@{/js/work/workdetail.js}"></script>
+
 
   <title>작품 상세보기</title>
   <script>
@@ -48,11 +48,11 @@
      $("#addlike").click(function(){
        $.ajax({
          url : "/work/like/[[${work.id}]]",
-         mathod : 'GET',
+         type: 'GET',
          contentType: "application/json; charset=utf-8",
          success : function(count){
            console.log(count);
-           $('#countLike').html(count);
+
          }
        })
      })
@@ -161,6 +161,29 @@
   </div>
 
 
+  <!-- 사이드바 (좋아요/ 댓글 )-->
+  <div class="sidebar-item">
+    <div class="make-me-sticky row">
+      <!--
+        th:classappend="${member가 이 작품을 좋아요 한 내용이 true 면,}" ? active"
+          todo: onclick 부분 지우고 위 th로직 작성하기-->
+      <button class="sidebar-icon col-12 mt-2" id="addlike" onclick="btnClick()">
+        <i class="far fa-heart fa-2x"></i>
+      </button>
+      <button class="sidebar-icon col-12 mt-1" href="#comment">
+        <i class="far fa-comment fa-2x"></i>
+      </button>
+      <button class="sidebar-icon col-12 mt-1">
+        <i class="fas fa-share-alt fa-2x"></i>
+      </button>
+      <button class="sidebar-icon col-12 mt-1" href="#top">
+        <i class="fas fa-angle-double-up fa-2x"></i>
+      </button>
+      <button class="sidebar-icon col-12 mt-1 mb-2" href="#bottom">
+        <i class="fas fa-angle-double-down fa-2x"></i>
+      </button>
+    </div>
+  </div>
 
 
   <!--경매 사진 및 가격제안-->
@@ -181,6 +204,7 @@
             <P class="ps-3 textmuted">Masterpiece A</P>
 
             <p class="textmuted">created by 작가이름</p>
+            인기도 :
             <span class="textmuted" th:id= "countLike" th:text="${work.popularity}"></span>
 
           </div>
@@ -205,29 +229,6 @@
 
   </div>
 
-  <!-- 사이드바 (좋아요/ 댓글 )-->
-  <div class="sidebar-item">
-    <div class="make-me-sticky row">
-      <!--
-        th:classappend="${member가 이 작품을 좋아요 한 내용이 true 면,}" ? active"
-          todo: onclick 부분 지우고 위 th로직 작성하기-->
-      <button class="sidebar-icon col-12 mt-2" id="addlike" onclick="btnClick()">
-        <i class="far fa-heart fa-2x"></i>
-      </button>
-      <button class="sidebar-icon col-12 mt-1" href="#comment">
-        <i class="far fa-comment fa-2x"></i>
-      </button>
-      <button class="sidebar-icon col-12 mt-1">
-        <i class="fas fa-share-alt fa-2x"></i>
-      </button>
-      <button class="sidebar-icon col-12 mt-1" href="#top">
-        <i class="fas fa-angle-double-up fa-2x"></i>
-      </button>
-      <button class="sidebar-icon col-12 mt-1 mb-2" href="#bottom">
-        <i class="fas fa-angle-double-down fa-2x"></i>
-      </button>
-    </div>
-  </div>
 
   <!-- 클릭 시 좋아요 버튼 active 하는 스크립트 -->
   <script>
@@ -328,6 +329,7 @@
   </div>
 
   <div layout:fragment="script">
+    <script th:src="@{/js/work/workdetail.js}"></script>
     <script>
 
       let index= {
@@ -368,6 +370,8 @@
 
       }
       index.init();
+
+
     </script>
 
   </div>
