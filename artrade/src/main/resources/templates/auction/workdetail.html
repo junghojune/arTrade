@@ -8,55 +8,137 @@
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+
 
 
   <script th:src="@{/js/work/workdetail.js}"></script>
 
-    <title>작품 상세보기</title>
-    <script>
-      // 타이머
-      timer = setInterval( function () {
+  <title>작품 상세보기</title>
+  <script>
+    // 타이머
+    timer = setInterval( function () {
 
-        $.ajax ({
-          type: 'GET',
-          url : "/auction/computeAutionTime/[[${work.id}]]",
-          dataType: 'json',
-          success : function (result) {
-            if(result.status === "notExistAuction"){
-              $('#remain_price').html(result.result);
-            }else{
+      $.ajax ({
+        type: 'GET',
+        url : "/auction/computeAutionTime/[[${work.id}]]",
+        dataType: 'json',
+        success : function (result) {
+          if(result.status === "notExistAuction"){
+            $('#remain_price').html(result.result);
+          }else{
             $('.days').html(result.days);
             $('.hours').html(result.hours);
             $('.minutes').html(result.minutes);
             $('.seconds').html(result.seconds);
-            }
           }
-        });
-      }, 1000);
-    </script>
-   <link rel="stylesheet" th:href="@{/css/work/workdetail.css}" >
+        }
+      });
+    }, 1000);
+
+   // 좋아요 버튼 클릭시
+   $(function(){
+     $("#addlike").click(function(){
+       $.ajax({
+         url : "/work/like/[[${work.id}]]",
+         mathod : 'GET',
+         contentType: "application/json; charset=utf-8",
+         success : function(count){
+           console.log(count);
+           $('#countLike').html(count);
+         }
+       })
+     })
+   })
 
 
-  </head>
+  </script>
+  <link rel="stylesheet" th:href="@{/css/work/workdetail.css}" >
+
+
+  <style>
+
+    .sidebar-section {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+    }
+
+
+    .sidebar-item {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+
+    }
+
+
+    .make-me-sticky {
+      margin-left: 10px;
+      /* background-color: aquamarine; */
+      border: 1px solid black;
+      position: -webkit-sticky;
+      position: sticky;
+      top: 300px;
+      right: 0;
+      width: 100px;
+
+      padding: 0 15px;
+    }
+
+    .sidebar-icon{
+      height: 50px;
+      width: 50px;
+      border: 1px solid black;
+      color: cadetblue;
+      background: #fff;
+    }
+
+    .sidebar-icon.active{
+      background-color: tomato;
+      color: #fff;
+    }
+    .sidebar-icon:hover{
+      background-color: #555;
+    }
+
+    .auction-time{
+      font-size: 30px;
+      font-weight: 500;
+    }
+
+
+  </style>
+
+</head>
 <body>
-<div layout:fragment="content">
+<section layout:fragment="content">
+  <section id=top>
+    <!-- 기본  Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> </div>
+          <div class="text-center align-items-center mid ">
+            <div class="modal-logo"><img src="https://imgur.com/N1vwiAJ.png"></div>
+            <div class="modal-body pb-2">
 
-  <!-- 기본  Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> </div>
-        <div class="text-center align-items-center mid ">
-          <div class="modal-logo"><img src="https://imgur.com/N1vwiAJ.png"></div>
-          <div class="modal-body pb-2">
-
+            </div>
+            <div class="modal-footer d-flex justify-content-center mb-3"> <button type="button" class="btn btn-block btn-outline-info" data-dismiss="modal" id="confirm" >확인</button> </div>
           </div>
-          <div class="modal-footer d-flex justify-content-center mb-3"> <button type="button" class="btn btn-block btn-outline-info" data-dismiss="modal" id="confirm" >확인</button> </div>
         </div>
       </div>
     </div>
-  </div>
-
+  </section>
 
 
   <!-- 경매가 제안 Modal -->
@@ -86,22 +168,20 @@
     <div class="row" >
       <div class="col-7">
 
-        <div class="col-12 p-5"> <img id="workpircture" th:src="${work.filePath}"> </div>
-        <div class="bg-light">
-          <div class="col-md-4 col-4 ps-30 pe-0 ">
-          </div>
-
+        <div class="col-5 p-5">
+          <img id="workpircture" th:src="${work.filePath}" style="border: 1px solid black; width: 300px; height: 300px;">
         </div>
+
       </div>
       <div class="col-5 py-5">
         <div class="row m-0">
           <div class="col-12 ">
 
-            <p class="h4 m-0" th:text="${work.title}">작품A</p>
+            <p class="h4 m-0" id="workid" th:text="${work.title}" th:value="${work.id}">작품A</p>
             <P class="ps-3 textmuted">Masterpiece A</P>
 
             <p class="textmuted">created by 작가이름</p>
-
+            <span class="textmuted" th:id= "countLike" th:text="${work.popularity}"></span>
 
           </div>
           <div class="col-12 px-0">
@@ -111,7 +191,6 @@
               </div>
               <div class="col-12 px-4 mb-4">
                 <p class="h4 m-0"><span class="pe-1" th:text="${work.auction.winingBid}" th:id="priceSuggest" > 2ETH</span></p>
-
               </div>
             </div>
           </div>
@@ -126,28 +205,39 @@
 
   </div>
 
-  <!-- 사이드바 -->
-  <div id = "sidebar" >
-    <div class="container">
-      <ul class="nav flex-column">
-        <button class="nav-item">
-          <i class="far fa-heart"></i>
-        </button>
-        <button class="nav-item">
-          <i class="far fa-comment"></i>
-        </button>
-        <button class="nav-item">
-          <i class="fas fa-share-alt"></i>
-        </button>
-        <button class="nav-item">
-          <i class="fas fa-angle-double-up"></i>
-        </button>
-        <button class="nav-item">
-          <i class="fas fa-angle-double-down"></i>
-        </button>
-      </ul>
+  <!-- 사이드바 (좋아요/ 댓글 )-->
+  <div class="sidebar-item">
+    <div class="make-me-sticky row">
+      <!--
+        th:classappend="${member가 이 작품을 좋아요 한 내용이 true 면,}" ? active"
+          todo: onclick 부분 지우고 위 th로직 작성하기-->
+      <button class="sidebar-icon col-12 mt-2" id="addlike" onclick="btnClick()">
+        <i class="far fa-heart fa-2x"></i>
+      </button>
+      <button class="sidebar-icon col-12 mt-1" href="#comment">
+        <i class="far fa-comment fa-2x"></i>
+      </button>
+      <button class="sidebar-icon col-12 mt-1">
+        <i class="fas fa-share-alt fa-2x"></i>
+      </button>
+      <button class="sidebar-icon col-12 mt-1" href="#top">
+        <i class="fas fa-angle-double-up fa-2x"></i>
+      </button>
+      <button class="sidebar-icon col-12 mt-1 mb-2" href="#bottom">
+        <i class="fas fa-angle-double-down fa-2x"></i>
+      </button>
     </div>
   </div>
+
+  <!-- 클릭 시 좋아요 버튼 active 하는 스크립트 -->
+  <script>
+    function btnClick(){
+      const menuRed = document.querySelector('.sidebar-icon');
+      menuRed.classList.toggle('active');
+    }
+  </script>
+
+
   <div class="container py-md-0 py-3" id="timer" style = " margin-top:50px " >
 
     <!-- 작품 정보 및  가격 제안 -->
@@ -161,21 +251,14 @@
         <div class="rounded bg-faded  padding-top-3x padding-bottom-3x">
           <div class="text-center">
             <div class="countdown mb-3" data-date-time="12/30/2019 12:00:00">
-              <div class="item">
-                <span>남은 경매 시간</span>
+              <h5>남은 경매 시간</h5>
+              <div class="auction-time">
+                <span class="days mx-1">00</span>
+                <span class="hours mx-1">00</span>
+                <span class="minutes mx-1">00</span>
+                <span class="seconds mx-1">00</span>
               </div>
-              <div class="item">
-                <div class="days">00</div><span class="days_ref">Days</span>
-              </div>
-              <div class="item">
-                <div class="hours">00</div><span class="hours_ref">Hours</span>
-              </div>
-              <div class="item">
-                <div class="minutes">00</div><span class="minutes_ref">Mins</span>
-              </div>
-              <div class="item">
-                <div class="seconds">00</div><span class="seconds_ref">Secs</span>
-              </div>
+              <div>Days &nbsp; Hours &nbsp; Mins &nbsp; Secs</div>
             </div>
           </div>
         </div>
@@ -183,106 +266,111 @@
     </div>
 
 
-      <!--  표현식을 넣을 위치 -->
-      <div class="card">
-        <div class="card-body">
-          작품에 관한 설명이 이곳에 작성됩니다. 다음의 작품은 오픈마켓에서
-          작품을 선택하였을 때 보이는 상세내용 입니다.
-        </div>
+    <!--  표현식을 넣을 위치 -->
+    <div class="card my-5">
+      <div class="card-body">
+        작품에 관한 설명이 이곳에 작성됩니다. 다음의 작품은 오픈마켓에서
+        작품을 선택하였을 때 보이는 상세내용 입니다.
       </div>
+    </div>
 
 
 
-      <!--댓글 -->
+    <!--댓글 -->
 
+    <section id=comment></section>
+    <div class="comment-area py-1 my-5" style="background-color: #f3f3f3;">
       <!-- 댓글 달릴 창 -->
-      <div id="comment-count">댓글 <span id="count">0</span></div>
-      <div id = "comments" class = flex-container></div>
-
+      <div class="container my-3">
+        <div id="comment-count">댓글 <span id="count">0</span></div>
+        <div id = "comments" class = flex-container></div>
+      </div>
 
       <!-- 댓글 달 창 -->
-      <div class = "container-comment">
-        <label name = "comment"><i class="fas fa-user"></i></label>
-        <div id="form-commentInfo">
-          <input id="comment-input" placeholder="댓글을 입력해 주세요.">
-          <button id="submit" class="btn float-right">댓글 작성</button>
+      <div class="container py-3">
+        <div id="form-commentInfo py-3">
+          <label name ="comment"><i class="fas fa-user fa-2x col-1"></i></label>
+          <input id="comment-input" placeholder="댓글을 입력해 주세요." class="col-10">
+          <button id="submit" type="button" class="btn btn-outline-dark float-right px-2">댓글 작성</button>
         </div>
-
       </div>
+    </div>
 
+    <!-- 최근 본 작품들 -->
+    <div id = "recent-work">
 
-      <!-- 최근 본 작품들 -->
-      <div id = "recent-work">
+      <h4>보고 있는 작품과 비슷한 작품</h4>
 
-        <h4>보고 있는 작품과 비슷한 작품</h4>
-
-        <div class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1">
-          <div class="card"> <img class="card-img-top" src="https://www.freepnglogos.com/uploads/cucumber-png/cucumber-png-image-purepng-transparent-png-26.png">
-            <div class="card-body">
-              <div class="d-flex align-items-center product"> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="far fa-star"></span> </div>
-              <div class="d-flex align-items-center justify-content-between pt-3">
-                <div class="d-flex flex-column">
-                  <div class="h6 font-weight-bold">작품A</div>
-                </div>
-                <div class="h6 font-weight-bold">2ETH</div>
+      <div class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1">
+        <div class="card"> <img class="card-img-top" src="https://www.freepnglogos.com/uploads/cucumber-png/cucumber-png-image-purepng-transparent-png-26.png">
+          <div class="card-body">
+            <div class="d-flex align-items-center product"> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="far fa-star"></span> </div>
+            <div class="d-flex align-items-center justify-content-between pt-3">
+              <div class="d-flex flex-column">
+                <div class="h6 font-weight-bold">작품A</div>
               </div>
+              <div class="h6 font-weight-bold">2ETH</div>
             </div>
           </div>
         </div>
-
       </div>
-      <!--  </div>  -->
-
-
-
 
     </div>
+    <!--  </div>  -->
+
+
 
 
   </div>
 
-<div layout:fragment="script">
-  <script>
+  <section id=bottom></section>
 
-    let index= {
-      init: function () {
-        $("#offer").on("click", () => { //function(){}, ()=>{}this를 바인딩하기 위해
-          this.save();
-        });
-      },
-      save:function (){
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
-        let data = {
-          offerPrice: $("#price").val()
-        };
-        console.log(data); // 자바스크립트 오브젝트
-        console.log(JSON.stringify(data));
-        $.ajax({
-          type: "POST",
-          url: "/auction/suggest/detail/[[${work.id}]]",
-          data: JSON.stringify(data),
-          contentType: "application/json; charset=utf-8",
-          dataType: "json",
-          beforeSend : function(xhr)
-          {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-            xhr.setRequestHeader(header, token);
-          },
-        }).done(function (resp) {
-          $('#priceSuggest').html(resp.maxPrice);
-          $('.modal-body').html(resp.status);
-          $('#exampleModal').modal();
-        }).fail(function (error) {
-          alert(JSON.stringify(error));
-        });
+  </div>
+
+  <div layout:fragment="script">
+    <script>
+
+      let index= {
+        init: function () {
+          $("#offer").on("click", () => { //function(){}, ()=>{}this를 바인딩하기 위해
+            this.save();
+          });
+        },
+        save:function (){
+          var token = $("meta[name='_csrf']").attr("content");
+          var header = $("meta[name='_csrf_header']").attr("content");
+          let data = {
+            offerPrice: $("#price").val()
+          };
+          console.log(data); // 자바스크립트 오브젝트
+          console.log(JSON.stringify(data));
+          $.ajax({
+            type: "POST",
+            url: "/auction/suggest/detail/[[${work.id}]]",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            beforeSend : function(xhr)
+            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+              xhr.setRequestHeader(header, token);
+            },
+          }).done(function (resp) {
+            $('#priceSuggest').html(resp.maxPrice);
+            $('.modal-body').html(resp.status);
+            $('#exampleModal').modal();
+          }).fail(function (error) {
+            alert(JSON.stringify(error));
+          });
+
+
+        }
 
 
       }
+      index.init();
+    </script>
 
-
-    }
-    index.init();
-  </script>
-</div>
+  </div>
+</section>
 </body>
 </html>

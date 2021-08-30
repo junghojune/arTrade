@@ -6,6 +6,8 @@ import com.megait.artrade.authentication.AuthenticationMember;
 import com.megait.artrade.authentication.EmailService;
 import com.megait.artrade.authentication.SignUpForm;
 import com.megait.artrade.authentication.SignUpFormValidator;
+import com.megait.artrade.like.Like;
+import com.megait.artrade.like.LikeService;
 import com.megait.artrade.member.Member;
 import com.megait.artrade.member.MemberRepository;
 import com.megait.artrade.member.MemberService;
@@ -58,6 +60,8 @@ public class MainController {
     private final OfferPriceService offerPriceService;
 
     private final EmailService emailService;
+
+    private final LikeService likeService;
 
     @InitBinder("signUpForm")
     protected void initBinder(WebDataBinder binder) {
@@ -502,5 +506,23 @@ public class MainController {
         }
     }
 
+    // 좋아요 버튼 늘렀을시
+    @GetMapping("/work/like/{id}")
+    @ResponseBody
+    public String countLike(@AuthenticationMember Member member, @PathVariable Long id){
 
+        Like like = likeService.addLike(member, workService.getWork(id));
+
+        int countLike = like.getWork().getPopularity();
+
+        JsonObject object = new JsonObject();
+        try{
+
+            object.addProperty("count", countLike);
+
+        }catch (IllegalArgumentException e){
+            object.addProperty("message", e.getMessage());
+        }
+        return object.toString();
+    }
 }
