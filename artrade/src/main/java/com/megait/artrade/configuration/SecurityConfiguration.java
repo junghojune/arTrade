@@ -44,7 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/item/*").permitAll()
 
                 // 다음 디렉토리 혹은 파일은 인증 없이 요청 가능
-                .antMatchers("/css/**", "/images/**", "/js/**", "**/favicon.ico").permitAll()
+                .antMatchers("/css/**", "/images/**", "/js/**", "**/favicon.ico", "/work/list/**").permitAll()
                 // 이것보다는 밑에 ignoring()이 좋다.
 
                 // 나머지 요청은 로그인 해야만 요청 가능

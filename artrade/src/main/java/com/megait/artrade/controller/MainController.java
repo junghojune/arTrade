@@ -135,6 +135,7 @@ public class MainController {
             , @RequestParam("title") String title, @RequestParam("contents") String contents) throws Exception {
         String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
         String basePath = rootPath + "/testFileUpload";
+        String webPath = "/work/list";
 
 
 
@@ -146,7 +147,8 @@ public class MainController {
             String currentDate = simpleDateFormat.format(new Date());
             String storedFileName = currentDate + "-" + originalFileTilte + originalFileExtension;
             String filePath = basePath + "/" + storedFileName;
-            Work work = workService.processNewWork(member, title, contents, filePath);
+            String fileWebPath = webPath + "/" + storedFileName;
+            Work work = workService.processNewWork(member, title, contents, fileWebPath);
             File dest = new File(filePath);
             file.transferTo(dest);
         }
