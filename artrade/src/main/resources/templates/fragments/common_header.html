@@ -1,0 +1,61 @@
+<header class="commonheader">
+    <a th:href="@{/}" class="logo"><img src="/images/logo_transparent.png"></a>
+    <div class="toggle" onclick="toggleMenu();"></div>
+    <ul class="navigation">
+        <li><a th:href="@{/}" style="--i:1;">Home</a></li>
+        <li><a th:href="@{#services}" style="--i:2;">Menu</a></li>
+        <li><a th:href="@{#work}" style="--i:3;">Works</a></li>
+        <li><a th:href="@{#about}" style="--i:4;">About</a></li>
+    </ul>
+    <div class="useraction">
+        <div class="userprofile" onclick="toggleUser();">
+            <i class="far fa-user"></i>
+        </div>
+        <div class="usermenu">
+            <h3>이름<br/><span>작가</span></h3>
+            <ul>
+                <li sec:authorize="!isAuthenticated()">
+                    <form th:action="@{/login}">
+                        <a th:href="@{/login}">로그인하기</a>
+                    </form>
+                </li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/signup}">회원가입</a></li>
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/mypage}">마이페이지</a></li>
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/workUpload}">작품 올리기</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/regauction}">작품 경매 등록하기</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/mypage/like}">찜</a></li>
+                <li sec:authorize="isAuthenticated()">
+                    <form class="form-inline" th:action="@{/logout}" th:method="post">
+                        <button class="nav-link btn btn-dark btn-sm" type="submit"
+                                style="border:0; background-color: transparent; font-size: 12px"
+                                sec:authorize="isAuthenticated()">로그아웃</button>
+                    </form></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+
+
+<script>
+    function toggleMenu(){
+        const menuToggle = document.querySelector('.toggle');
+        const navigation = document.querySelector('.navigation');
+        menuToggle.classList.toggle('active');
+        navigation.classList.toggle('active');
+    };
+
+    function toggleUser(){
+        const userToggle = document.querySelector('.usermenu');
+        userToggle.classList.toggle('active');
+
+    };
+</script>
+
