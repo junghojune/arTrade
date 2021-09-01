@@ -36,7 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 // 다음 URL 은 인증 없이 요청 가능
                 .mvcMatchers("/", "/login", "/signup", "/check-email", "/email_check_token",
-                        "/market",
+                        "/market/**",
                         "/mypage/**" ,"/oauth2/**" , "/member/findpw" , "/auction/**"
                 ).permitAll()
 
