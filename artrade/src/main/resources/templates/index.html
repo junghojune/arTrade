@@ -18,7 +18,7 @@
             <div class="title col-4">
                 <h2>지금 가장 인기 있는 작품</h2>
                 <p>
-                    <a class="btn btn-dark" th:href="@{/market}">인기 작품 보러가기</a>
+                    <a class="btn btn-dark" th:href="@{/market/popularity}">인기 작품 보러가기</a>
                 </p>
                 <div class="searchBox mx-auto" style="background-color:#fff; width: 350px; border-radius: 10px; height:30px";>
                     <form class="form-inline" th:action="@{/auction/search}">
@@ -108,7 +108,7 @@
     <section class="work" id="work" style="background-color: lightblue">
         <div class="title white">
             <h2>Recent Work</h2>
-            <p><button th:href="@{/market}">최신 작품 보러가기</button></p>
+            <p><button th:href="@{/market/lates}">최신 작품 보러가기</button></p>
         </div>
         <div class="container">
             <div class="card">
