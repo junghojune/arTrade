@@ -272,6 +272,7 @@ public class MainController {
     public String auctionSearchpage(String search,@AuthenticationMember Member member ,Model model){
         System.out.println(search);
         Work work = workService.findByTitle(search);
+        work.setSearch_cnt(work.getSearch_cnt() + 1);
         return auctionPage(work.getId(), model);
     }
 
@@ -281,6 +282,7 @@ public class MainController {
 
         try{
             Work work = workService.getWork(id);
+            work.setInsert_cnt(work.getInsert_cnt() + 1);
             double maxPrice = auctionService.findMaxPrice(id);
             model.addAttribute("work", work);
             model.addAttribute("maxPrice", Double.toString(maxPrice));

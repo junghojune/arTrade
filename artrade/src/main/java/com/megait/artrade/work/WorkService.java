@@ -148,7 +148,12 @@ public class WorkService {
             popularity_cnt = work.getPopularity();
             comment_cnt = work.getComment_cnt();
             search_cnt = work.getSearch_cnt();
+
+            if(work.getAuction().getOfferPrice().isEmpty()){
+                offerprice_cnt = 0;
+            }
             offerprice_cnt = work.getAuction().getOfferPrice().size();
+
             insert_cnt = work.getInsert_cnt();
 
             double popularityRanking = search_cnt * 1 + comment_cnt * 100 + insert_cnt * 200 + popularity_cnt * 400

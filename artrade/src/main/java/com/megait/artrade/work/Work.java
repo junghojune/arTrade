@@ -47,7 +47,6 @@ public class Work {
 
     private int popularity;
 
-
     private int insert_cnt;
 
     private int search_cnt;
