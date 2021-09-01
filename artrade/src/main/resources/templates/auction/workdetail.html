@@ -149,13 +149,15 @@
 
   <!--경매 사진 및 가격제안-->
   <div class="container" >
+    <form th:action="@{/auction/buy}">
     <div class="row" >
       <div class="col-7 p-5">
           <img id="workpircture" th:src="${work.filePath}" style="border: 1px solid black; width: 300px; height: 300px;">
       </div>
       <div class="col-5 p-5">
 
-            <h4 class="pt-3" id="workid" th:text="${work.title}" th:value="${work.id}">작품A</h4>
+            <input type="hidden"   th:value="${work.id}" th:name="id" >
+            <h4 class="pt-3" id="workid" th:text="${work.title}" th:value="${work.id}" >작품A</h4>
             <p>Masterpiece A</p>
 
             <p>created by 작가이름</p>
@@ -171,12 +173,14 @@
             </div>
 <!--        todo: sec:authorize 지우고 로직 맞게 쓰기 (if 구매자가 맞다면 버튼 보이기) -->
             <div class="btn btn-block btn-outline-info col-12" id="suggest">경매가제시하기 </div>
-            <div sec:authorize="isAuthenticated()" class="btn btn-block btn-outline-info col-12" id="buy">구매하기 </div>
+            <input sec:authorize="isAuthenticated()"  type="submit" th:value="구매하기" class="btn btn-block btn-outline-info col-12" id="buy">
             <div class="col-12 mb-4 ">
             </div>
           </div>
 
         </div>
+
+       </form>
       </div>
     </div>
 

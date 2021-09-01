@@ -24,11 +24,11 @@ public class ExampleWorks {
     private final AuctionService auctionService;
 
 
-
     @PostConstruct
     @Profile("local")
     public void createExampleWorks(){
-        Member newMember = memberService.createNewMember();
+        Member newMember = memberService.createNewMember("user01" , "춘식이" , "0x0260E71A86AD681F629D5ad5F43c7580E8aC24F3");
+        memberService.createNewMember("user02" , "니니즈" , "0x7aFE95B205D9Abccc7437C0FD8fc8E537a4e2D68");
         List<Work> work = workService.createWork(newMember);
         auctionService.createAuction(work , newMember);
 

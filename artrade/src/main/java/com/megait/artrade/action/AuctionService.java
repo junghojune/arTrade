@@ -72,7 +72,7 @@ public class AuctionService {
             Auction auction = Auction.builder()
                     .auctionClosingTime(localDateTime)
                     .offerPrice(List.of(offerPrice_))
-                    .winingBid(123)
+                    .winingBid(5)
                     .status(AuctionStatusType.경매중)
                     .auctionProduct(work_)
                     .build();
@@ -88,7 +88,7 @@ public class AuctionService {
 
     private OfferPrice createOfferPrice(Member member) {
         OfferPrice offerPrice = OfferPrice.builder()
-                .offerPrice(123)
+                .offerPrice(5)
                 .member(member)
                 .offerAt(LocalDateTime.now())
                 .build();

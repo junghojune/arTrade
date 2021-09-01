@@ -337,6 +337,17 @@ public class MainController {
         return "auction/regAuction";
     }
 
+    @GetMapping("/auction/buy")
+    public String buyWork( @AuthenticationMember Member member , Model model , Long id){
+        System.out.println(id + "id111");
+        String sellerWalletId = workService.getWork(id).getSeller().getWalletId();
+        double winingBid = workService.getWork(id).getAuction().getWiningBid();
+        model.addAttribute("member" , member);
+        model.addAttribute("sellerWalletId" , sellerWalletId);
+        model.addAttribute("winingBid" , Double.toString(winingBid));
+        return "auction/payment";
+    }
+
 
 
 
