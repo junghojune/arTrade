@@ -133,8 +133,14 @@ public class WorkService {
 
     // 인기 계산산
 
-    public void calculatePopularity() {
+    public void allCalculatePopularity() {
+        List<Work> workList = workRepository.findAll();
+        for (Work work : workList) {
+            setPopularityRanking(work.getId());
+        }
+    }
 
+    public double setPopularityRanking(Long id){
 
         int popularity_cnt = 0;
         int comment_cnt = 0;
@@ -143,38 +149,40 @@ public class WorkService {
         int insert_cnt = 0;
         double agingValue = 0;
 
-        List<Work> workList = workRepository.findAll();
-        for (Work work : workList) {
-            popularity_cnt = work.getPopularity();
-            comment_cnt = work.getComment_cnt();
-            search_cnt = work.getSearch_cnt();
+        Work work = workRepository.getById(id);
 
-            if(work.getAuction().getOfferPrice().isEmpty()){
-                offerprice_cnt = 0;
-            }
-            offerprice_cnt = work.getAuction().getOfferPrice().size();
+        popularity_cnt = work.getPopularity();
+        comment_cnt = work.getComment_cnt();
+        search_cnt = work.getSearch_cnt();
 
-            insert_cnt = work.getInsert_cnt();
-
-            double popularityRanking = search_cnt * 1 + comment_cnt * 100 + insert_cnt * 200 + popularity_cnt * 400
-                    + offerprice_cnt * 300;
-
-            LocalDateTime workUploadAt = work.getUploadAt();
-            LocalDateTime nowDate = LocalDateTime.now();
-
-            double t = ChronoUnit.HOURS.between(workUploadAt,nowDate) / 24.0;
-
-            t = Math.round(t*10) / 10.0;
-
-            double gravity = 0.6;
-
-            agingValue = Math.pow(t,gravity);
-
-            popularityRanking = popularityRanking / agingValue;
-
-            work.setPopularityRanking(popularityRanking);
-            workRepository.save(work);
+        if(work.getAuction().getOfferPrice().isEmpty()){
+            offerprice_cnt = 0;
         }
+        offerprice_cnt = work.getAuction().getOfferPrice().size();
+
+        insert_cnt = work.getInsert_cnt();
+
+        double popularityRanking = search_cnt * 1 + comment_cnt * 100 + insert_cnt * 200 + popularity_cnt * 400
+                + offerprice_cnt * 300;
+
+        LocalDateTime workUploadAt = work.getUploadAt();
+        LocalDateTime nowDate = LocalDateTime.now();
+
+        /*double t = ChronoUnit.HOURS.between(workUploadAt,nowDate) / 24.0;
+
+            t = Math.round(t*10) / 10.0 ;
+*/
+        double t =2 ;
+        double gravity = 2;
+
+        agingValue = Math.pow(t,gravity);
+
+        popularityRanking = popularityRanking / agingValue;
+
+        work.setPopularityRanking(popularityRanking);
+        workRepository.save(work);
+
+        return popularityRanking;
 
     }
 

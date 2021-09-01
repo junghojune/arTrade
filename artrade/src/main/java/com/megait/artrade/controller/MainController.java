@@ -15,6 +15,7 @@ import com.megait.artrade.offerprice.OfferPrice;
 import com.megait.artrade.offerprice.OfferPriceService;
 import com.megait.artrade.offerprice.UploadVo;
 import com.megait.artrade.work.Work;
+import com.megait.artrade.work.WorkRepository;
 import com.megait.artrade.work.WorkService;
 import com.megait.artrade.work.WorkVo;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.swing.filechooser.FileSystemView;
 import javax.validation.Valid;
 import java.io.File;
@@ -57,6 +60,8 @@ public class MainController {
 
     private final MemberRepository memberRepository;
 
+    private final WorkRepository workRepository;
+
     private final WorkService workService;
 
     private final OfferPriceService offerPriceService;
@@ -71,7 +76,13 @@ public class MainController {
     }
 
     @RequestMapping("/")
-    public String index() { return "index";}
+    public String index(HttpServletResponse response) {
+        Cookie cookie = new Cookie("view", null);
+        cookie.setComment("게시글조회 확인");
+        cookie.setMaxAge(60 * 60 * 24 * 30);
+        response.addCookie(cookie);
+        return "index";
+    }
 
 
     @GetMapping("/login")
@@ -236,7 +247,7 @@ public class MainController {
     @GetMapping("/market")
     public String openMarket(@AuthenticationMember Member member, Model model) {
         List<Work> workList = workService.getAllWorkList();
-        workService.calculatePopularity();
+        workService.allCalculatePopularity();
         model.addAttribute("workList", workList);
         return "auction/market";
     }
@@ -246,6 +257,7 @@ public class MainController {
 
 
         List<Work> workList = workService.latesOrder();
+        workService.allCalculatePopularity();
         model.addAttribute("workList", workList);
 
         return  "auction/market";
@@ -254,7 +266,7 @@ public class MainController {
     @GetMapping("/market/popularity")
     public String popularityOpenMarket(Model model){
 
-
+        workService.allCalculatePopularity();
         List<Work> workList = workService.topPopularityRanking();
         model.addAttribute("workList", workList);
 
@@ -269,20 +281,31 @@ public class MainController {
 //    경매
 
     @GetMapping("/auction/search")
-    public String auctionSearchpage(String search,@AuthenticationMember Member member ,Model model){
+    public String auctionSearchpage(String search,@AuthenticationMember Member member ,Model model,  @CookieValue("view") String cookie, HttpServletResponse response){
         System.out.println(search);
         Work work = workService.findByTitle(search);
         work.setSearch_cnt(work.getSearch_cnt() + 1);
-        return auctionPage(work.getId(), model);
+        workRepository.save(work);
+        workService.setPopularityRanking(work.getId());
+        return auctionPage(work.getId(), model, cookie,response);
     }
 
 
     @GetMapping("/auction/{id}")
-    public String auctionPage(@PathVariable Long id ,Model model){
+    public String auctionPage(@PathVariable Long id ,Model model, @CookieValue("view") String cookie, HttpServletResponse response){
+
 
         try{
             Work work = workService.getWork(id);
-            work.setInsert_cnt(work.getInsert_cnt() + 1);
+
+            if(!(cookie.contains(String.valueOf(id)))){
+                cookie += id + "/";
+                work.setInsert_cnt(work.getInsert_cnt() + 1);
+                workRepository.save(work);
+                workService.setPopularityRanking(work.getId());
+            }
+            response.addCookie(new Cookie("view", cookie));
+
             double maxPrice = auctionService.findMaxPrice(id);
             model.addAttribute("work", work);
             model.addAttribute("maxPrice", Double.toString(maxPrice));
