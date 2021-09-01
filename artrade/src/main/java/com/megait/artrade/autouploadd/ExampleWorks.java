@@ -27,8 +27,8 @@ public class ExampleWorks {
     @PostConstruct
     @Profile("local")
     public void createExampleWorks(){
-        Member newMember = memberService.createNewMember("user01" , "춘식이" , "0x0260E71A86AD681F629D5ad5F43c7580E8aC24F3");
-        memberService.createNewMember("user02" , "니니즈" , "0x7aFE95B205D9Abccc7437C0FD8fc8E537a4e2D68");
+        Member newMember = memberService.createNewMember("user01" , "춘식이" , "0x9F049eA69B8C68E0841D9BDdd4832f00Db14A3F9");
+        memberService.createNewMember("user02" , "니니즈" , "0xcfAc79Ea16ED1A1Cb6B0fC670808Ae437C595fFA");
         List<Work> work = workService.createWork(newMember);
         auctionService.createAuction(work , newMember);
 
