@@ -10,9 +10,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
-<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>-->
-<!--  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
+
 
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
@@ -43,20 +41,21 @@
       });
     }, 1000);
 
-   // 좋아요 버튼 클릭시
-   $(function(){
-     $("#addlike").click(function(){
-       $.ajax({
-         url : "/work/like/[[${work.id}]]",
-         type: 'GET',
-         contentType: "application/json; charset=utf-8",
-         success : function(count){
-           console.log(count);
+    // 좋아요 버튼 클릭시
+    $(function(){
+      $("#addlike").click(function(){
+        $.ajax({
+          url : "/work/like/[[${work.id}]]",
+          type: 'GET',
+          contentType: "application/json; charset=utf-8",
+          dataType: 'json',
+          success : function(result){
+            $('#countLike').html(result.count);
 
-         }
-       })
-     })
-   })
+          }
+        })
+      })
+    });
 
 
   </script>
