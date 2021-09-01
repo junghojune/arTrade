@@ -2,6 +2,7 @@ package com.megait.artrade.controller;
 
 import com.megait.artrade.action.Auction;
 import com.megait.artrade.action.AuctionService;
+import com.megait.artrade.action.AuctionStatusType;
 import com.megait.artrade.authentication.AuthenticationMember;
 import com.megait.artrade.authentication.EmailService;
 import com.megait.artrade.authentication.SignUpForm;
@@ -97,7 +98,6 @@ public class MainController {
 
         if(optional.isEmpty()){
             model.addAttribute("error", "잘못된 이메일");
-            System.out.println("email" + email  +", Member email" + optional.get() + "해당하는 메일 없음");
             return "member/checked_email";
         }
 
@@ -105,7 +105,6 @@ public class MainController {
 
         if(!(member.isValidToken(token))){
             model.addAttribute("error" , "잘못된 토큰");
-            System.out.println("token" + token +", Member token" + member.getEmailCheckToken());
             return "member/checked_email";
         }
 
@@ -339,17 +338,21 @@ public class MainController {
 
     @GetMapping("/auction/buy")
     public String buyWork( @AuthenticationMember Member member , Model model , Long id){
-        System.out.println(id + "id111");
-        String sellerWalletId = workService.getWork(id).getSeller().getWalletId();
-        double winingBid = workService.getWork(id).getAuction().getWiningBid();
+        Work work = workService.getWork(id);
         model.addAttribute("member" , member);
-        model.addAttribute("sellerWalletId" , sellerWalletId);
-        model.addAttribute("winingBid" , Double.toString(winingBid));
+        model.addAttribute("work" , work);
         return "auction/payment";
     }
 
-
-
+    @ResponseBody
+    @PostMapping ("/auction/transfer")
+    public String transferETH( @RequestBody Member member){
+        JsonObject object = new JsonObject();
+        Auction auction = workService.getWork(member.getId()).getAuction();
+        auction.setStatus(AuctionStatusType.체결됨);
+        auctionService.saveAuction(auction);
+        return object.toString();
+    }
 
 
     @ResponseBody
@@ -480,7 +483,6 @@ public class MainController {
     @ResponseBody
     @PostMapping("/auction/registration")
     public String registerAuction(@AuthenticationMember Member member , @RequestBody Work work_ ){
-        System.out.println(work_+"work_");
         Work work = workService.getWork(work_.getId());
         Auction auction = work.getAuction();
 
@@ -521,7 +523,6 @@ public class MainController {
 
         object.addProperty("contents",work.getContents());
 
-        System.out.println(work.getTitle()+"work.getTitle()");
 
         return object.toString();
     }
