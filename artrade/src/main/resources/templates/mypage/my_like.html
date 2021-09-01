@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-<!--      todo: th:activeTab='수정' -->
-      layout:decorate="~{fragments/mypage.html}" th:with="activeTab='index', title='Welcome!'">
+      layout:decorate="~{fragments/my_layout.html}" th:with="currentTab='like'">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,7 +21,7 @@
     </style>
 </head>
 <body>
-<div layout:fragment="mypage-content">
+<div layout:fragment="my_content(currentTab)">
     <div class="mypage-like">
         <div class="container m-3">
             <div>
@@ -100,6 +101,10 @@
 
 
 </div>
+
+
+
+
 </div>
 </body>
 </html>

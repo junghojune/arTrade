@@ -43,7 +43,7 @@ public class Member {
 
     private boolean isSellerAuthority;
 
-    @OneToMany
+    @OneToMany (fetch = FetchType.EAGER)
     private List<Work> works = new ArrayList<>();
 
     private String walletId;
