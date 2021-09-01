@@ -60,27 +60,19 @@
   </script>
   <link rel="stylesheet" th:href="@{/css/work/workdetail.css}" >
 
-
   <style>
-
     .sidebar-section {
       position: absolute;
       height: 100%;
       width: 100%;
     }
-
-
     .sidebar-item {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-
     }
-
-
-
     .sidebar-icon{
       height: 50px;
       width: 50px;
@@ -88,19 +80,20 @@
       color: #eee;
       background: #fff;
     }
-
     .sidebar-icon.active{
       color:tomato;
     }
     .sidebar-icon:hover{
       color: tomato;
     }
-
     .auction-time{
       font-size: 30px;
       font-weight: 500;
     }
-
+    .workInfoBx{
+      display: flex;
+      justify-content: center;
+    }
 
   </style>
 
@@ -146,51 +139,45 @@
 
   <!--경매 사진 및 가격제안-->
   <div class="container" >
-    <form th:action="@{/auction/buy}">
-    <div class="row" >
-      <div class="col-7 p-5">
-          <img id="workpircture" th:src="${work.filePath}" style="border: 1px solid black; width: 300px; height: 300px;">
+    <div class="row workInfoBx">
+      <div class="px-4">
+        <img id="workpircture" th:src="${work.filePath}" style="border: 1px solid black; width: 300px; height: 300px;">
       </div>
-      <div class="col-5 p-5">
-
-            <input type="hidden"   th:value="${work.id}" th:name="id" >
-            <h4 class="pt-3" id="workid" th:text="${work.title}" th:value="${work.id}" >작품A</h4>
-            <p>Masterpiece A</p>
-
-            <p>created by 작가이름</p>
-            <button class="sidebar-icon col-12 mt-2" id="addlike" onclick="btnClick()">
-              <i class="fas fa-heart fa-2x"></i>
-            </button>
-            <span>인기도 :</span>
-            <span class="textmuted" th:id= "countLike" th:text="${work.popularity}"></span>
-            <div class="mb-4">
-              <span class="fw-bold mt-3" id="remain_price"></span>
-                현재 경매가 : &nbsp;
-              <span class="ml-4" th:text="${work.auction.winingBid + ' &nbsp;ETH'}" th:id="priceSuggest" style="font-size:30px;"> 2ETH</span>
-            </div>
-<!--        todo: sec:authorize 지우고 로직 맞게 쓰기 (if 구매자가 맞다면 버튼 보이기) -->
-            <div class="btn btn-block btn-outline-info col-12" id="suggest">경매가제시하기 </div>
-            <input sec:authorize="isAuthenticated()"  type="submit" th:value="구매하기" class="btn btn-block btn-outline-info col-12" id="buy">
-            <div class="col-12 mb-4 ">
-            </div>
-          </div>
-
+      <div class="px-4">
+        <h4 class="pt-3" id="workid" th:text="${work.title}" th:value="${work.id}">작품A</h4>
+        <p>Masterpiece A</p>
+        <p>created by 작가이름</p>
+        <button class="sidebar-icon col-12 mt-2" id="addlike" sec:authorize="isAuthenticated()">
+          <i class="fas fa-heart fa-2x"></i>
+        </button>
+        <span>인기도 :</span>
+        <span class="textmuted" th:id= "countLike" th:text="${work.popularity}"></span>
+        <div class="mb-4">
+          <span class="fw-bold mt-3" id="remain_price"></span>
+          현재 경매가 : &nbsp;
+          <span class="ml-4" th:text="${work.auction.winingBid + ' &nbsp;ETH'}" th:id="priceSuggest" style="font-size:30px;"> 2ETH</span>
         </div>
-
-       </form>
+        <!--        todo: sec:authorize 지우고 로직 맞게 쓰기 (if 구매자가 맞다면 버튼 보이기) -->
+        <div class="btn btn-block btn-outline-info col-12" id="suggest">경매가제시하기 </div>
+        <div sec:authorize="isAuthenticated()" class="btn btn-block btn-outline-info col-12" id="buy">구매하기 </div>
+        <div class="col-12 mb-4 ">
+        </div>
       </div>
+
+    </div>
+  </div>
     </div>
 
   </div>
 
 
   <!-- 클릭 시 좋아요 버튼 active 하는 스크립트 -->
-  <script>
-    function btnClick(){
-      const menuRed = document.querySelector('.sidebar-icon');
-      menuRed.classList.toggle('active');
-    }
-  </script>
+<!--  <script>-->
+<!--    function btnClick(){-->
+<!--      const menuRed = document.querySelector('.sidebar-icon');-->
+<!--      menuRed.classList.toggle('active');-->
+<!--    }-->
+<!--  </script>-->
 
 
   <div class="container py-md-0 py-3" id="timer" style = " margin-top:50px " >
