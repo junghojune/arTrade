@@ -47,6 +47,14 @@ public class Work {
 
     private int popularity;
 
+
+    private int insert_cnt;
+
+    private int search_cnt;
+
+    private int comment_cnt;
+
+    private double popularityRanking;
     @Override
     public String toString() {
         return "Work{" +

@@ -174,14 +174,32 @@ public class MainController {
         return "mypage/my_like";
     }
 
-// 오픈마켓 들어가기
-
     @GetMapping("/openMarket")
     public String openMarket(@AuthenticationMember Member member, Model model) {
         List<Work> workList = workService.getAllWorkList();
-
+        workService.calculatePopularity();
         model.addAttribute("workList", workList);
         return "auction/market";
+    }
+
+    @GetMapping("/openMarket/lates")
+    public String latesOpenMarket(Model model){
+
+
+        List<Work> workList = workService.latesOrder();
+        model.addAttribute("workList", workList);
+
+        return  "auction/market";
+    }
+
+    @GetMapping("/openMarket/popularity")
+    public String popularityOpenMarket(Model model){
+
+
+        List<Work> workList = workService.topPopularityRanking();
+        model.addAttribute("workList", workList);
+
+        return  "auction/market";
     }
 
 
