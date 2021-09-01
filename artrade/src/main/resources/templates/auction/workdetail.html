@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="ko"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/common_layout}"
       th:with="activeTab='workdetail', title='Welcome!'">
 <head>
+  <meta charset="utf-8">
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
@@ -81,33 +83,20 @@
     }
 
 
-    .make-me-sticky {
-      margin-left: 10px;
-      /* background-color: aquamarine; */
-      border: 1px solid black;
-      position: -webkit-sticky;
-      position: sticky;
-      top: 300px;
-      right: 0;
-      width: 100px;
-
-      padding: 0 15px;
-    }
 
     .sidebar-icon{
       height: 50px;
       width: 50px;
-      border: 1px solid black;
-      color: cadetblue;
+      border: none;
+      color: #eee;
       background: #fff;
     }
 
     .sidebar-icon.active{
-      background-color: tomato;
-      color: #fff;
+      color:tomato;
     }
     .sidebar-icon:hover{
-      background-color: #555;
+      color: tomato;
     }
 
     .auction-time{
@@ -121,7 +110,6 @@
 </head>
 <body>
 <section layout:fragment="content">
-  <section id=top>
     <!-- 기본  Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -137,7 +125,6 @@
         </div>
       </div>
     </div>
-  </section>
 
 
   <!-- 경매가 제안 Modal -->
@@ -160,68 +147,35 @@
   </div>
 
 
-  <!-- 사이드바 (좋아요/ 댓글 )-->
-  <div class="sidebar-item">
-    <div class="make-me-sticky row">
-      <!--
-        th:classappend="${member가 이 작품을 좋아요 한 내용이 true 면,}" ? active"
-          todo: onclick 부분 지우고 위 th로직 작성하기-->
-      <button class="sidebar-icon col-12 mt-2" id="addlike" onclick="btnClick()">
-        <i class="far fa-heart fa-2x"></i>
-      </button>
-      <button class="sidebar-icon col-12 mt-1" href="#comment">
-        <i class="far fa-comment fa-2x"></i>
-      </button>
-      <button class="sidebar-icon col-12 mt-1">
-        <i class="fas fa-share-alt fa-2x"></i>
-      </button>
-      <button class="sidebar-icon col-12 mt-1" href="#top">
-        <i class="fas fa-angle-double-up fa-2x"></i>
-      </button>
-      <button class="sidebar-icon col-12 mt-1 mb-2" href="#bottom">
-        <i class="fas fa-angle-double-down fa-2x"></i>
-      </button>
-    </div>
-  </div>
-
-
   <!--경매 사진 및 가격제안-->
   <div class="container" >
     <div class="row" >
-      <div class="col-7">
-
-        <div class="col-5 p-5">
+      <div class="col-7 p-5">
           <img id="workpircture" th:src="${work.filePath}" style="border: 1px solid black; width: 300px; height: 300px;">
-        </div>
-
       </div>
-      <div class="col-5 py-5">
-        <div class="row m-0">
-          <div class="col-12 ">
+      <div class="col-5 p-5">
 
-            <p class="h4 m-0" id="workid" th:text="${work.title}" th:value="${work.id}">작품A</p>
-            <P class="ps-3 textmuted">Masterpiece A</P>
+            <h4 class="pt-3" id="workid" th:text="${work.title}" th:value="${work.id}">작품A</h4>
+            <p>Masterpiece A</p>
 
-            <p class="textmuted">created by 작가이름</p>
-            인기도 :
+            <p>created by 작가이름</p>
+            <button class="sidebar-icon col-12 mt-2" id="addlike" onclick="btnClick()">
+              <i class="fas fa-heart fa-2x"></i>
+            </button>
+            <span>인기도 :</span>
             <span class="textmuted" th:id= "countLike" th:text="${work.popularity}"></span>
-
-          </div>
-          <div class="col-12 px-0">
-            <div class="row  m-0">
-              <div class="col-12  my-4">
-                <p class="fw-bold" id="remain_price">현재 경매가</p>
-              </div>
-              <div class="col-12 px-4 mb-4">
-                <p class="h4 m-0"><span class="pe-1" th:text="${work.auction.winingBid}" th:id="priceSuggest" > 2ETH</span></p>
-              </div>
+            <div class="mb-4">
+              <span class="fw-bold mt-3" id="remain_price"></span>
+                현재 경매가 : &nbsp;
+              <span class="ml-4" th:text="${work.auction.winingBid + ' &nbsp;ETH'}" th:id="priceSuggest" style="font-size:30px;"> 2ETH</span>
             </div>
-          </div>
-          <div class="row m-0">
+<!--        todo: sec:authorize 지우고 로직 맞게 쓰기 (if 구매자가 맞다면 버튼 보이기) -->
+            <div class="btn btn-block btn-outline-info col-12" id="suggest">경매가제시하기 </div>
+            <div sec:authorize="isAuthenticated()" class="btn btn-block btn-outline-info col-12" id="buy">구매하기 </div>
             <div class="col-12 mb-4 ">
-              <div class="btn btn-block btn-outline-info" id="suggest">경매가제시하기 </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -278,7 +232,6 @@
 
     <!--댓글 -->
 
-    <section id=comment></section>
     <div class="comment-area py-1 my-5" style="background-color: #f3f3f3;">
       <!-- 댓글 달릴 창 -->
       <div class="container my-3">
@@ -322,8 +275,6 @@
 
 
   </div>
-
-  <section id=bottom></section>
 
   </div>
 

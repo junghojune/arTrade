@@ -16,6 +16,7 @@ import com.megait.artrade.offerprice.OfferPriceService;
 import com.megait.artrade.offerprice.UploadVo;
 import com.megait.artrade.work.Work;
 import com.megait.artrade.work.WorkService;
+import com.megait.artrade.work.WorkVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -156,25 +158,82 @@ public class MainController {
         return "redirect:/";
     }
 
-
+//   --------- 마이페이지----------------
     @GetMapping("/mypage")
-    public String mypage(){
-        return "fragments/mypage";
+    public String modifyForm(@AuthenticationMember Member member, Model model){
+        memberinfo(member, model);
+        return "mypage/mypage";
     }
     @GetMapping("/mypage/comment")
-    public String mycomment(){
+    public String mycomment(@AuthenticationMember Member member, Model model){
+        memberinfo(member, model);
         return "mypage/my_comment";
-    }
-    @GetMapping("/mypage/recent")
-    public String myrecent(){
-        return "mypage/my_recent";
-    }
-    @GetMapping("/mypage/like")
-    public String mylike(){
-        return "mypage/my_like";
+    }   
+    @GetMapping("/mypage/upload")
+    public String myupload(@AuthenticationMember Member member, Model model){
+        memberinfo(member, model);
+        List<Work> workList = member.getWorks();
+        List<WorkVo> workVoList = new ArrayList<>();
+        for(int i=0; i<workList.size(); i++){
+            LocalDateTime uploadAt = workList.get(i).getUploadAt();
+            int year = uploadAt.getYear();
+            int month = uploadAt.getMonthValue();
+            int dayOfMonth = uploadAt.getDayOfMonth();
+            LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+            WorkVo workVo = new WorkVo();
+            workVo.setTitle(workList.get(i).getTitle());
+            workVo.setDate(localDate.toString());
+            workVo.setCheckToken(workList.get(i).isCheckToken());
+            workVo.setFilePath(workList.get(i).getFilePath());
+            workVoList.add(workVo);
+        }
+        model.addAttribute("workVoList" , workVoList);
+
+        if(workList == null){
+            model.addAttribute("status","notExist");
+            model.addAttribute("workList" ,"등록된 작품이 없습니다");
+        }
+        else{
+            model.addAttribute("status","Exist");
+            model.addAttribute("workList" , workList);
+        }
+        return "mypage/my_upload";
     }
 
-    @GetMapping("/openMarket")
+    @GetMapping("/mypage/like")
+    public String mylike(@AuthenticationMember Member member, Model model){
+        memberinfo(member, model);
+        return "mypage/my_like";
+    }
+    @GetMapping("/mypage/wallet")
+    public String mywallet(@AuthenticationMember Member member, Model model){
+        memberinfo(member, model);
+        return "mypage/my_wallet";
+    }
+    @GetMapping("/mypage/notice")
+    public String mynotice(@AuthenticationMember Member member, Model model){
+        memberinfo(member, model);
+        return "mypage/my_notification";
+    }
+
+    private void memberinfo(@AuthenticationMember Member member, Model model) {
+        model.addAttribute("member", member);
+        LocalDateTime registerDateTime = member.getRegisterDateTime();
+        int year = registerDateTime.getYear();
+        int month = registerDateTime.getMonth().getValue();
+        int dayOfMonth = registerDateTime.getDayOfMonth();
+        LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+        model.addAttribute("localDate", localDate.toString());
+    }
+
+    // --------------마이페이지 끝-------------------
+
+
+
+
+
+
+    @GetMapping("/market")
     public String openMarket(@AuthenticationMember Member member, Model model) {
         List<Work> workList = workService.getAllWorkList();
         workService.calculatePopularity();
@@ -182,7 +241,7 @@ public class MainController {
         return "auction/market";
     }
 
-    @GetMapping("/openMarket/lates")
+    @GetMapping("/market/lates")
     public String latesOpenMarket(Model model){
 
 
@@ -192,7 +251,7 @@ public class MainController {
         return  "auction/market";
     }
 
-    @GetMapping("/openMarket/popularity")
+    @GetMapping("/market/popularity")
     public String popularityOpenMarket(Model model){
 
 
