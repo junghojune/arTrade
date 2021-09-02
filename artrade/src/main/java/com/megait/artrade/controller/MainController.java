@@ -1,5 +1,6 @@
 package com.megait.artrade.controller;
 
+import com.google.gson.JsonArray;
 import com.megait.artrade.action.Auction;
 import com.megait.artrade.action.AuctionService;
 import com.megait.artrade.action.AuctionStatusType;
@@ -7,6 +8,8 @@ import com.megait.artrade.authentication.AuthenticationMember;
 import com.megait.artrade.authentication.EmailService;
 import com.megait.artrade.authentication.SignUpForm;
 import com.megait.artrade.authentication.SignUpFormValidator;
+import com.megait.artrade.comment.Comment;
+import com.megait.artrade.comment.CommentService;
 import com.megait.artrade.like.Like;
 import com.megait.artrade.like.LikeService;
 import com.megait.artrade.member.Member;
@@ -39,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,7 +57,7 @@ import com.google.gson.JsonObject;
 @RequiredArgsConstructor
 public class MainController {
 
-
+    private final CommentService commentService;
 
     private final AuctionService auctionService;
 
@@ -289,6 +293,10 @@ public class MainController {
         workService.setPopularityRanking(work.getId());
         return auctionPage(work.getId(), member,model, cookie,response);
     }
+
+
+
+
 
 
     @GetMapping("/auction/{id}")

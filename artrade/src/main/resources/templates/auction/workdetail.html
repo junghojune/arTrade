@@ -257,6 +257,47 @@
 
     <!--댓글 -->
     <script th:inline="javascript">
+
+
+      $(document).ready(function () {
+        getList();
+      });
+
+      function getList(){
+        var html = "";
+        $.ajax({
+          url: "/auction/list/[[${work.id}]]",  // 데이터 요청할 경로 지정
+          type: "GET",                   // 방식 : GET
+          // data: JSON.stringify(data),     // JSON 데이터를 string화 시킴
+          contentType: "application/json; charset=utf-8",
+          dataType: 'json',
+          success: function (data) {
+            $("#cnt").text(data.length);
+            console.log(data);
+            $.each(data,function (i, e) {
+              html += '<label name = "comment">';
+              html += '<i class="fas fa-user"></i>';
+              html += '</label>';
+              html += '<div id = "comments-nickName">';
+              html += e.nickname;
+              html += '</div>';
+              html += '<div id = "comments-contents" >';
+              html += e.comment;
+              html += '</div>';
+              html += '<div id = "comments-time">';
+              html += e.time;
+              html += '</div>';
+
+            });
+
+            $("#comments").html(html);
+          }
+        });
+
+      }
+
+
+
       $(document).ready(function () {
 
         $('#submit').click(function () {
@@ -268,9 +309,9 @@
             count: $("#cnt").text()
           };
 
-
-          console.log(data);
-          console.log(JSON.stringify(data));
+          //
+          // console.log(data);
+          // console.log(JSON.stringify(data));
 
           var token = $("meta[name='_csrf']").attr("content");
           var header = $("meta[name='_csrf_header']").attr("content");
@@ -278,7 +319,7 @@
           // ajax 통신
           $.ajax({
             url: "/comment/add",  // 데이터 요청할 경로 지정
-            type: "POST",                   // 방식 : POSt
+            type: "POST",                   // 방식 : POST
             data: JSON.stringify(data),     // JSON 데이터를 string화 시킴
 
 
@@ -288,48 +329,14 @@
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
             success: function (data) {
+              location.reload()
               console.log(data)
-              // if(data == 1){
-              //   getCommentList()
-              //   $('#comment-input').val('');
-              // }
-              // $("#comments-contents").html(data.comment);
-              // $("#comments-nickName").html(data.nickName);
-              // $("#comments-time").html(data.time);
-              $("#cnt").html(data.cnt);
-              getCommentList(data);
+              getList();
             },
           });
         });
 
       });
-
-      // 댓글을 html 형식 세트로 보내기
-      var html = "";
-
-      function getCommentList(data) {
-
-
-        $(data).each(function (i, e) {
-          console.log(e);
-          html += '<label name = "comment">';
-          html += '<i class="fas fa-user"></i>';
-          html += '</label>';
-          html += '<div id = "comments-nickName">';
-          html += e.nickName;
-          html += '</div>';
-          html += '<div id = "comments-contents" >';
-          html += e.comment;
-          html += '</div>';
-          html += '<div id = "comments-time">';
-          html += e.time;
-          html += '</div>';
-        });
-
-        $("#comments").html(html);
-
-      }
-
 
     </script>
 
@@ -346,7 +353,7 @@
       </div>
 
       <div id="form-commentInfo">
-        <input type="text" id="comment-input" placeholder="댓글을 입력해 주세요.">
+        <input type="text" id="comment-input" placeholder="댓글을 입력해 주세요." >
         <input type="submit" id="submit" class="btn float-right" value="댓글 작성">
       </div>
     </div>

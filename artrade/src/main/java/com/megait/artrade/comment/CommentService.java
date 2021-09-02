@@ -22,8 +22,6 @@ public class CommentService {
     // 댓글 레포
     private final CommentRepository commentRepository;
 
-    private final MemberRepository memberRepository;
-
 
     public List<Comment> getList(Work work){
 
@@ -55,34 +53,5 @@ public class CommentService {
                 .build();
         return commentRepository.save(comment);
     }
-
-
-
-    // 대댓글 저장
-    public Comment saveReplyComment(String contents, Member member ,Work work){
-        Comment comment = Comment.builder()
-                .contents(contents)
-                .member(member)
-                .work(work)
-                .commentClass(CommentType.대댓글)
-                .createAt(LocalDateTime.now())
-                .build();
-        return commentRepository.save(comment);
-    }
-
-
-
-
-
-    // 댓글 수정
-
-
-
-
-
-
-
-
-    // 대댓글 수정
 
 }
