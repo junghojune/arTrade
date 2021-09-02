@@ -287,12 +287,12 @@ public class MainController {
         work.setSearch_cnt(work.getSearch_cnt() + 1);
         workRepository.save(work);
         workService.setPopularityRanking(work.getId());
-        return auctionPage(work.getId(), model, cookie,response);
+        return auctionPage(work.getId(), member,model, cookie,response);
     }
 
 
     @GetMapping("/auction/{id}")
-    public String auctionPage(@PathVariable Long id ,Model model, @CookieValue("view") String cookie, HttpServletResponse response){
+    public String auctionPage(@PathVariable Long id , @AuthenticationMember Member member,Model model, @CookieValue("view") String cookie, HttpServletResponse response){
 
 
         try{
@@ -305,6 +305,12 @@ public class MainController {
                 workService.setPopularityRanking(work.getId());
             }
             response.addCookie(new Cookie("view", cookie));
+
+            if(likeService.findLike(member, work).isEmpty()){
+                model.addAttribute("isLike", 0);
+            }else {
+                model.addAttribute("isLike", 1);
+            }
 
             double maxPrice = auctionService.findMaxPrice(id);
             model.addAttribute("work", work);
