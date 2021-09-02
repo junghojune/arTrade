@@ -54,6 +54,8 @@ public class Work {
     private int comment_cnt;
 
     private double popularityRanking;
+
+    private boolean isTimeoutAuction;
     @Override
     public String toString() {
         return "Work{" +
