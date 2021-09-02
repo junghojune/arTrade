@@ -306,6 +306,8 @@ public class MainController {
             }
             response.addCookie(new Cookie("view", cookie));
 
+         //   auctionService.checkTimeoutAuction(work.getAuction());
+
             if(likeService.findLike(member, work).isEmpty()){
                 model.addAttribute("isLike", 0);
             }else {
@@ -373,10 +375,11 @@ public class MainController {
             e.printStackTrace();
         }
 
-
+        boolean timeoutAuction = false;
         LocalDateTime closingTime = LocalDateTime.now();
         if (work != null) {
             Auction auction = work.getAuction();
+             timeoutAuction = auctionService.checkTimeoutAuction(auction);
             if(auction == null) {
                 object.addProperty("status", "notExistAuction");
                 object.addProperty("result", "해당 작품에 등록된 경매가 없습니다");
@@ -384,6 +387,15 @@ public class MainController {
             }else{
                 closingTime = auction.getAuctionClosingTime();
             }
+        }
+
+        if(timeoutAuction){
+            object.addProperty("days", "00");
+            object.addProperty("hours", "00");
+            object.addProperty("minutes", "00");
+            object.addProperty("seconds", "00");
+
+            return object.toString();
         }
 
         LocalDateTime localDateTimeNow = LocalDateTime.now();

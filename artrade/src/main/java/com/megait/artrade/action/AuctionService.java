@@ -10,6 +10,7 @@ import com.megait.artrade.work.WorkRepository;
 import com.megait.artrade.work.WorkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -97,5 +98,14 @@ public class AuctionService {
     }
 
 
+    @Transactional
+    public boolean checkTimeoutAuction(Auction auction)  {
+        LocalDateTime auctionClosingTime = auction.getAuctionClosingTime();
+        LocalDateTime duedate = LocalDateTime.parse(auctionClosingTime.toString());
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().toString());
+        auction.setStatus(AuctionStatusType.미체결됨);
+        System.out.println("경매가 마감되면 true , 마감 되지 않으면 false");
+        return now.isAfter(duedate);
+    }
 
 }
