@@ -120,6 +120,14 @@ public class MemberService {
         return sb.toString(); }
 
 
+    public void updateMemberInfo(Long id, String nickname){
+        Member updateMember = getMember(id);
+        updateMember.setNickname(nickname);
+        updateMember.setType(MemberType.일반회원);
+        memberRepository.save(updateMember);
+
+    }
+
 
 
 

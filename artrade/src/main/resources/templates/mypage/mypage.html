@@ -1,88 +1,26 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" th:with="currentTab='info'"
       layout:decorate="~{fragments/my_layout.html}">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous"></head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-<style>
-    .nickname{
-        font-size: 25px;
-    }
-    .form-group{
-        display: flex;
-        justify-content: center;
-        align-content: center;
-        margin-top:10px;
-        margin-bottom: 10px;
-    }
-</style>
 </head>
 <body>
-<div layout:fragment="my_content">
-    <div class="container m-5">
-        <h2>회원정보수정</h2>
-
-        <form th:object="${modifyForm}" th:action="@{/mypage}" method="post" name="modifyForm" novalidate>
-            <!-- 아이디 -->
-            <div class="form-group">
-                <div class="col-9 px-0">
-                    <input type="text" th:field="*{username}" th:placeholder="${member.username}" class="form-control" id="username">
+<div layout:fragment="my_content(currentTab)">
+    <div class="container p-5">
+    <h2>회원 정보 수정</h2>
+    <form th:action="@{/mypage}" method="post" name="modifyForm" novalidate>
+        <!-- 아이디 -->
+        <div class="form-group mt-4">
+            <div class="col-9 px-0">
+                <div class="mt-3">
+                    <label th:name="label">닉네임</label>
+                    <input th:type="text"  th:value="${member.nickname}" class="form-control" th:id="nickname" th:name="nickname" th:label="nickname">
                 </div>
+                <input type="submit" class="btn btn-dark btn-sm my-3 col-12 float-right" value="정보 수정하기">
             </div>
-
-            <!-- 비밀번호 -->
-            <div class="form-group">
-                <div class="col-9 px-0"> <input type="password" th:field="*{password}" placeholder="비밀번호" class="form-control" th:classappend="${#fields.hasErrors('password') } ? 'is-invalid'" id="password"  required>
-                    <div th:if="${#fields.hasErrors('password')}" th:class="${#fields.hasErrors('password')}? 'invalid-feedback'" th:each="err : ${#fields.errors('password')}" th:text="${err}">
-                        Invalid password</div>
-                </div>
-            </div> <!-- 비밀번호 재확인 -->
-            <div class="form-group">
-                <div class="col-9 px-0"> <input type="password" th:field="*{passwordCheck}" placeholder="재확인 비밀번호" class="form-control" th:classappend="${#fields.hasErrors('passwordCheck') } ? 'is-invalid'" id="passwordCheck"  required>
-                    <div th:if="${#fields.hasErrors('passwordCheck')}" th:class="${#fields.hasErrors('passwordCheck')}? 'invalid-feedback'" th:each="err : ${#fields.errors('passwordCheck')}" th:text="${err}">
-                        Invalid password</div>
-                </div>
-            </div>
-
-            <!-- 닉네임 -->
-            <div class="form-group">
-                <div class="col-9 px-0">
-                    <input type="text"  th:field="*{nickname}" th:value="${member.nickname}" class="form-control" th:classappend="${#fields.hasErrors('nickname') } ? 'is-invalid'" id="nickname" required>
-                    <div th:if="${#fields.hasErrors('nickname')}" th:class="${#fields.hasErrors('nickname')}? 'invalid-feedback'" th:each="err : ${#fields.errors('nickname')}" th:text="${err}">
-                        Invalid nickname</div>
-                </div>
-            </div>
-            <!-- 본인확인 이메일 -->
-            <div class="form-group">
-                <div class="col-9 px-0"> <input type="text" th:field="*{email}" th:placeholder="${member.email}" class="form-control border-info placeicon" th:classappend="${#fields.hasErrors('email') } ? 'is-invalid'" id="email" required>
-                    <div th:if="${#fields.hasErrors('email')}" th:class="${#fields.hasErrors('email')}? 'invalid-feedback'" th:each="err : ${#fields.errors('email')}" th:text="${err}">
-                        Invalid email</div>
-                </div>
-            </div><!-- 작가로 가입하기 Input -->
-            <div class="form-group">
-                <div class="col-9">
-                    <div class="row">
-                        <div class="col-6 px-0">
-                            <div class="custom-control custom-checkbox mb-3"> <input id="isWriter"  th:field="*{isWriter}" th:value="true" type="checkbox" class="custom-control-input checkbox-muted"> <label for="isWriter" class="custom-control-label text-muted" >작가로 가입하기</label> </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-3 px-3"> <input type="submit" value="정보 수정하기" class="btn btn-block btn-outline-info"> </div>
-            </div>
-
-        </form>
-
-
+        </div>
+    </form>
     </div>
 </div>
 </body>

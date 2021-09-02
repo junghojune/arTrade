@@ -81,11 +81,14 @@ public class MainController {
     }
 
     @RequestMapping("/")
-    public String index(HttpServletResponse response) {
+    public String index(HttpServletResponse response, @AuthenticationMember Member member, Model model) {
         Cookie cookie = new Cookie("view", null);
         cookie.setComment("게시글조회 확인");
         cookie.setMaxAge(60 * 60 * 24 * 30);
         response.addCookie(cookie);
+
+        model.addAttribute("member", member);
+
         return "index";
     }
 
@@ -178,6 +181,21 @@ public class MainController {
         memberinfo(member, model);
         return "mypage/mypage";
     }
+
+    @PostMapping("/mypage")
+    public String updateMember(@AuthenticationMember Member member, Model model, Member member1){
+        memberService.updateMemberInfo(member.getId(), member1.getNickname());
+        memberService.login(member);
+
+        LocalDateTime registerDateTime = member.getRegisterDateTime();
+        int year = registerDateTime.getYear();
+        int month = registerDateTime.getMonth().getValue();
+        int dayOfMonth = registerDateTime.getDayOfMonth();
+        LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+        model.addAttribute("localDate", localDate.toString());
+        return "mypage/mypage";
+    }
+
     @GetMapping("/mypage/comment")
     public String mycomment(@AuthenticationMember Member member, Model model){
         memberinfo(member, model);

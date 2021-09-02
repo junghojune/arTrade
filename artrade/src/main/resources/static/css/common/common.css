@@ -7,6 +7,17 @@
 .commonheader body{
     overflow-x: hidden;
 }
+.info_logo{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.infoBx{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'East Sea Dokdo', cursive;
+    color: #fff;
+}
 section{
     min-height: 100vh;
     padding-top: 100px;

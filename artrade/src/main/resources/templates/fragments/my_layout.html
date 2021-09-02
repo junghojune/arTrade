@@ -12,17 +12,17 @@
         section{
             min-height: 100vh;
         }
-        .nav{
+        .myNav{
             position: absolute;
             width: 100%;
             height: 100%;
             /* background-color: #ccc; */
         }
-        .nav ul{
+        .myNav ul{
             position: absolute;
             width: 100%;
         }
-        .nav ul li{
+        .myNav ul li{
             position:relative;
             width:70%;
             list-style: none;
@@ -32,21 +32,21 @@
             height: 50px;
 
         }
-        .nav ul li:hover{
+        .myNav ul li:hover{
             background: #555;
         }
-        .nav ul li:hover a{
+        .myNav ul li:hover a{
             color:#fff;
         }
 
-        .nav ul li.active{
+        .myNav ul li.active{
             background: #555;
         }
-        .nav ul li.active a{
+        .myNav ul li.active a{
             color:#fff;
         }
 
-        .nav ul li a{
+        .myNav ul li a{
             position: relative;
             display: block;
             width: 100%;
@@ -56,7 +56,7 @@
             font-size: 15px;
             margin-left: 15px;
         }
-        .nav ul li a .icon{
+        .myNav ul li a .icon{
             font-size: 20px;
             margin-right:20px;
         }
@@ -73,7 +73,8 @@
                 <hr/>
                 <i class="fas fa-user-alt"></i>&nbsp;
                 <span th:text="${member.nickname}">닉네임&nbsp;</span>
-                (<span th:text="${member.type}">일반회원</span>)
+<!--                <span th:text="'(' + ${member.type} + ')'">일반회원</span>-->
+                <span>(일반회원)</span>
                 <hr/>
                 <p th:text="'가입일 : ' + ${localDate}">가입일: 00.00.00</p>
 
@@ -83,7 +84,7 @@
                 </a>
                 <hr/>
             </div>
-            <div class="nav">
+            <div class="nav myNav">
                 <ul><li th:classappend="${currentTab == 'like'} ? active"><a th:href="@{/mypage/like}">
                     <span class="icon"><i class="fas fa-thumbs-up"></i></span>
                     <span class="title">관심 작품</span></a></li>

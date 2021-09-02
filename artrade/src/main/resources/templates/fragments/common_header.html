@@ -12,7 +12,12 @@
             <i class="far fa-user"></i>
         </div>
         <div class="usermenu">
-            <h3>이름<br/><span>작가</span></h3>
+            <div class="mx-auto infoBx">
+                <div class="mx-auto infoBx" th:if="${member != null and member != ''}">
+                    <h2 th:text="${member.nickname}" class="my-2">닉네임</h2>
+                </div>
+                <img src="/images/logo_white.png" style="height: 40px; width: auto;" class="info_logo"th:unless="${member != null and member != ''}" >
+            </div>
             <ul>
                 <li sec:authorize="!isAuthenticated()">
                     <form th:action="@{/login}">
@@ -34,7 +39,7 @@
                 <li sec:authorize="isAuthenticated()">
                     <form class="form-inline" th:action="@{/logout}" th:method="post">
                         <button class="nav-link btn btn-dark btn-sm" type="submit"
-                                style="border:0; background-color: transparent; font-size: 12px"
+                                style="border:0; background-color: transparent; font-size: 16px; color: #555"
                                 sec:authorize="isAuthenticated()">로그아웃</button>
                     </form></li>
             </ul>
