@@ -36,40 +36,40 @@ public class CommentController {
     private final WorkService workService;
 
 
-    @ResponseBody
-    @GetMapping("/comment/list")
-    public String commentList(@RequestBody PostVo postVo) {
+//    @ResponseBody
+//    @GetMapping("/comment/list")
+//    public String commentList(@RequestBody PostVo postVo) {
+//
+//        //Comment 에 등록되어 있는 댓글들 불러와서 list에 담고 작품의 댓글 목록에 뿌려야함
+//        String workNo1 = postVo.getWorkNo();
+//        Long workNo = Long.parseLong(workNo1);      // 게시물 번호를 작품 번호로 봄
+//
+//
+//        Work work = workService.getWork(workNo);   // 작품번호로 작품 불러옴.
+//        // 리스트 불러옴
+//
+//        List<Comment> commentList = commentService.getList(work);
+//
+//        JsonArray result = JsonArray.
+//        for (int i = 0; i < commentList.size(); i++) {
+//            array.add(commentList.get(i));
+//
+//        }
+//        JsonObject object = new JsonObject();         // json 형식으로 html에 응답을 보내야 함.
+//        return null;
+//
+//    }
 
-        //Comment 에 등록되어 있는 댓글들 불러와서 list에 담고 작품의 댓글 목록에 뿌려야함
-        String workNo1 = postVo.getWorkNo();
-        Long workNo = Long.parseLong(workNo1);      // 게시물 번호를 작품 번호로 봄
 
 
-        Work work = workService.getWork(workNo);   // 작품번호로 작품 불러옴.
-        // 리스트 불러옴
-
-        List<Comment> commentList = commentService.getList(work);
-
-        JsonArray array = new JsonArray();
-        for (int i = 0; i < commentList.size(); i++) {
-            array.add(commentList.get(i));
-
-        }
-        JsonObject object = new JsonObject();         // json 형식으로 html에 응답을 보내야 함.
-        return null;
-
-    }
-
-
-
-    @ResponseBody
-    @GetMapping(value = "/comment/replies/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Comment>> commentList(@PathVariable Long id) {
-
-         return new ResponseEntity<>(commentService.getList(workService.getWork(id)), HttpStatus.OK);
-
-    }
-
+//    @ResponseBody
+//    @GetMapping(value = "/comment/replies/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<List<Comment>> commentList(@PathVariable Long id) {
+//
+//         return new ResponseEntity<>(commentService.getList(workService.getWork(id)), HttpStatus.OK);
+//
+//    }
+//
 
 
 
@@ -126,32 +126,32 @@ public class CommentController {
         return object.toString();
     }
 
-
-
-    // 대댓글 추가
-    @ResponseBody
-    @PostMapping("/comment/reply")
-    public String replyComment(){
-
-        return null;
-    }
-
-
-    // 삭제
-    @ResponseBody
-    @PostMapping("/comment/delete")
-    public String deleteComment(){
-
-        return "";
-
-    }
-
-    // 수정
-      @ResponseBody
-      @PostMapping("/comment/modify")
-      public String modifyComment(){
-        return "";
-    }
+//
+//
+//    // 대댓글 추가
+//    @ResponseBody
+//    @PostMapping("/comment/reply")
+//    public String replyComment(){
+//
+//        return null;
+//    }
+//
+//
+//    // 삭제
+//    @ResponseBody
+//    @PostMapping("/comment/delete")
+//    public String deleteComment(){
+//
+//        return "";
+//
+//    }
+//
+//    // 수정
+//      @ResponseBody
+//      @PostMapping("/comment/modify")
+//      public String modifyComment(){
+//        return "";
+//    }
 
 
 }
