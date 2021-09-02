@@ -6,14 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentVo {
+public class PostVo {
 
-    private String workNo;   // 작품 제목
-    private String comment;
-    private String count;
+    private String workNo;
 }

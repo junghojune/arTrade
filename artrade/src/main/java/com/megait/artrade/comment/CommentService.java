@@ -6,11 +6,13 @@ import com.megait.artrade.comment.Comment;
 import com.megait.artrade.comment.CommentRepository;
 import com.megait.artrade.member.Member;
 import com.megait.artrade.member.MemberRepository;
+import com.megait.artrade.work.Work;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,22 +25,32 @@ public class CommentService {
     private final MemberRepository memberRepository;
 
 
+    public List<Comment> getList(Work work){
+
+        List<Comment> comment = commentRepository.findByWork(work).orElseThrow();
+        return comment;
+    }
     //Comment를 가져오기
-    public Comment getComment(Long id){
+    public Comment getComment(Member member, String contents, Work work){
 
         // 댓글만 꺼내기
-        Optional<Comment> commentOptional = commentRepository.findById(id);
-        return commentOptional.get();
+        Comment comment = commentRepository.findByMemberAndContentsAndWork(member, contents,work).orElseThrow(()->{
+            return new IllegalArgumentException("달린 댓글이 없습니다.");
+        });
+        return comment;
     }
 
 
 
     // 댓글 저장
-    public Comment saveComment(String contents, Member member){
+    public Comment saveComment(String contents, Member member, Work work, int count){
         Comment comment = Comment.builder()
                 .contents(contents)
                 .member(member)
                 .commentClass(CommentType.댓글)
+                .work(work)
+                .comment_cnt(count)
+                .oder(1)
                 .createAt(LocalDateTime.now())
                 .build();
         return commentRepository.save(comment);
@@ -47,10 +59,11 @@ public class CommentService {
 
 
     // 대댓글 저장
-    public Comment saveReplyComment(String contents, @AuthenticationMember Member member){
+    public Comment saveReplyComment(String contents, Member member ,Work work){
         Comment comment = Comment.builder()
                 .contents(contents)
                 .member(member)
+                .work(work)
                 .commentClass(CommentType.대댓글)
                 .createAt(LocalDateTime.now())
                 .build();

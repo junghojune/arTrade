@@ -7,6 +7,16 @@
 <head>
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css}" >
+  <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css}" >
+  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css}" >
+  <link rel="stylesheet" th:href="@{/css/member/login.css}" >
+
+  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css}">
+  <script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
 
 
   <script th:src="@{/js/work/workdetail.js}"></script>
@@ -41,7 +51,9 @@
 <div layout:fragment="content">
 
   <!-- 기본  Modal -->
-
+  <div class="container">
+    <div class="row">
+    <div class="flex-container col">
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -49,7 +61,6 @@
         <div class="text-center align-items-center mid ">
           <div class="modal-logo"><img src="https://imgur.com/N1vwiAJ.png"></div>
           <div class="modal-body pb-2">
-
           </div>
           <div class="modal-footer d-flex justify-content-center mb-3"> <button type="button" class="btn btn-block btn-outline-info" data-dismiss="modal" id="confirm" >확인</button> </div>
         </div>
@@ -96,7 +107,7 @@
         <div class="row m-0">
           <div class="col-12 ">
 
-            <p class="h4 m-0" th:text="${work.title}">작품A</p>
+            <p class="h4 m-0" id = "title" th:text="${work.title}">작품A</p>
             <P class="ps-3 textmuted">Masterpiece A</P>
 
             <p class="textmuted">created by 작가이름</p>
@@ -127,29 +138,7 @@
   </div>
 
 
-  <!-- 사이드바 -->
 
-  <div id = "sidebar" >
-    <div class="container">
-      <ul class="nav flex-column">
-        <button class="nav-item">
-          <i class="far fa-heart"></i>
-        </button>
-        <button class="nav-item">
-          <i class="far fa-comment"></i>
-        </button>
-        <button class="nav-item">
-          <i class="fas fa-share-alt"></i>
-        </button>
-        <button class="nav-item">
-          <i class="fas fa-angle-double-up"></i>
-        </button>
-        <button class="nav-item">
-          <i class="fas fa-angle-double-down"></i>
-        </button>
-      </ul>
-    </div>
-  </div>
   <div class="container py-md-0 py-3" id="timer" style = " margin-top:50px " >
 
     <!-- 작품 정보 및  가격 제안 -->
@@ -199,64 +188,263 @@
 
 
 
-      <!--댓글 -->
-      <!--Comments -->
-      <!--  댓글 등록-->
-      <script>
-          // 댓글 저장 TODO - 댓글 로직 짜기
-          $('#submit').on('click',function(){
 
 
-              // 입력한 댓글 불러오기
-              let data = {
-                  comment : $("#comment-input").val()
-              };
 
-              // 데이터 받아왔는지 로그 출력
-              console.log(data);
-              console.log(JSON.stringify(data));
+<!--    <script th:inline="javascript">-->
 
-              // ajax 통신
-              $.ajax({
-                  url : "/auction/comment/${comment.id}",  // 데이터 요청할 경로 지정
-                  type: "POST",                   // 방식 : POSt
-                  data: JSON.stringify(data),     // JSON 데이터를 string화 시킴
+<!--      $(document).ready(function (){-->
 
-                  success:function(result){
-                      $("comments-result").html(result.id);
-                      $("comments-result").html(result.comment);
-                      $("comments-result").html(result.nickName);
-                      $("comments-result").html(result.time);
-                      console.log(result.id);
-                      console.log(result.comment);
-                      console.log(result.nickName);
-                      console.log(result.time);
+<!--        var id = [[${work.id}]];-->
+<!--        var listGroup = $(".replyList");-->
+<!--        $(".replyCount").click(function(){-->
+<!--          $.getJSON('/comment/replies/' + id, function (arr){-->
+
+<!--            console.log(arr)-->
+<!--            -->
 
 
-                  },
-              });
-          });
-      </script>
+
+<!--          });-->
+
+
+
+<!--        });-->
+
+
+
+<!--      });-->
+
+
+
+<!--    </script>-->
 
 
 
       <!-- 댓글 달릴 창 -->
-      <div id="comment-count">댓글 <span id="count">0</span></div>
-      <div id = "comments" class = flex-container></div>
 
+    <div>
+    <input type="hidden" id="bno" th:value="${work.id}">
+    </div>
+      <div id="comment-count" class = "replyCount">댓글 <span  id="cnt" >0</span></div>
+        <div class ="card replyList"  id = "comments">
+        </div>
 
       <!-- 댓글 달 창 -->
       <div class = "container-comment">
         <label name = "comment"><i class="fas fa-user"></i></label>
-        <div id="form-commentInfo">
-          <input id="comment-input" placeholder="댓글을 입력해 주세요.">
-          <button id="submit" class="btn float-right">댓글 작성</button>
+        <div id="form-commentInfo" >
+          <input type = "text" id="comment-input" placeholder="댓글을 입력해 주세요." >
+          <input type = "submit" id = "submit" class="btn float-right" value="댓글 작성">
         </div>
-
       </div>
 
+    <!--댓글 -->
+    <script th:inline="javascript">
+      $(document).ready(function() {
 
-      <!-- 최근 본 작품들 -->
+        $('#submit').click(function () {
+
+          // 입력한 댓글 불러오기
+          var data = {
+            workNo: $("#bno").val(),
+            comment: $("#comment-input").val(),
+            count: $("#cnt").text()
+          };
+
+
+          console.log(data);
+          console.log(JSON.stringify(data));
+
+          var token = $("meta[name='_csrf']").attr("content");
+          var header = $("meta[name='_csrf_header']").attr("content");
+
+          // ajax 통신
+          $.ajax({
+            url: "/comment/add",  // 데이터 요청할 경로 지정
+            type: "POST",                   // 방식 : POSt
+            data: JSON.stringify(data),     // JSON 데이터를 string화 시킴
+
+
+            beforeSend : function(xhr)
+            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+              xhr.setRequestHeader(header, token);
+            },
+            contentType: "application/json; charset=utf-8",
+            dataType:'json',
+            success: function (data) {
+              console.log(data)
+              if(data == 1){
+                getCommentList()
+                $('#comment-input').val('');
+              }
+              // $("#comments-contents").html(data.comment);
+              // $("#comments-nickName").html(data.nickName);
+              // $("#comments-time").html(data.time);
+              // $("#cnt").html(data.cnt);
+              // getCommentList(data);
+            },
+          });
+        });
+
+      });
+
+      // 댓글을 html 형식 세트로 보내기
+      var html = "";
+      function getCommentList() {
+
+        var data = {
+          workNo: $("#bno").val(),
+        };
+
+        $.ajax({
+          url: "/comment/list",
+          type: "GET",                   // 방식 : POSt
+          data: JSON.stringify(data),     // JSON 데이터를 string화 시킴
+          contentType: "application/json; charset=utf-8",
+          dataType: 'json',
+          success: function (data) {
+        var cCnt = data.cnt;
+        if (cCnt == 0) {
+          html = '<div>등록된 댓글이 없습니다.</div>'
+        } else {
+
+          $(data).each(function () {
+            html += '<label name = "comment">'
+            html += '<i class="fas fa-user"></i>'
+            html += '</label>'
+            html += '<div id = "comments-nickName">'
+            html += data.comment
+            html += '</div>'
+            html += '<div id = "comments-contents" >'
+            html += data.nickName
+            html += '</div>'
+            html += '<div id = "comments-time">'
+            html += data.time
+            html += '</div>'
+          });
+        }
+        $("#comments").html(html);
+
+      }
+    </script >
+
+<!--    <script>-->
+<!--      var bno = '${detail.bno}'; //게시글 번호-->
+
+<!--      $('[name=commentInsertBtn]').click(function(){ //댓글 등록 버튼 클릭시-->
+<!--        var insertData = $('[name=commentInsertForm]').serialize(); //commentInsertForm의 내용을 가져옴-->
+<!--        commentInsert(insertData); //Insert 함수호출(아래)-->
+<!--      });-->
+
+
+
+<!--      //댓글 목록-->
+<!--      function commentList(){-->
+<!--        $.ajax({-->
+<!--          url : '/comment/list',-->
+<!--          type : 'get',-->
+<!--          data : {'bno':bno},-->
+<!--          success : function(data){-->
+<!--            var a ='';-->
+<!--            $.each(data, function(key, value){-->
+<!--              a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';-->
+<!--              a += '<div class="commentInfo'+value.cno+'">'+'댓글번호 : '+value.cno+' / 작성자 : '+value.writer;-->
+<!--              a += '<a onclick="commentUpdate('+value.cno+',\''+value.content+'\');"> 수정 </a>';-->
+<!--              a += '<a onclick="commentDelete('+value.cno+');"> 삭제 </a> </div>';-->
+<!--              a += '<div class="commentContent'+value.cno+'"> <p> 내용 : '+value.content +'</p>';-->
+<!--              a += '</div></div>';-->
+<!--            });-->
+
+<!--            $(".commentList").html(a);-->
+<!--          }-->
+<!--        });-->
+<!--      }-->
+
+<!--      //댓글 등록-->
+<!--      function commentInsert(insertData){-->
+<!--        $.ajax({-->
+<!--          url : '/comment/insert',-->
+<!--          type : 'post',-->
+<!--          data : insertData,-->
+<!--          success : function(data){-->
+<!--            if(data == 1) {-->
+<!--              commentList(); //댓글 작성 후 댓글 목록 reload-->
+<!--              $('[name=content]').val('');-->
+<!--            }-->
+<!--          }-->
+<!--        });-->
+<!--      }-->
+
+<!--      //댓글 수정 - 댓글 내용 출력을 input 폼으로 변경-->
+<!--      function commentUpdate(cno, content){-->
+<!--        var a ='';-->
+
+<!--        a += '<div class="input-group">';-->
+<!--        a += '<input type="text" class="form-control" name="content_'+cno+'" value="'+content+'"/>';-->
+<!--        a += '<span class="input-group-btn"><button class="btn btn-default" type="button" onclick="commentUpdateProc('+cno+');">수정</button> </span>';-->
+<!--        a += '</div>';-->
+
+<!--        $('.commentContent'+cno).html(a);-->
+
+<!--      }-->
+
+<!--      //댓글 수정-->
+<!--      function commentUpdateProc(cno){-->
+<!--        var updateContent = $('[name=content_'+cno+']').val();-->
+
+<!--        $.ajax({-->
+<!--          url : '/comment/update',-->
+<!--          type : 'post',-->
+<!--          data : {'content' : updateContent, 'cno' : cno},-->
+<!--          success : function(data){-->
+<!--            if(data == 1) commentList(bno); //댓글 수정후 목록 출력-->
+<!--          }-->
+<!--        });-->
+<!--      }-->
+
+<!--      //댓글 삭제-->
+<!--      function commentDelete(cno){-->
+<!--        $.ajax({-->
+<!--          url : '/comment/delete/'+cno,-->
+<!--          type : 'post',-->
+<!--          success : function(data){-->
+<!--            if(data == 1) commentList(bno); //댓글 삭제후 목록 출력-->
+<!--          }-->
+<!--        });-->
+<!--      }-->
+
+
+
+
+<!--      $(document).ready(function(){-->
+<!--        commentList(); //페이지 로딩시 댓글 목록 출력-->
+<!--      });-->
+<!--    </script>-->
+
+
+    <!-- 댓글 테스트 중 -->
+<!--    <div class="container">-->
+<!--      <label for="content">comment</label>-->
+<!--      <form name="commentInsertForm">-->
+<!--        <div class="input-group">-->
+<!--          <input type="hidden" name="bno" th:text="${work.id}"/>-->
+<!--          <input type="text" class="form-control" id="content" name="content" placeholder="내용을 입력하세요.">-->
+<!--          <span class="input-group-btn">-->
+<!--                    <button class="btn btn-default" type="button" name="commentInsertBtn">등록</button>-->
+<!--               </span>-->
+<!--        </div>-->
+<!--      </form>-->
+<!--    </div>-->
+
+<!--    <div class="container">-->
+<!--      <div class="commentList"></div>-->
+<!--    </div>-->
+<!--  </div>-->
+      <!-- 댓글 테스트 중
+
+
+      <! -- 최근 본 작품들 -->
       <div id = "recent-work">
 
         <h4>보고 있는 작품과 비슷한 작품</h4>
@@ -277,15 +465,42 @@
 
       </div>
       <!--  </div>  -->
+  </div>
+      </div>
+    <!-- 사이드바 -->
 
+    <div id = "sidebar" >
+      <div class="container col">
+        <ul class="nav flex-column">
+          <button class="nav-item">
+            <i class="far fa-heart"></i>
+          </button>
+          <button class="nav-item">
+            <i class="far fa-comment"></i>
+          </button>
+          <button class="nav-item">
+            <i class="fas fa-share-alt"></i>
+          </button>
+          <button class="nav-item">
+            <i class="fas fa-angle-double-up"></i>
+          </button>
+          <button class="nav-item">
+            <i class="fas fa-angle-double-down"></i>
+          </button>
+        </ul>
+      </div>
+    </div>
+      </div>
     </div>
 
 
   </div>
+</div>
 
 
 <div layout:fragment="script">
   <script>
+
 
 
     let index= {

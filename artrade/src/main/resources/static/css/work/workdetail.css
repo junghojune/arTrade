@@ -1,0 +1,134 @@
+.container{
+    width: 150%;
+}
+
+.card{
+    width: 80%;
+}
+
+.container-comment{
+    display:flex;
+    background-color:gray;
+    width : 80%
+}
+label{
+
+    font-size:1px;
+
+}
+
+li{
+    border-bottom : solid 1px black;
+
+}
+
+
+
+i{
+    font-size:50px;
+:10px 10px
+}
+
+
+#sidebar{
+    width:200px;
+    height:200px;
+    float:right;
+    padding:10px;
+    position : fixed;
+
+}
+
+#recent-work{
+    margin-top:100px;
+}
+
+
+#form-commentInfo{ width: 100%; }
+
+
+#comments{
+    overflow:scroll; width:900px; height:300px; padding:10px; background-color:white;
+    gap : 10px 10px;
+}
+#comment-count{ margin-bottom: 10px; }
+#contents{
+    width: 70%;
+    margin-top:11px;
+    height: 2em; }
+
+#submit{
+    background-color: rgb(0, 128,255);
+    margin-right:10px;
+    margin-top: 10px;
+    width: 8em;
+    height: 2.5em;
+    font-size: 15px;
+    font-weight: bold;
+    color: aliceblue;
+    text-align:center;
+}
+
+
+h4{
+    margin-bottom :20px;
+}
+button{
+    height:50%;
+    width:50%;
+}
+
+
+
+
+
+/* 카운트 다운 css*/
+
+
+.countdown {
+    display: inline-block
+}
+
+.countdown .item {
+    display: block;
+    margin: 7px;
+    float: left;
+    text-align: center
+}
+
+.countdown .item .days,
+.countdown .item .hours,
+.countdown .item .minutes,
+.countdown .item .seconds {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 5px;
+    border: 1px solid #e1e7ec;
+    border-radius: 7px;
+    font-size: 22px;
+    line-height: 46px
+}
+
+.countdown .item .days_ref,
+.countdown .item .hours_ref,
+.countdown .item .minutes_ref,
+.countdown .item .seconds_ref {
+    font-size: 12px;
+    text-transform: uppercase
+}
+
+.text-center ,
+.text-center  {
+    margin-right: 6px;
+    margin-left: 6px
+}
+
+
+
+
+
+#workpircture {
+    width: 600px;
+    height: 400px;
+    object-fit: fill
+}

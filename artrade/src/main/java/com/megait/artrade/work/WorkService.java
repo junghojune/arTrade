@@ -48,6 +48,12 @@ public class WorkService {
         return newWork;
     }
 
+    public Work findWorkByTitle(String title){
+        Work work = workRepository.findByTitle(title).orElseThrow(()->{
+            return new IllegalArgumentException("해당 작품번호로 작품을 조회할 수 없습니다");
+        });
+        return work;
+    }
 
     public Work getWork(Long id){
         Work work = workRepository.findById(id).orElseThrow(()->{
