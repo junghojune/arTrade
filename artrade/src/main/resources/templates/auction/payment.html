@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/common_layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+    <script th:src="@{/js/web3.min.js}"></script>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container">
+
+        <hr>
+        <input id="workId" type="hidden" th:value="${work.id}">
+
+        <label class="col-lg-2 control-label"><h3>보유 ETH</h3></label>
+        <p> 내 계좌번호 :</p>
+        <input id="Account" type="hidden" th:value="${member.walletId}">
+        <div  type="text" th:text="${member.walletId}" th:value="${member.walletId}"></div>
+        <button id="checkBalance">보유 ETH 확인</button>
+        <p>Balance : <input id="Balance" type="text"></p>
+
+
+        <hr>
+
+
+
+
+        <hr>
+        <label class="col-lg-2 control-label"><h3>거래</h3></label>
+        <p>나의 계좌 : &nbsp &nbsp &nbsp <input id="From" type="text" th:value="${member.walletId}" readonly> </p>
+        <p>입금계좌 : &nbsp &nbsp &nbsp &nbsp &nbsp <input id="To" type="text" th:value="${work.seller.walletId}"  readonly > </p>
+        <p>Amount : &nbsp <input id="Amount" type="text"  th:value="${work.auction.winingBid}"  readonly></p>
+        <button id="Transfer">Transfer</button>
+        <p>Transaction Hash : &nbsp  <span id="Tx"></span></p>
+
+
+
+    </div>
+
+
+
+    <script>
+
+        $( document ).ready(function() {
+            console.log( "ready!" );
+
+            if (typeof web3 !== 'undefined') {
+                web3 = new Web3(web3.currentProvider);
+            } else {
+                web3 = new Web3(new Web3.providers.HttpProvider("htTtp://localhost:8545"));
+            }
+
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+            web3.eth.getNodeInfo(function(error, result){
+                if(error){
+                    console.log( "error" ,error);
+                }
+                else{
+                    console.log( "result",result );
+                    $('#NodeInfo').val(result);
+                }
+            });
+
+
+            web3.eth.getAccounts(function(error, accounts) {
+                if(error) {
+                    console.log(error);
+                }
+                $('#Account').val(accounts[0]);
+                web3.eth.getBalance(accounts[0]).then(function(result){
+                    console.log( "Balance : " ,web3.utils.fromWei(result, 'ether'));
+                    $('#Balance').val(web3.utils.fromWei(result, 'ether'));
+                });
+            });
+
+            $('#checkBalance').click(function() {
+                var _account = $('#Account').val();
+                web3.eth.getBalance(_account).then(function(result){
+                    console.log( "Balance : " ,web3.utils.fromWei(result, 'ether'));
+                    $('#Balance').val(web3.utils.fromWei(result, 'ether'));
+                    $('#Balance').text(txn_hash);
+
+                });
+            });
+
+
+
+            $('#Transfer').click(function() {
+                $('#Tx').text('');
+                var _from = $('#From').val();
+                var _to = $('#To').val();
+                var _Amount = $('#Amount').val();
+                var txnObject = {
+                    "from":_from,
+                    "to": _to,
+                    "value": web3.utils.toWei(_Amount,'ether'),
+                }
+
+                web3.eth.sendTransaction(txnObject, function(error, result){
+                    if(error){
+                        console.log( "Transaction error" ,error);
+                    }
+                    else{
+                        var txn_hash = result;
+                        $('#Tx').text(txn_hash);
+                    }
+                    let data = {
+                        id: $("#workId").val()
+                    };
+                    console.log(data); // 자바스크립트 오브젝트
+                    console.log(JSON.stringify(data));
+                    var token = $("meta[name='_csrf']").attr("content");
+                    var header = $("meta[name='_csrf_header']").attr("content");
+                    $.ajax({
+                        type: 'POST',
+                        url: '/auction/transfer', // 요청보낼 주소
+                        data: JSON.stringify(data),
+                        beforeSend : function(xhr)
+                        {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                            xhr.setRequestHeader(header, token);
+                        },
+                        contentType: "application/json; charset=utf-8",
+                        dataType: 'json',   // 응답의 content-type (json 타입으로 받겠다!)
+
+                        success: function (result){ // 요청을 성공적으로 했다면
+                            alert("결제가 완료 되었습니다");
+                        }
+                    });
+
+                });
+            });
+        });
+
+
+
+
+    </script>
+
+
+</section>
+</body>
+</html>

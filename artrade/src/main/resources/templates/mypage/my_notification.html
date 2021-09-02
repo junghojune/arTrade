@@ -1,10 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/my_layout.html}" th:with="currentTab='notice'">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+
+    <style>
+        .myNoticeContainer{
+            width: 100%;
+            min-height: 150px;
+            border: 2px dotted black;
+            padding-top:20px;
+            margin: 5px;
+        }
+        .myNoticeContainer p{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
 
+<div layout:fragment="my_content(currentTab)">
+<div class="container">
+    <div class="myTitle" style="font-size: 30px;">
+        <span><i class="fas fa-bell"></i></span>
+        <span>notification</span>
+        <span class="float-right">
+                <i class="fas fa-cog"></i>
+            </span>
+    </div>
+    <div class="myNoticeBox">
+        <div class="myNoticeContainer">
+            <p>21.08.30 17:42:42</p>
+            <p>알림 내용</p>
+        </div>
+    </div>
+    <div class="myNoticeBox">
+        <div class="myNoticeContainer">
+            <p>21.08.30 17:42:42</p>
+            <p>알림 내용</p>
+        </div>
+    </div>
+</div>
+
+</div>
 </body>
 </html>

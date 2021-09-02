@@ -1,154 +1,240 @@
 <!DOCTYPE html>
-<html lang="ko"
+<html lang="ko" style="scroll-behavior: smooth"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/common_layout.html}" th:with="activeTab='index', title='Welcome!'">
 <head>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script th:src="@{https://code.jquery.com/jquery-1.12.4.js}"></script>
-    <script th:src="@{https://code.jquery.com/ui/1.12.1/jquery-ui.js}"></script>
-    <script th:src="@{/js/work/workList.js}"></script>
-    <script th:src="@{/js/work/search.js}"></script>
-    <meta charset="UTF-8">
-
-    <style>
-        a p{
-            font-family: 'Nanum Gothic';
-            font-size: 10px;
-        }
-        .menu-name{
-            font-family: 'Open Sans Condensed';
-            font-size: 20px;
-        }
-        .card {
-            border: none;
-        }
-
-        .card:hover {
-            transform: scale(1.01);
-            transition: all 0.5s ease-in-out;
-            cursor: pointer;
-            z-index: 1;
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-
-        @media screen and (max-width: 768px){
-            .card:hover{
-                transform: none;
-                transition: none;
-                cursor: none;
-            }
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/index/index.css}">
+    <!--    이미지 슬라이드 script -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
 </head>
 
 <body>
-<div layout:fragment="content">
+<th:block layout:fragment="content">
 
-
-    <!-- 네비게이션 바 (로그인, 마이페이지, 찜, 검색 등등)-->
-    <div id="scroll-1">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto" style="font-size: 12px">
-                <li class="nav-item" th:classappend="${activeTab == 'login'} ? active">
-                    <form class="form-inline" th:action="@{/login}">
-                        <button class="nav-link btn btn-sm" style="border:1px solid grey"
-                                type="submit" sec:authorize="!isAuthenticated()">로그인하기</button>
-                    </form>
-                </li>
-                <a>&emsp;&emsp;&emsp;</a>
-<!--                    로그인 했을 때, '닉네임(작가님 or 회원님 )' -->
-<!--                <li class="nav-item" sec:authorize="isAuthenticated()">-->
-<!--                        <a sec:authentication="name">${#authentication?.name}&nbsp;(${#authentication?.type}님)</a>-->
-<!--                </li>-->
-                <li class="nav-item" th:classappend="${activeTab == 'mypage'} ? active"
-                    sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{'/mypage/' + ${#authentication?.name}}" sec:authentication="name">마이페이지</a>
-                </li>
-                <li class="nav-item" th:classappend="${activeTab == 'join'} ? active"
-                    sec:authorize="!isAuthenticated()">
-                    <a class="nav-link" th:href="@{/signup}" sec:authorize="!isAuthenticated()">회원가입</a>
-                </li>
-
-                <li class="nav-item" th:classappend="${activeTab == 'upload'}? active"
-                    sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/workUpload}">작품올리기</a>
-                </li>
-
-                <li class="nav-item" th:classappend="${activeTab == 'regwork'}? active"
-                    sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/regauction}">작품 경매 등록하기</a>
-                </li>
-
-                <li class="nav-item" th:classappend="${activeTab == 'like'}? active">
-                    <a class="nav-link" th:href="@{/like}">찜</a>
-                </li>
-                <li class="nav-item" th:classappend="${activeTab == 'logout'} ? active">
-                    <form class="form-inline" th:action="@{/logout}" th:method="post">
-                        <button class="nav-link btn btn-dark btn-sm" type="submit"
-                                style="border:0; background-color: transparent; font-size: 12px"
-                                sec:authorize="isAuthenticated()">로그아웃</button>
-                    </form>
-                </li>
-            </ul>
-
-                <!-- 검색 -->
-
-                <div class="nav_search">
+    <!--인기 작품!!-->
+    <section id="home">
+        <div class="row first">
+            <div class="title col-4">
+                <h2>지금 가장 인기 있는 작품</h2>
+                <p>
+                    <a class="btn btn-dark" th:href="@{/market/popularity}">인기 작품 보러가기</a>
+                </p>
+                <div class="searchBox mx-auto" style="background-color:#fff; width: 350px; border-radius: 10px; height:30px";>
                     <form class="form-inline" th:action="@{/auction/search}">
-                        <div style="background: #f5f5f5; height:30px; width:180px; border-radius:20px;">
-                  <span>
-                  	<img src="https://imgur.com/1COF58H.png" style="width:30px; padding:3px">
-                  </span>
-
-                            <span><input type="text" placeholder="검색" id="search" style="width:120px; height:30px; border:0 solid black; background-color:#f5f5f5" name="search"></span>
-                        </div>
+                        <span class="col-2"><i class="fas fa-search"></i></span>
+                        <input type="text" placeholder="작품 검색" id="search" name="search" class="mx-auto col-9" style="border:none"/>
                     </form>
                 </div>
+
+                <script th:src="@{/js/work/workList.js}"></script>
+                <script th:src="@{/js/work/search.js}"></script>
+            </div>
+            <!-- 이미지 슬라이드!!!! -->
+            <div class="popwork col-8">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><img src="/images/work_list/img1.jpg"></div>
+                        <div class="swiper-slide"><img src="/images/work_list/img2.jpg"></div>
+                        <div class="swiper-slide"><img src="/images/work_list/img3.jpg"></div>
+                        <div class="swiper-slide"><img src="/images/work_list/img4.jpg"></div>
+                        <div class="swiper-slide"><img src="/images/work_list/img5.jpg"></div>
+                        <div class="swiper-slide"><img src="/images/work_list/img6.jpg"></div>
+                    </div>
+                    <!-- Add Pagination -->
+                    <!-- <div class="swiper-pagination"></div> -->
+                </div>
+                <!-- Swiper JS -->
+                <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+                <!-- Initialize Swiper -->
+                <script th:inline="javascript">
+                    var swiper = new Swiper(".swiper-container", {
+                        effect: "coverflow",
+                        grabCursor: true,
+                        centeredSlides: true,
+                        slidesPerView: "auto",
+                        coverflowEffect: {
+                            rotate: 20,
+                            stretch: 0,
+                            depth: 200,
+                            modifier: 1,
+                            slideShadows: true,
+                        },
+                        pagination: {
+                            el: ".swiper-pagination",
+                        },
+                        loop: true,
+                        autoplay: {
+                            delay: 2500,
+                            disableOnInteraction: false,
+                        },
+                    });
+                </script>
+
+                <!-- 이미지 슬라이드 끝!!!! -->
+            </div>
+
         </div>
-    </nav>
-    </div>
-<!--    네비게이션 끝 -->
+    </section>
 
-<!--이미지 슬라이더 - fragments 에 따로 빼서 작성함 -->
-    <div id="scroll-2">
-    <div th:replace="~{fragments/imageslider :: imageSlider(${activeTab})}"></div>
-    </div>
-<!-- 이미지 슬라이더 끝-->
+    <!--        HOME #2 <MENU> [about / 온라인전시회 / 오픈마켓] 으로 가는 버튼 -->
+    <section class="services" id="services">
+        <div class="title">
+            <h2>메뉴 바로가기</h2>
+            <p>menu</p>
+        </div>
+        <div class="content">
+            <a class="servicesBox" th:href="@{#about}">
+                <i class="far fa-building fa-8x"></i>
+                <h2>About Us</h2>
+                <p>홈페이지 소개</p>
+            </a>
+            <a class="servicesBox" th:href="@{/exhibition}">
+                <i class="fas fa-ticket-alt fa-8x"></i>
+                <h2>Online Exhibition</h2>
+                <p>다양한 테마들로 구성된 온라인 전시회!<br/>지금 바로 입장하세요</p>
+            </a>
+            <a class="servicesBox" th:href="@{/market}">
+                <i class="fas fa-store-alt fa-8x"></i>
+                <h2>Open Market</h2>
+                <p>오픈마켓에서는 매일 경매가 열립니다<br/>놓치지 마세요</p>
+            </a>
+        </div>
+    </section>
 
-<!-- 메뉴 버튼 -->
-    <div class="container my-5" id="scroll-3">
-        <div class="row" style="display: flex; text-align: center">
-            <div class="col-4">
-                <a class="card" th:href="@{/}">
-                    <div><img src="https://picsum.photos/400/530?random=1&grayscale&blur=3"><br/></div>
-                    <strong class="menu-name">ABOUT</strong>
-                    <p>홈페이지 소개<br/>페이지 맵</p>
-                </a>
+
+
+    <!--        HOME #3 <WORK> 최신작품 모아보기 (마켓-경매- 바로가기) -->
+    <section class="work" id="work" style="background-color: lightblue">
+        <div class="title white">
+            <h2>Recent Work</h2>
+            <a th:href="@{/market/lates}"><p><button>최신 작품 보러가기</button></p></a>
+        </div>
+        <div class="container">
+            <div class="card">
+                <div class="imgBx">
+                    <img src="/images/work_list/img1.jpg">
+                </div>
+                <div class="contentBx">
+                    <div class="content">
+                        <h3>[ 작품 이름 A ]</h3>
+                        <p>작가 : name <br/>작품 설명</p>
+                        <button href="#">자세히 보러가기</button>
+                    </div>
+                </div>
             </div>
-            <div class="col-4">
-                <a class="card" th:href="@{/exhibition}">
-                    <div><img src="https://picsum.photos/400/530?random=2&grayscale&blur=3"><br/></div>
-                    <strong class="menu-name">EXHIBITION</strong>
-                    <p>다양한 테마들로 구성된 온라인 전시회!<br/>지금 바로 입장하세요</p>
-                </a>
+            <div class="card">
+                <div class="imgBx">
+                    <img src="/images/work_list/img2.jpg">
+                </div>
+                <div class="contentBx">
+                    <div class="content">
+                        <h3>[ 작품 이름 B ]</h3>
+                        <p>작가 : name <br/>작품 설명</p>
+                        <button>자세히 보러가기</button>
+                    </div>
+                </div>
             </div>
-            <div class="col-4">
-                <a class="card" th:href="@{/openMarket}">
-                    <div><img src="https://picsum.photos/400/530?random=3&grayscale&blur=3"><br/></div>
-                    <strong class="menu-name">MARKET</strong>
-                    <p style="font-family: 'Open Sans Condensed'">오픈마켓에서는 매일 경매가 열립니다<br/>놓치지 마세요</p>
-                </a>
+            <div class="card">
+                <div class="imgBx">
+                    <img src="/images/work_list/img3.jpg">
+                </div>
+                <div class="contentBx">
+                    <div class="content">
+                        <h3>[ 작품 이름 C ]</h3>
+                        <p>작가 : name <br/>작품 설명</p>
+                        <button>자세히 보러가기</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="imgBx">
+                    <img src="/images/work_list/img4.jpg">
+                </div>
+                <div class="contentBx">
+                    <div class="content">
+                        <h3>[ 작품 이름 D ]</h3>
+                        <p>작가 : name <br/>작품 설명</p>
+                        <button>자세히 보러가기</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="imgBx">
+                    <img src="/images/work_list/img5.jpg">
+                </div>
+                <div class="contentBx">
+                    <div class="content">
+                        <h3>[ 작품 이름 E ]</h3>
+                        <p>작가 : name <br/>작품 설명</p>
+                        <button>자세히 보러가기</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="imgBx">
+                    <img src="/images/work_list/img6.jpg">
+                </div>
+                <div class="contentBx">
+                    <div class="content">
+                        <h3>[ 작품 이름 F ]</h3>
+                        <p>작가 : name <br/>작품 설명</p>
+                        <button>자세히 보러가기</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <!-- 메뉴 버튼 끝 -->
+    </section>
 
-</div>
+
+
+
+
+    <!--        HOME #4 <about> 홈페이지 설명-->
+    <section class="row about" id="about">
+        <div class="row">
+            <div class="title white col-12">
+                <h2>About Us</h2>
+                <p>Hover your mouse BELOW!</p>
+            </div>
+            <div class="content col-12">
+                <div class="text">
+                    <p>A<span>RE YOU STILL</span></p>
+                    <p><span>THE</span>R<span>E YET?&emsp;&emsp;</span></p>
+                    <p><span>THIS IS </span>T<span>HE MOST</span></p>
+                    <p>&emsp;&emsp;&emsp;&emsp;<span>C</span>R<span>EATIVE</span></p>
+                    <p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;A<span>RT</span></p>
+                    <p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<span>TRA</span>D<span>E</span></p>
+                    <p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<span>MARK</span>E<span>T</span></p>
+                    <p>&emsp;&emsp;&emsp;&emsp;<span>IN THE WORLD!</span></p>
+                </div>
+                <script>
+                    const text=document.querySelector('.text');
+                    // text.innerHTML = text.textContent.replace(/\S/g,"<span>$&</span>");
+
+                    const letters = document.querySelectorAll('span');
+                    for(let i=0; i<letters.length; i++){
+                        letters[i].addEventListener("mouseover", function (){
+                            letters[i].classList.add('active')
+                        })
+                    }
+                </script>
+            </div>
+        </div>
+        <div class="abouthome col-7 mt-5">
+            <h2 class="abouttitle">NFT는 무엇인가요?</h2>
+            <p class="abouttext mb-5">NFT(non-fungible token)는 대체 불가능한 디지털 자산을 의미합니다.<br>
+                저희 아트레이드에서 제공되는 작품들은 모두 컴퓨터로 암호화된 예술 작품으로<br>
+                대체 불가능하며 보안이 유지됩니다.</p>
+            <h2 class="abouttitle">온라인 전시회는 무엇인가요?</h2>
+            <p class="abouttext mb-5">온라인 전시회는 인터랙션 디자인을 제공합니다.<br>
+                전시회를 통해 판매되는 작품을 간접적으로 체험할 수 있습니다.<br>
+            <p class="abouttext mb-5"><img src="/images/logo_transparent.png" style="width:200px; height: auto;" class="my-5"></p>
+        </div>
+
+    </section>
+
+
+</th:block>
 </body>
 </html>

@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.security.SecureRandom;
@@ -28,24 +29,25 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
 
-    @PostConstruct
-    @Profile("local")
-    public void createNewMember(){
+
+    public Member createNewMember(String name, String nickname ,String walletId){
 
         Member  member = Member.builder()
-                .username("admin")
+                .username(name)
                 .email("yhr05008@naver.com")
                 .password(passwordEncoder.encode("Password!"))
-                .nickname("테스트 관리자")
+                .nickname(nickname)
                 .type(MemberType.일반회원)
                 .registerDateTime(LocalDateTime.now())
-                .walletId("aaaa")
+                .walletId(walletId)
                 .build();
 
         Member newMember = memberRepository.save(member);
-        emailService.sendEmail(newMember);
+        // emailService.sendEmail(newMember);
 
+        return newMember;
     }
+
 
     public Member processNewMember(SignUpForm signUpForm){
 

@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-<html lang="ko"
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <title th:text="'My Mall ::: ' + title"></title>
+    <title th:text="'arTrade ::: ' + title"></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <link rel="stylesheet" th:href="@{/css/common/common.css}" >
-    <script th:src="@{/js/common/common.js}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"/>
+    <!-- css / script -->
+    <link rel="stylesheet" th:href="@{/css/common/common.css}">
+    <link rel="script" th:href="@{/js/common/common.js}">
 
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+
+    <!--bootstrap-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
     <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js}"></script>
@@ -20,50 +26,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Open+Sans+Condensed:wght@300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Yeon+Sung&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&family=Yeon+Sung&display=swap" rel="stylesheet">
 
 </head>
+
+<!-- BODY 헤더, 푸터 가져오기-->
 <body>
-<!-- header -->
-    <nav class="navbar sticky-top">
-        <div class="navbar__logo">
-            <a th:href="@{/}"><img src="https://imgur.com/PH4LeKJ.png" id="logo"></a>
-        </div>
-
-        <ul class="navbar__menu">
-            <li><a th:href="@{/#}">HOME</a></li>
-            <li><a th:href="@{/#scroll-2}">WORK</a></li>
-            <li><a th:href="@{/#scroll-3}">MENU</a></li>
-        </ul>
-
-        <a href="#" class="navbar__toggleBtn">
-            <i class="fas fa-bars"></i>
-        </a>
-
-    </nav>
-
-<!-- main -->
+<th:block th:include="fragments/common_header"></th:block>
 <section layout:fragment="content"></section>
-
-
-<!-- footer -->
-<footer class="jumbotron jumbotron-fluid text-center" style="margin-bottom: 0; background-color:black">
-    <div class="row text-center mx-auto">
-        <ul class="nav mx-auto">
-            <li class="nav-items"><a class="nav-link text-light text-center" href="#">INFO</a></li>
-            <li class="nav-items"><a class="nav-link text-light" href="#">SUPPORT</a></li>
-            <li class="nav-items"><a class="nav-link text-light" href="#">CONNECTION</a>
-            </li>
-        </ul>
-    </div>
-    <a style="color:white"><small>Terms of Use &nbsp; | &nbsp; Privacy Policy</small></a><br/>
-    <p style="color: ghostwhite"><small>&copy;2021. MegaIT team3. All Rights Reserved.</small></p>
-</footer>
-
-</body>
+<th:block th:include="fragments/common_footer"></th:block>
 
 <!-- Content Page의 script fragment가 있다면 삽입될 위치-->
 <th:block layout:fragment="script"></th:block>
-
+</body>
 </html>

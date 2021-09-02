@@ -2,10 +2,13 @@ package com.megait.artrade.controller;
 
 import com.megait.artrade.action.Auction;
 import com.megait.artrade.action.AuctionService;
+import com.megait.artrade.action.AuctionStatusType;
 import com.megait.artrade.authentication.AuthenticationMember;
 import com.megait.artrade.authentication.EmailService;
 import com.megait.artrade.authentication.SignUpForm;
 import com.megait.artrade.authentication.SignUpFormValidator;
+import com.megait.artrade.like.Like;
+import com.megait.artrade.like.LikeService;
 import com.megait.artrade.member.Member;
 import com.megait.artrade.member.MemberRepository;
 import com.megait.artrade.member.MemberService;
@@ -13,7 +16,9 @@ import com.megait.artrade.offerprice.OfferPrice;
 import com.megait.artrade.offerprice.OfferPriceService;
 import com.megait.artrade.offerprice.UploadVo;
 import com.megait.artrade.work.Work;
+import com.megait.artrade.work.WorkRepository;
 import com.megait.artrade.work.WorkService;
+import com.megait.artrade.work.WorkVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -24,6 +29,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.swing.filechooser.FileSystemView;
 import javax.validation.Valid;
 import java.io.File;
@@ -32,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -53,11 +61,15 @@ public class MainController {
 
     private final MemberRepository memberRepository;
 
+    private final WorkRepository workRepository;
+
     private final WorkService workService;
 
     private final OfferPriceService offerPriceService;
 
     private final EmailService emailService;
+
+    private final LikeService likeService;
 
     @InitBinder("signUpForm")
     protected void initBinder(WebDataBinder binder) {
@@ -65,7 +77,13 @@ public class MainController {
     }
 
     @RequestMapping("/")
-    public String index() { return "index";}
+    public String index(HttpServletResponse response) {
+        Cookie cookie = new Cookie("view", null);
+        cookie.setComment("게시글조회 확인");
+        cookie.setMaxAge(60 * 60 * 24 * 30);
+        response.addCookie(cookie);
+        return "index";
+    }
 
 
     @GetMapping("/login")
@@ -80,7 +98,6 @@ public class MainController {
 
         if(optional.isEmpty()){
             model.addAttribute("error", "잘못된 이메일");
-            System.out.println("email" + email  +", Member email" + optional.get() + "해당하는 메일 없음");
             return "member/checked_email";
         }
 
@@ -88,7 +105,6 @@ public class MainController {
 
         if(!(member.isValidToken(token))){
             model.addAttribute("error" , "잘못된 토큰");
-            System.out.println("token" + token +", Member token" + member.getEmailCheckToken());
             return "member/checked_email";
         }
 
@@ -131,6 +147,7 @@ public class MainController {
             , @RequestParam("title") String title, @RequestParam("contents") String contents) throws Exception {
         String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
         String basePath = rootPath + "/testFileUpload";
+        String webPath = "/work/list";
 
 
 
@@ -142,7 +159,8 @@ public class MainController {
             String currentDate = simpleDateFormat.format(new Date());
             String storedFileName = currentDate + "-" + originalFileTilte + originalFileExtension;
             String filePath = basePath + "/" + storedFileName;
-            Work work = workService.processNewWork(member, title, contents, filePath);
+            String fileWebPath = webPath + "/" + storedFileName;
+            Work work = workService.processNewWork(member, title, contents, fileWebPath);
             File dest = new File(filePath);
             file.transferTo(dest);
         }
@@ -150,32 +168,108 @@ public class MainController {
         return "redirect:/";
     }
 
-
+//   --------- 마이페이지----------------
     @GetMapping("/mypage")
-    public String mypage(){
-        return "fragments/mypage";
+    public String modifyForm(@AuthenticationMember Member member, Model model){
+        memberinfo(member, model);
+        return "mypage/mypage";
     }
     @GetMapping("/mypage/comment")
-    public String mycomment(){
+    public String mycomment(@AuthenticationMember Member member, Model model){
+        memberinfo(member, model);
         return "mypage/my_comment";
+    }   
+    @GetMapping("/mypage/upload")
+    public String myupload(@AuthenticationMember Member member, Model model){
+        memberinfo(member, model);
+        List<Work> workList = member.getWorks();
+        List<WorkVo> workVoList = new ArrayList<>();
+        for(int i=0; i<workList.size(); i++){
+            LocalDateTime uploadAt = workList.get(i).getUploadAt();
+            int year = uploadAt.getYear();
+            int month = uploadAt.getMonthValue();
+            int dayOfMonth = uploadAt.getDayOfMonth();
+            LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+            WorkVo workVo = new WorkVo();
+            workVo.setTitle(workList.get(i).getTitle());
+            workVo.setDate(localDate.toString());
+            workVo.setCheckToken(workList.get(i).isCheckToken());
+            workVo.setFilePath(workList.get(i).getFilePath());
+            workVoList.add(workVo);
+        }
+        model.addAttribute("workVoList" , workVoList);
+
+        if(workList == null){
+            model.addAttribute("status","notExist");
+            model.addAttribute("workList" ,"등록된 작품이 없습니다");
+        }
+        else{
+            model.addAttribute("status","Exist");
+            model.addAttribute("workList" , workList);
+        }
+        return "mypage/my_upload";
     }
-    @GetMapping("/mypage/recent")
-    public String myrecent(){
-        return "mypage/my_recent";
-    }
+
     @GetMapping("/mypage/like")
-    public String mylike(){
+    public String mylike(@AuthenticationMember Member member, Model model){
+        memberinfo(member, model);
         return "mypage/my_like";
     }
+    @GetMapping("/mypage/wallet")
+    public String mywallet(@AuthenticationMember Member member, Model model){
+        memberinfo(member, model);
+        return "mypage/my_wallet";
+    }
+    @GetMapping("/mypage/notice")
+    public String mynotice(@AuthenticationMember Member member, Model model){
+        memberinfo(member, model);
+        return "mypage/my_notification";
+    }
 
-// 오픈마켓 들어가기
+    private void memberinfo(@AuthenticationMember Member member, Model model) {
+        model.addAttribute("member", member);
+        LocalDateTime registerDateTime = member.getRegisterDateTime();
+        int year = registerDateTime.getYear();
+        int month = registerDateTime.getMonth().getValue();
+        int dayOfMonth = registerDateTime.getDayOfMonth();
+        LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+        model.addAttribute("localDate", localDate.toString());
+    }
 
-    @GetMapping("/openMarket")
+    // --------------마이페이지 끝-------------------
+
+
+
+
+
+
+    @GetMapping("/market")
     public String openMarket(@AuthenticationMember Member member, Model model) {
         List<Work> workList = workService.getAllWorkList();
-
+        workService.allCalculatePopularity();
         model.addAttribute("workList", workList);
         return "auction/market";
+    }
+
+    @GetMapping("/market/lates")
+    public String latesOpenMarket(Model model){
+
+
+        List<Work> workList = workService.latesOrder();
+        workService.allCalculatePopularity();
+        model.addAttribute("workList", workList);
+
+        return  "auction/market";
+    }
+
+    @GetMapping("/market/popularity")
+    public String popularityOpenMarket(Model model){
+
+        workService.allCalculatePopularity();
+        List<Work> workList = workService.topPopularityRanking();
+        model.addAttribute("workList", workList);
+
+        return  "auction/market";
     }
 
 
@@ -187,18 +281,31 @@ public class MainController {
 
 
     @GetMapping("/auction/search")
-    public String auctionSearchpage(String search,@AuthenticationMember Member member ,Model model){
+    public String auctionSearchpage(String search,@AuthenticationMember Member member ,Model model,  @CookieValue("view") String cookie, HttpServletResponse response){
         System.out.println(search);
         Work work = workService.findByTitle(search);
-        return auctionPage(work.getId(), model);
+        work.setSearch_cnt(work.getSearch_cnt() + 1);
+        workRepository.save(work);
+        workService.setPopularityRanking(work.getId());
+        return auctionPage(work.getId(), model, cookie,response);
     }
 
 
     @GetMapping("/auction/{id}")
-    public String auctionPage(@PathVariable Long id ,Model model){
+    public String auctionPage(@PathVariable Long id ,Model model, @CookieValue("view") String cookie, HttpServletResponse response){
+
 
         try{
             Work work = workService.getWork(id);
+
+            if(!(cookie.contains(String.valueOf(id)))){
+                cookie += id + "/";
+                work.setInsert_cnt(work.getInsert_cnt() + 1);
+                workRepository.save(work);
+                workService.setPopularityRanking(work.getId());
+            }
+            response.addCookie(new Cookie("view", cookie));
+
             double maxPrice = auctionService.findMaxPrice(id);
             model.addAttribute("work", work);
             model.addAttribute("maxPrice", Double.toString(maxPrice));
@@ -230,8 +337,23 @@ public class MainController {
         return "auction/regAuction";
     }
 
+    @GetMapping("/auction/buy")
+    public String buyWork( @AuthenticationMember Member member , Model model , Long id){
+        Work work = workService.getWork(id);
+        model.addAttribute("member" , member);
+        model.addAttribute("work" , work);
+        return "auction/payment";
+    }
 
-
+    @ResponseBody
+    @PostMapping ("/auction/transfer")
+    public String transferETH( @RequestBody Member member){
+        JsonObject object = new JsonObject();
+        Auction auction = workService.getWork(member.getId()).getAuction();
+        auction.setStatus(AuctionStatusType.체결됨);
+        auctionService.saveAuction(auction);
+        return object.toString();
+    }
 
 
     @ResponseBody
@@ -362,7 +484,6 @@ public class MainController {
     @ResponseBody
     @PostMapping("/auction/registration")
     public String registerAuction(@AuthenticationMember Member member , @RequestBody Work work_ ){
-        System.out.println(work_+"work_");
         Work work = workService.getWork(work_.getId());
         Auction auction = work.getAuction();
 
@@ -403,7 +524,6 @@ public class MainController {
 
         object.addProperty("contents",work.getContents());
 
-        System.out.println(work.getTitle()+"work.getTitle()");
 
         return object.toString();
     }
@@ -504,5 +624,23 @@ public class MainController {
         }
     }
 
+    // 좋아요 버튼 늘렀을시
+    @GetMapping("/work/like/{id}")
+    @ResponseBody
+    public String countLike(@AuthenticationMember Member member, @PathVariable Long id){
 
+        Like like = likeService.addLike(member, workService.getWork(id));
+
+        int countLike = like.getWork().getPopularity();
+
+        JsonObject object = new JsonObject();
+        try{
+
+            object.addProperty("count", countLike);
+
+        }catch (IllegalArgumentException e){
+            object.addProperty("message", e.getMessage());
+        }
+        return object.toString();
+    }
 }

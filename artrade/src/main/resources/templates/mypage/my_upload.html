@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/my_layout.html}" th:with="currentTab='upload'">
+<head>
+<style>
+    img{
+        width: 300px;
+        height: 300px;
+        object-fit: cover;
+    }
+</style>
+</head>
+<body>
+
+<div layout:fragment="my_content(currentTab)">
+    <div class="container p-5">
+        <h2>업로드 한 작품</h2>
+        <hr/>
+        <div class="row" th:if="${status} == 'Exist'">
+           <div th:each="work : ${workVoList}" class="mx-3">
+                <img th:src="${work.filePath}">
+                <p th:text="${work.title}">작품 제목</p>
+                <p th:text="${work.checkToken}">nft 등록 여부</p>
+                <p th:text="${work.date}">업로드 한 날짜</p>
+            </div>
+        </div>
+        <div th:unless="${status} == 'Exist'">
+            <p>등록된 작품이 없습니다.</p>
+        </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
