@@ -10,20 +10,17 @@
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <link rel="stylesheet"
-              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
-  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css}" >
-  <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css}" >
-  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css}" >
-  <link rel="stylesheet" th:href="@{/css/member/login.css}" >
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css}">
+  <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css}">
+  <link rel="stylesheet"
+        th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css}">
+  <link rel="stylesheet" th:href="@{/css/member/login.css}">
 
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
-
-
-
-
 
 
   <title>작품 상세보기</title>
@@ -49,14 +46,14 @@
     }, 1000);
 
     // 좋아요 버튼 클릭시
-    $(function(){
-      $("#addlike").click(function(){
+    $(function () {
+      $("#addlike").click(function () {
         $.ajax({
-          url : "/work/like/[[${work.id}]]",
+          url: "/work/like/[[${work.id}]]",
           type: 'GET',
           contentType: "application/json; charset=utf-8",
           dataType: 'json',
-          success : function(result){
+          success: function (result) {
             $('#countLike').html(result.count);
 
           }
@@ -65,7 +62,7 @@
     });
 
   </script>
-  <link rel="stylesheet" th:href="@{/css/work/workdetail.css}" >
+  <link rel="stylesheet" th:href="@{/css/work/workdetail.css}">
 
   <style>
     .sidebar-section {
@@ -73,6 +70,7 @@
       height: 100%;
       width: 100%;
     }
+
     .sidebar-item {
       position: absolute;
       top: 0;
@@ -80,24 +78,29 @@
       width: 100%;
       height: 100%;
     }
-    .sidebar-icon{
+
+    .sidebar-icon {
       height: 50px;
       width: 50px;
       border: none;
       color: #eee;
       background: #fff;
     }
-    .sidebar-icon.active{
-      color:tomato;
+
+    .sidebar-icon.active {
+      color: tomato;
     }
-    .sidebar-icon:hover{
+
+    .sidebar-icon:hover {
       color: #cccccc;
     }
-    .auction-time{
+
+    .auction-time {
       font-size: 30px;
       font-weight: 500;
     }
-    .workInfoBx{
+
+    .workInfoBx {
       display: flex;
       justify-content: center;
     }
@@ -107,36 +110,52 @@
 </head>
 <body>
 <section layout:fragment="content">
-    <!-- 기본  Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> </div>
-          <div class="text-center align-items-center mid ">
-            <div class="modal-logo"><img src="https://imgur.com/N1vwiAJ.png"></div>
-            <div class="modal-body pb-2">
+  <!-- 기본  Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                  aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="text-center align-items-center mid ">
+          <div class="modal-logo"><img src="https://imgur.com/N1vwiAJ.png"></div>
+          <div class="modal-body pb-2">
 
-            </div>
-            <div class="modal-footer d-flex justify-content-center mb-3"> <button type="button" class="btn btn-block btn-outline-info" data-dismiss="modal" id="confirm" >확인</button> </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-center mb-3">
+            <button type="button" class="btn btn-block btn-outline-info" data-dismiss="modal" id="confirm">
+              확인
+            </button>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
   <!-- 경매가 제안 Modal -->
-  <div class="modal fade" id="auctionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="auctionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+       aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> </div>
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                  aria-hidden="true">&times;</span></button>
+        </div>
         <div class="text-center align-items-center mid">
           <div class="modal-logo"><img src="https://imgur.com/N1vwiAJ.png"></div>
           <div class="modal-body pb-2">
 
           </div>
-          <div  class="pb-2" >
+          <div class="pb-2">
             <input type="number" class="form-control mt-2" placeholder="경매가 입력 (ex. 3ETH)" id="price">
           </div>
-          <div class="modal-footer d-flex justify-content-center mb-3"> <button type="button" class="btn btn-block btn-outline-info" data-dismiss="modal" id="offer" >offer</button> </div>
+          <div class="modal-footer d-flex justify-content-center mb-3">
+            <button type="button" class="btn btn-block btn-outline-info" data-dismiss="modal" id="offer">
+              offer
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -145,50 +164,59 @@
 
   <!--경매 사진 및 가격제안-->
 
-  <div class="container" >
+  <div class="container">
     <div class="row workInfoBx">
       <div class="px-4">
-        <img id="workpircture" th:src="${work.filePath}" style="border: 1px solid black; width: 300px; height: 300px;">
+        <img id="workpircture" th:src="${work.filePath}"
+             style="border: 1px solid black; width: 300px; height: 300px;">
       </div>
       <div class="px-4">
         <h4 class="pt-3" id="workid" th:text="${work.title}" th:value="${work.id}">작품A</h4>
         <p>Masterpiece A</p>
         <p>created by 작가이름</p>
-        <button class="sidebar-icon col-12 mt-2" id="addlike" sec:authorize="isAuthenticated()" th:classappend="${isLike == 1} ? 'active' " th:onclick="btnClick()">
+        <button class="sidebar-icon col-12 mt-2" id="addlike" sec:authorize="isAuthenticated()"
+                th:classappend="${isLike == 1} ? 'active' " onclick="btnClick()">
           <i class="fas fa-heart fa-2x"></i>
         </button>
         <span>인기도 :</span>
-        <span class="textmuted" th:id= "countLike" th:text="${work.popularity}"></span>
+        <span class="textmuted" th:id="countLike" th:text="${work.popularity}"></span>
         <div class="mb-4">
           <span class="fw-bold mt-3" id="remain_price"></span>
           현재 경매가 : &nbsp;
-          <span class="ml-4" th:text="${work.auction.winingBid + ' &nbsp;ETH'}" th:id="priceSuggest" style="font-size:30px;"> 2ETH</span>
+          <span class="ml-4" th:text="${work.auction.winingBid + ' &nbsp;ETH'}" th:id="priceSuggest"
+                style="font-size:30px;"> 2ETH</span>
         </div>
         <!--        todo: sec:authorize 지우고 로직 맞게 쓰기 (if 구매자가 맞다면 버튼 보이기) -->
-        <div class="btn btn-block btn-outline-info col-12" id="suggest">경매가제시하기 </div>
-        <div sec:authorize="isAuthenticated()" class="btn btn-block btn-outline-info col-12" id="buy">구매하기 </div>
+
+        <div class="btn btn-block btn-outline-info col-12" id="suggest">경매가제시하기</div>
+
+
+        <form th:action="@{/auction/buy}">
+          <input type="hidden" th:value="${work.id}" th:name="id">
+          <input sec:authorize="isAuthenticated()" type="submit" th:value="구매하기"
+                 class="btn btn-block btn-outline-info col-12" id="buy">
+        </form>
         <div class="col-12 mb-4 ">
         </div>
       </div>
 
 
-
     </div>
   </div>
-    </div>
+  </div>
 
   </div>
 
 
-<!--   클릭 시 좋아요 버튼 active 하는 스크립트-->
+  <!--   클릭 시 좋아요 버튼 active 하는 스크립트-->
   <script>
-    function btnClick(){
+    function btnClick() {
       const menuRed = document.querySelector('.sidebar-icon');
       menuRed.classList.toggle('active');
     }
   </script>
 
-  <div class="container py-md-0 py-3" id="timer" style = " margin-top:50px " >
+  <div class="container py-md-0 py-3" id="timer" style=" margin-top:50px ">
 
     <!-- 작품 정보 및  가격 제안 -->
     <!--   <div id = "work-detail"> -->
@@ -229,7 +257,7 @@
 
     <!--댓글 -->
     <script th:inline="javascript">
-      $(document).ready(function() {
+      $(document).ready(function () {
 
         $('#submit').click(function () {
 
@@ -254,12 +282,11 @@
             data: JSON.stringify(data),     // JSON 데이터를 string화 시킴
 
 
-            beforeSend : function(xhr)
-            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+            beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
               xhr.setRequestHeader(header, token);
             },
             contentType: "application/json; charset=utf-8",
-            dataType:'json',
+            dataType: 'json',
             success: function (data) {
               console.log(data)
               // if(data == 1){
@@ -279,55 +306,63 @@
 
       // 댓글을 html 형식 세트로 보내기
       var html = "";
+
       function getCommentList(data) {
 
 
-              $(data).each(function () {
-                html += '<label name = "comment">'
-                html += '<i class="fas fa-user"></i>'
-                html += '</label>'
-                html += '<div id = "comments-nickName">'
-                html +=  data.nickName
-                html += '</div>'
-                html += '<div id = "comments-contents" >'
-                html +=  data.comment
-                html += '</div>'
-                html += '<div id = "comments-time">'
-                html += data.time
-                html += '</div>'
-              });
+        $(data).each(function (i, e) {
+          console.log(e);
+          html += '<label name = "comment">';
+          html += '<i class="fas fa-user"></i>';
+          html += '</label>';
+          html += '<div id = "comments-nickName">';
+          html += e.nickName;
+          html += '</div>';
+          html += '<div id = "comments-contents" >';
+          html += e.comment;
+          html += '</div>';
+          html += '<div id = "comments-time">';
+          html += e.time;
+          html += '</div>';
+        });
 
         $("#comments").html(html);
 
       }
 
 
-    </script >
+    </script>
+
+    <div id="comment-count" class="replyCount">댓글 <span id="cnt">0</span></div>
+    <div class="card replyList" id="comments">
+    </div>
+
+    <!-- 댓글 달 창 -->
+    <div class="container-comment">
+      <label name="comment"><i class="fas fa-user"></i></label>
 
       <div>
-          <input type="hidden" id="bno" th:value="${work.id}">
-      </div>
-      <div id="comment-count" class = "replyCount">댓글 <span  id="cnt" >0</span></div>
-      <div class ="card replyList"  id = "comments">
+        <input type="hidden" id="bno" th:value="${work.id}">
       </div>
 
-      <!-- 댓글 달 창 -->
-      <div class = "container-comment">
-          <label name = "comment"><i class="fas fa-user"></i></label>
-          <div id="form-commentInfo" >
-              <input type = "text" id="comment-input" placeholder="댓글을 입력해 주세요.">
-              <input type = "submit" id = "submit" class="btn float-right" value="댓글 작성">
-
+      <div id="form-commentInfo">
+        <input type="text" id="comment-input" placeholder="댓글을 입력해 주세요.">
+        <input type="submit" id="submit" class="btn float-right" value="댓글 작성">
+      </div>
+    </div>
 
     <!-- 최근 본 작품들 -->
-    <div id = "recent-work">
+    <div id="recent-work">
 
       <h4>보고 있는 작품과 비슷한 작품</h4>
 
       <div class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1">
-        <div class="card"> <img class="card-img-top" src="https://www.freepnglogos.com/uploads/cucumber-png/cucumber-png-image-purepng-transparent-png-26.png">
+        <div class="card"><img class="card-img-top"
+                               src="https://www.freepnglogos.com/uploads/cucumber-png/cucumber-png-image-purepng-transparent-png-26.png">
           <div class="card-body">
-            <div class="d-flex align-items-center product"> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="fas fa-star"></span> <span class="far fa-star"></span> </div>
+            <div class="d-flex align-items-center product"><span class="fas fa-star"></span> <span
+                    class="fas fa-star"></span> <span class="fas fa-star"></span> <span
+                    class="fas fa-star"></span> <span class="far fa-star"></span></div>
             <div class="d-flex align-items-center justify-content-between pt-3">
               <div class="d-flex flex-column">
                 <div class="h6 font-weight-bold">작품A</div>
@@ -343,26 +378,20 @@
     <!--  </div>  -->
 
 
-
-
-
   </div>
-
-  </div>
-</div>
 
 
   <div layout:fragment="script">
     <script th:src="@{/js/work/workdetail.js}"></script>
     <script>
 
-      let index= {
+      let index = {
         init: function () {
           $("#offer").on("click", () => { //function(){}, ()=>{}this를 바인딩하기 위해
             this.save();
           });
         },
-        save:function (){
+        save: function () {
           var token = $("meta[name='_csrf']").attr("content");
           var header = $("meta[name='_csrf_header']").attr("content");
           let data = {
@@ -376,8 +405,7 @@
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            beforeSend : function(xhr)
-            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+            beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
               xhr.setRequestHeader(header, token);
             },
           }).done(function (resp) {
@@ -390,8 +418,6 @@
 
 
         }
-
-
 
 
       }
