@@ -3,6 +3,7 @@ package com.megait.artrade.work;
 
 import com.megait.artrade.action.Auction;
 import com.megait.artrade.action.AuctionRepository;
+import com.megait.artrade.action.AuctionStatusType;
 import com.megait.artrade.member.Member;
 import com.megait.artrade.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -106,7 +107,9 @@ public class WorkService {
                     .copyrightHolder(member_)
                     .uploadAt(LocalDateTime.now())
                     .checkToken(true)
+                    .isTimeoutAuction(false)
                     .seller(member_)
+                    .status(AuctionStatusType.경매중)
                     .build();
             workList.add(work);
         }

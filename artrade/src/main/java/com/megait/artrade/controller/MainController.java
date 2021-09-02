@@ -251,7 +251,13 @@ public class MainController {
     public String openMarket(@AuthenticationMember Member member, Model model) {
         List<Work> workList = workService.getAllWorkList();
         workService.allCalculatePopularity();
+
+        for(int i=0;i < workList.size(); i++){
+          auctionService.checkTimeoutAuction(workList.get(i));
+
+       }
         model.addAttribute("workList", workList);
+
         return "auction/market";
     }
 
@@ -263,6 +269,13 @@ public class MainController {
         workService.allCalculatePopularity();
         model.addAttribute("workList", workList);
 
+        for(int i=0;i < workList.size(); i++){
+            auctionService.checkTimeoutAuction(workList.get(i));
+
+        }
+        model.addAttribute("workList", workList);
+
+
         return  "auction/market";
     }
 
@@ -272,6 +285,13 @@ public class MainController {
         workService.allCalculatePopularity();
         List<Work> workList = workService.topPopularityRanking();
         model.addAttribute("workList", workList);
+
+        for(int i=0;i < workList.size(); i++){
+            auctionService.checkTimeoutAuction(workList.get(i));
+
+        }
+        model.addAttribute("workList", workList);
+
 
         return  "auction/market";
     }
@@ -387,7 +407,7 @@ public class MainController {
         LocalDateTime closingTime = LocalDateTime.now();
         if (work != null) {
             Auction auction = work.getAuction();
-             timeoutAuction = auctionService.checkTimeoutAuction(auction);
+             timeoutAuction = auctionService.checkTimeoutAuction(work);
             if(auction == null) {
                 object.addProperty("status", "notExistAuction");
                 object.addProperty("result", "해당 작품에 등록된 경매가 없습니다");
@@ -669,4 +689,11 @@ public class MainController {
         }
         return object.toString();
     }
+
+    // 온라인 전시회 입장
+    @GetMapping("/exhibition")
+    public String exhibition(){
+        return "/exhibition/enterpage";
+    }
+
 }

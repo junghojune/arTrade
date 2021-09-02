@@ -99,11 +99,14 @@ public class AuctionService {
 
 
     @Transactional
-    public boolean checkTimeoutAuction(Auction auction)  {
-        LocalDateTime auctionClosingTime = auction.getAuctionClosingTime();
+    public boolean checkTimeoutAuction(Work work)  {
+        LocalDateTime auctionClosingTime = work.getAuction().getAuctionClosingTime();
         LocalDateTime duedate = LocalDateTime.parse(auctionClosingTime.toString());
         LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().toString());
-        auction.setStatus(AuctionStatusType.미체결됨);
+        if(now.isAfter(duedate)){
+           work.getAuction().setStatus(AuctionStatusType.미체결됨);
+           work.setTimeoutAuction(true);
+        }
         System.out.println("경매가 마감되면 true , 마감 되지 않으면 false");
         return now.isAfter(duedate);
     }

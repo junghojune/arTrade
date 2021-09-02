@@ -51,9 +51,9 @@
                 <option th:text="${work.title}" th:value="${work.id}">작품1</option>
                </div>
             </span>
-            <spab th:unless="${status} == 'Exist'">
+            <span th:unless="${status} == 'Exist'">
                <option>등록된 작품이 없습니다.</option>
-            </spab >
+            </span >
           </select>
 
         </div>

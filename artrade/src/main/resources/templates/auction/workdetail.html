@@ -6,21 +6,10 @@
       layout:decorate="~{layout/common_layout}"
       th:with="activeTab='workdetail', title='Welcome!'">
 <head>
-  <meta charset="utf-8">
+
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
-  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css}">
-  <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css}">
-  <link rel="stylesheet"
-        th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css}">
-  <link rel="stylesheet" th:href="@{/css/member/login.css}">
 
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
 
 
   <title>작품 상세보기</title>
@@ -172,8 +161,8 @@
       </div>
       <div class="px-4">
         <h4 class="pt-3" id="workid" th:text="${work.title}" th:value="${work.id}">작품A</h4>
-        <p>Masterpiece A</p>
-        <p>created by 작가이름</p>
+        <span>created by</span>
+        <span th:text="${work.copyrightHolder.nickname}"></span>
         <button class="sidebar-icon col-12 mt-2" id="addlike" sec:authorize="isAuthenticated()"
                 th:classappend="${isLike == 1} ? 'active' " onclick="btnClick()">
           <i class="fas fa-heart fa-2x"></i>
@@ -186,18 +175,15 @@
           <span class="ml-4" th:text="${work.auction.winingBid + ' &nbsp;ETH'}" th:id="priceSuggest"
                 style="font-size:30px;"> 2ETH</span>
         </div>
-        <!--        todo: sec:authorize 지우고 로직 맞게 쓰기 (if 구매자가 맞다면 버튼 보이기) -->
 
-        <div class="btn btn-block btn-outline-info col-12" id="suggest">경매가제시하기</div>
-
-
-        <form th:action="@{/auction/buy}">
+        <div  th:if="${!work.timeoutAuction}" class="btn btn-block btn-outline-info col-12" id="suggest">경매가제시하기</div>
+        <form th:action="@{/auction/buy}" th:if="${work.timeoutAuction}">
           <input type="hidden" th:value="${work.id}" th:name="id">
-          <input sec:authorize="isAuthenticated()" type="submit" th:value="구매하기"
+          <input type="submit" th:value="구매하기"
                  class="btn btn-block btn-outline-info col-12" id="buy">
         </form>
-        <div class="col-12 mb-4 ">
-        </div>
+        <div th:if="${work.timeoutAuction}" class="col-12">경매가 종료된 작품입니다.</div>
+
       </div>
 
 
@@ -248,9 +234,8 @@
 
     <!--  표현식을 넣을 위치 -->
     <div class="card my-5">
-      <div class="card-body">
-        작품에 관한 설명이 이곳에 작성됩니다. 다음의 작품은 오픈마켓에서
-        작품을 선택하였을 때 보이는 상세내용 입니다.
+      <div class="card-body" th:text="${work.contents}">
+        작품에 관한 설명이 없습니다.
       </div>
     </div>
 
@@ -345,44 +330,20 @@
     </div>
 
     <!-- 댓글 달 창 -->
-    <div class="container-comment">
+    <div class="container-comment mb-5">
       <label name="comment"><i class="fas fa-user"></i></label>
 
       <div>
         <input type="hidden" id="bno" th:value="${work.id}">
       </div>
 
-      <div id="form-commentInfo">
-        <input type="text" id="comment-input" placeholder="댓글을 입력해 주세요." >
-        <input type="submit" id="submit" class="btn float-right" value="댓글 작성">
+      <div id="form-commentInfo" class="row">
+        <input type="text" id="comment-input" placeholder="댓글을 입력해 주세요." class="col-8 form-control ml-3">
+        <input type="submit" id="submit" class="btn btn-outline-dark float-right col-3 ml-3" value="댓글 작성">
       </div>
     </div>
 
-    <!-- 최근 본 작품들 -->
-    <div id="recent-work">
 
-      <h4>보고 있는 작품과 비슷한 작품</h4>
-
-      <div class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1">
-        <div class="card"><img class="card-img-top"
-                               src="https://www.freepnglogos.com/uploads/cucumber-png/cucumber-png-image-purepng-transparent-png-26.png">
-          <div class="card-body">
-            <div class="d-flex align-items-center product"><span class="fas fa-star"></span> <span
-                    class="fas fa-star"></span> <span class="fas fa-star"></span> <span
-                    class="fas fa-star"></span> <span class="far fa-star"></span></div>
-            <div class="d-flex align-items-center justify-content-between pt-3">
-              <div class="d-flex flex-column">
-                <div class="h6 font-weight-bold">작품A</div>
-              </div>
-              <div class="h6 font-weight-bold">2ETH</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-    </div>
-    <!--  </div>  -->
 
 
   </div>
