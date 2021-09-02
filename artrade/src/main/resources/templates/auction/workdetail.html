@@ -156,7 +156,8 @@
       </div>
       <div class="px-4">
         <h4 class="pt-3" id="workid" th:text="${work.title}" th:value="${work.id}">작품A</h4>
-        <span>created by</span><span></span>
+        <span>created by</span>
+        <span th:text="${work.copyrightHolder.nickname}"></span>
         <button class="sidebar-icon col-12 mt-2" id="addlike" sec:authorize="isAuthenticated()"
                 th:classappend="${isLike == 1} ? 'active' " onclick="btnClick()">
           <i class="fas fa-heart fa-2x"></i>
@@ -228,9 +229,8 @@
 
     <!--  표현식을 넣을 위치 -->
     <div class="card my-5">
-      <div class="card-body">
-        작품에 관한 설명이 이곳에 작성됩니다. 다음의 작품은 오픈마켓에서
-        작품을 선택하였을 때 보이는 상세내용 입니다.
+      <div class="card-body" th:text="${work.contents}">
+        작품에 관한 설명이 없습니다.
       </div>
     </div>
 
