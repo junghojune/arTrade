@@ -681,4 +681,11 @@ public class MainController {
         }
         return object.toString();
     }
+
+    // 온라인 전시회 입장
+    @GetMapping("/exhibition")
+    public String exhibition(){
+        return "/exhibition/enterpage";
+    }
+
 }
