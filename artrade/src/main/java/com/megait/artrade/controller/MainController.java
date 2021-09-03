@@ -11,7 +11,9 @@ import com.megait.artrade.authentication.SignUpFormValidator;
 import com.megait.artrade.comment.Comment;
 import com.megait.artrade.comment.CommentService;
 import com.megait.artrade.like.Like;
+import com.megait.artrade.like.LikeRepository;
 import com.megait.artrade.like.LikeService;
+import com.megait.artrade.like.LikeVo;
 import com.megait.artrade.member.Member;
 import com.megait.artrade.member.MemberRepository;
 import com.megait.artrade.member.MemberService;
@@ -74,6 +76,8 @@ public class MainController {
     private final EmailService emailService;
 
     private final LikeService likeService;
+
+    private final LikeRepository likeRepository;
 
     @InitBinder("signUpForm")
     protected void initBinder(WebDataBinder binder) {
@@ -235,6 +239,34 @@ public class MainController {
     @GetMapping("/mypage/like")
     public String mylike(@AuthenticationMember Member member, Model model){
         memberinfo(member, model);
+        List<Like> likeList = likeService.getMyLike(member);
+        List<LikeVo> likeVoList = new ArrayList<>();
+        for(int i =0; i<likeList.size(); i++){
+            LocalDateTime uploadAt = likeList.get(i).getWork().getUploadAt();
+            int year = uploadAt.getYear();
+            int month = uploadAt.getMonthValue();
+            int dayOfMonth = uploadAt.getDayOfMonth();
+            LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+            LikeVo likeVo = new LikeVo();
+            likeVo.setTitle(likeList.get(i).getWork().getTitle());
+            likeVo.setFilePath(likeList.get(i).getWork().getFilePath());
+            likeVo.setPopularity(likeList.get(i).getWork().getPopularity());
+            likeVo.setComment_cnt(likeList.get(i).getWork().getComment_cnt());
+            likeVo.setDate(localDate.toString());
+            likeVo.setAutionType(likeList.get(i).getWork().getAuction().getStatus().toString());
+            likeVoList.add(likeVo);
+        }
+
+        model.addAttribute("likeVoList",likeVoList);
+        if(likeList.size() == 0){
+            model.addAttribute("status","notExist");
+            model.addAttribute("likeList" ,"등록된 작품이 없습니다");
+        }else
+        {
+            model.addAttribute("status","Exist");
+            model.addAttribute("likeList" , likeList);
+        }
+
         return "mypage/my_like";
     }
     @GetMapping("/mypage/wallet")
