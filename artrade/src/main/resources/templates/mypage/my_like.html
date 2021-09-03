@@ -12,16 +12,47 @@
         <div class="container p-5">
             <h2>관심 작품</h2>
             <hr/>
-            <div class="row" th:if="${like} == 'Exist'">
-                <div th:each="work : ${likeVoList}" class="mx-3">
-                    <img th:src="${like.filePath}">
-                    <p th:text="${like.title}">작품 제목</p>
-                </div>
-            </div>
-            <div th:unless="${like} == 'Exist'">
-                <p>관심 작품이 없습니다.</p>
-            </div>
 
+            <table class="table table-sm">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>작품 정보</th>
+                    <th>작품 상태</th>
+                    <th>
+                        <a>선택</a>
+                    </th>
+                </tr>
+                </thead>
+
+                <div class="row" th:if="${status} == 'Exist'">
+                    <td></td>
+                    <div th:each="like : ${likeVoList}" class="mx-3">
+
+                        <td>
+                            <img th:src="${like.filePath}" style="border: 1px solid black; width: 120px; height: 120px;">
+                        </td>
+
+                        <td>
+                            <div>
+                                <b th:text="${like.title}"></b>
+                                <br/>
+                            <small th:text="${like.date}"><br/>
+                            </small><br/>
+                                <i class="fas fa-heart"><div th:text="${like.popularity}"></div></i>
+                                <i class="fas fa-comment"><div th:text="${like.comment_cnt}"></div></i>
+                            </div>
+                        </td>
+
+                        <td th:text="${like.autionType}">
+                        </td>
+
+
+                    </div>
+                </div>
+                <div th:unless="${status} == 'notExist'">
+                </div>
+            </table>
         </div>
     </div>
 </div>

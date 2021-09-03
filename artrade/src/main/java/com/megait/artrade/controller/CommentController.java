@@ -8,6 +8,7 @@ import com.megait.artrade.comment.CommentService;
 import com.megait.artrade.comment.CommentVo;
 import com.megait.artrade.member.Member;
 import com.megait.artrade.work.Work;
+import com.megait.artrade.work.WorkRepository;
 import com.megait.artrade.work.WorkService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class CommentController {
     // service
     private final CommentService commentService;
     private final WorkService workService;
-
+    private final WorkRepository workRepository;
 
 
     @ResponseBody
@@ -72,7 +73,8 @@ public class CommentController {
         // 댓글 내용을 엔티티에 저장
         Work work = workService.getWork(workNo);          // 작품 조회(Id)
         commentService.saveComment(commentVo.getComment(),member, work, newCnt);      // 댓글 정보 DB에 저장
-
+        work.setComment_cnt(newCnt);
+        workRepository.save(work);
         // 댓글에 대한 정보 가져옴
         Comment comment = commentService.getComment(member, commentVo.getComment(), work);    // 댓글 조회
 
