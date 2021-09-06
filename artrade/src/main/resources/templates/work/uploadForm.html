@@ -5,39 +5,81 @@
       layout:decorate="~{layout/common_layout}" >
 <head>
 
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
-  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css}" >
-  <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css}" >
-  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css}" >
-  <link rel="stylesheet" th:href="@{/css/member/login.css}" >
-
-  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css}">
-  <script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js}"></script>
-  <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
-
-
-
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        section{
+            min-height: 100vh;
+            padding-top: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #img_section{
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+        }
+        .imgBx{
+            border: 2px dashed #ccc;
+        }
+        .submitBtn{
+            display: block;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            background-color: #40a798;
+            padding: 14px 28px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            color: white;
+            font-weight: 500;
+        }
+        .submitBtn:hover {
+            background-color: #ccc;
+        }
+        .subTitle{
+            color: #40a798;
+        }
+        .mainTitle{
+            color:#40a798;
+        }
+    </style>
 
 </head>
 <body>
 <section layout:fragment="content">
-  <!-- TODO  화면 구성 다시 이쁘게 하기! -->
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-12 col-md-9 col-lg-7 col-xl-6">
-        <!-- White Container -->
-        <div class="container bg-white rounded mt-2 mb-2 px-0">
-          <!-- Main Heading -->
-          <div class="row justify-content-center align-items-center pt-3 mb-3">
-            <h1><strong>작품올리기</strong></h1>
+          <div>
+              <h2 class="mainTitle">작품올리기</h2>
           </div>
-          <div class="pt-3 pb-3">
+          <hr/>
 
-            <form class="needs-validation" th:action="@{/workUpload}" method="post" name="signupForm" novalidate enctype="multipart/form-data">
+          <div class="row justify-content-center">
 
-              <img src="https://dummyimage.com/500x500/ffffff/000000.png&text=preview+image" id="img_section" style="width: 500px; height: 500px;">
-              <br>
+              <form class="needs-validation col-11" th:action="@{/workUpload}" method="post" name="signupForm" novalidate enctype="multipart/form-data">
+
+                  <div>
+                      <label class="col-12 my-1 subTitle">title</label>
+                      <input type="text" id="title" name="title" placeholder="제목" class="form-control col-11 mx-3 mb-1 col-10">
+                  </div>
+                  <div>
+                      <label class="col-12 my-1 subTitle">내용</label>
+                      <textarea class="form-control mx-3 mb-2 col-11" name="contents" id="contents" rows="3"
+                                placeholder="내용을 입력해주세요."></textarea>
+                  </div>
+
+
+                  <div class="imgBx col-11 mx-auto my-3">
+
+              <img src="https://dummyimage.com/500x500/ffffff/000000.png&text=preview+image" id="img_section">
+                </div>
               <input name = "uploadFile" type="file" id="upload_file" accept="image/*" required=true value="업로드">
               <script>
                 const reader = new FileReader();
@@ -55,28 +97,12 @@
                   //업로드한 이미지의 URL을 reader에 등록
                 })
               </script>
-              <br>
-
-              <input type="text" name = "title"  placeholder="제목">
-
-              <br>
-
-              <textarea class="form-control" name="contents" id="contents" rows="3" placeholder="내용을 입력해주세요." ></textarea>
-
-
-
-              <div class="form-group row justify-content-center">
-                <div class="col-3 px-3"> <input type="submit" value="작품올리기" class="btn btn-block btn-outline-info"> </div>
-              </div>
+                <input type="submit" value="작품올리기" class="submitBtn my-3">
 
             </form>
-
           </div>
-
-
         </div>
       </div>
-    </div>
   </div>
 </section>
 </body>

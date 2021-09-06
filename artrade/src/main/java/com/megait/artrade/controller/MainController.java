@@ -746,4 +746,11 @@ public class MainController {
         return "/exhibition/enterpage";
     }
 
+    @GetMapping("/exhibition/exh1")
+    public String exh1(){
+        return "/exhibition/exh1";
+    }
+
+    @GetMapping("/exhibition/theme1")
+    public String theme1(){return "/exhibition/theme1";}
 }
