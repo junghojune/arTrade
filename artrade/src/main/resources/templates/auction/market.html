@@ -92,7 +92,7 @@
                                 <span>
                                     <i class="fas fa-search" style="width:40px; padding:3px"></i>
                                     <span><input type="text" placeholder="작품 검색" id="search" name="search"
-                                                 style="margin: 0; width:120px; height:40px; border:0 solid black; background-color:#f5f5f5"></span>
+                                                 style="margin: 0; width:120px; height:40px; border:0 solid black; background-color:#fff"></span>
                                 </span>
               </div>
             </form>
@@ -122,8 +122,8 @@
             <span class="text-success px-2 count"></span>
             <select name="country" id="country" class="bg-light" onchange="if(this.value) location.href=(this.value);">
               <option value="" hidden>정렬기준</option>
-              <option th:value="@{/market/lates}" th:id="lates">최신순</option>
-              <option th:value="@{/market/popularity}">인기순</option>
+              <option th:value="@{/market/lates}" th:id="lates" th:selected="${sort} == 'lates'">최신순</option>
+              <option th:value="@{/market/popularity}" th:selected="${sort} == 'popularity'">인기순</option>
             </select>
           </div>
 

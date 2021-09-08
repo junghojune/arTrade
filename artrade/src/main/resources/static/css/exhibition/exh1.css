@@ -1,0 +1,207 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+section{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+/* section::before{
+    content: '';
+    position:absolute;
+    bottom: 0;
+    left: 0;
+    width:100%;
+    height: 100px;
+    background: linear-gradient(to top, #ddd, transparent);
+    z-index: 10000;
+} */
+
+section img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+#text{
+    position: relative;
+    color: #fff;
+    font-size: 10vw;
+}
+.main-content{
+    position: relative;
+    padding: 100px;
+    height: 100vh;
+    /* background: #ddd; */
+}
+.main-content h2{
+    font-size: 3.5em;
+    margin-bottom: 10px;
+    color: #445392;
+}
+.main-content p{
+    color: #445392;
+}
+
+
+.containerBx{
+    position: relative;
+    width: 100%;
+    height: 120vh;
+    background: #40a798;
+}
+.containerBx .section
+{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.containerBx .section:nth-child(1){
+    background: url(/images/exh/door1.jpg) no-repeat fixed;
+    background-size: cover;
+}
+.containerBx .section:nth-child(2){
+    background: url(/images/exh/door2.jpg) no-repeat fixed;
+    background-size: cover;
+}
+.containerBx .section:nth-child(3){
+    background: url(/images/exh/door3.jpg) fixed;
+    background-size: cover;
+}
+.containerBx .section:nth-child(4){
+    background: url(/images/exh/door4.jpg) fixed;
+    background-size: cover;
+}
+
+.containerBx .section .content  {
+    position: absolute;
+    bottom: 40%;
+    left: 40%;
+    max-width: 700px;
+}
+
+.containerBx .section .content h2 {
+    color: #ffffff;
+    font-weight: 700;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 2em;
+}
+
+.containerBx .section .content h1 {
+    color: #111;
+    font-weight: 900;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 3em;
+    background-color: white;
+}
+.containerBx .section .content p {
+    color: white;
+    text-shadow: 1px 1px 3px gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.containerBx .section .content::before{
+    top:0;
+    left:0;
+    background-color: rgba(0,0,0,0.3);
+}
+
+
+.buttonBx{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: rgba(1, 1, 1, 0.7);
+    background: #fff;
+    letter-spacing: 2px;
+    font-size: 3em;
+    transition: 0.5s;
+    padding: 5px;
+    margin: 20px;
+}
+.buttonBx:hover{
+    color: #40a798;
+}
+.buttonBx span{
+    display: block;
+    position: absolute;
+    background: #40a798;
+}
+.buttonBx span:nth-child(1){
+    left:0;
+    bottom:0;
+    width:3px;
+    height:100%;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.5s;
+}
+.buttonBx:hover span:nth-child(1){
+    transform: scaleY(1);
+    transform-origin: bottom;
+    transition: transform 0.5s;
+}
+
+.buttonBx span:nth-child(2){
+    left:0;
+    bottom:0;
+    width:100%;
+    height:3px;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s;
+}
+.buttonBx:hover span:nth-child(2){
+    transform: scaleX(1);
+    transform-origin: left;
+    transition: transform 0.5s;
+}
+
+.buttonBx span:nth-child(3){
+    right:0;
+    bottom:0;
+    width:3px;
+    height:100%;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.5s;
+    transition-delay: 0.5s;
+}
+.buttonBx:hover span:nth-child(3){
+    transform: scaleY(1);
+    transform-origin: bottom;
+    transition: transform 0.5s;
+    transition-delay: 0.5s;
+}
+
+.buttonBx span:nth-child(4){
+    left:0;
+    top:0;
+    width:100%;
+    height:3px;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s;
+    transition-delay: 0.5s;
+}
+.buttonBx:hover span:nth-child(4){
+    transform: scaleX(1);
+    transform-origin: left;
+    transition: transform 0.5s;
+    transition-delay: 0.5s;
+}

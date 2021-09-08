@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" crossorigin="anonymous">
+    <title>Title</title>
+
+    <style>
+        .header{
+            padding:0;
+            margin:0;
+            top:0;
+            left:0;
+            background: transparent;
+            width:100%;
+            height: 50px;
+            position: fixed;
+            z-index: 1;
+            padding:10px;
+        }
+        .header a{
+            text-decoration: none;
+            font-size: 1.5em;
+            font-weight: 900;
+            height: 80px;
+            float: right;
+            cursor: pointer;
+            color: #40a798;
+            margin-right:20px;
+        }
+        .header a:hover{
+            transform: scale(1.1);
+            transform: rotate(45deg);
+        }
+
+        .modal_wrap{
+            display: none;
+            width: 500px;
+            height: 300px;
+            position: absolute;
+            top:50%;
+            left: 50%;
+            margin: -250px 0 0 -250px;
+            background:#40a798;
+            z-index: 2;
+        }
+        .black_bg{
+            display: none;
+            position: fixed;
+            content: "";
+            width: 100%;
+            height: 100%;
+            background-color:rgba(0, 0,0, 0.5);
+            top:0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .modalContent{
+            height: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            color:#fff;
+            font-size: 1.5em;
+            border: 1px solid white;
+        }
+        .answerBtn{
+            width: 100%;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .answerBtn a{
+            width: 50%;
+            height: 80px;
+            background: #40a798;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            color:#fff;
+            border: 1px solid white;
+        }
+        .answerBtn a:hover{
+            background: #fff;
+            color:#40a798;
+        }
+
+
+        /* map css */
+        .map_wrap{
+            display: none;
+            width: 500px;
+            height: 300px;
+            position: absolute;
+            top:50%;
+            left: 50%;
+            margin: -250px 0 0 -250px;
+            background:#fff;
+            z-index: 2;
+        }
+        .outBx{
+            background: #fff;
+            border: 3px dashed #40a798;
+            height: 320px;
+            width: 530px;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            padding: 10px;
+        }
+        .mapModal{
+            position:relative;
+            top:0;
+            left:0;
+            height: 300px;
+            width: 400px;
+        }
+
+        .mapItem{
+            width: 100%;
+            height: 100%;
+            position:absolute;
+            top:0;
+            left:0;
+            margin:0;
+            padding:0;
+        }
+        .mapImg{
+            position:fixed;
+            top:0;
+            left:0;
+            width: 400px;
+            height: 300px;
+            display: none;
+        }
+        .lobby{
+            position:absolute;
+            top:20px;
+            right:0;
+            height:30px;
+            width:50%;
+            float:right;
+            justify-content: right;
+        }
+        .lobby:hover{
+            background: url("/images/exh/map_lobby.png");
+            background-position-x: right;
+            background-position-y: -23px;
+        }
+        .one{
+            position:absolute;
+            top:60px;
+            right:0;
+            height: 70px;
+            width:40%;
+            float:right;
+        }
+        .one:hover{
+            background: url("/images/exh/map_one.png");
+            background-position-x: right;
+            background-position-y: -60px;
+        }
+        .two{
+            position:absolute;
+            top: 140px;
+            right:160px;
+            width:20%;
+            height: 50px;
+        }
+        .two:hover{
+            background: url("/images/exh/map_two.png");
+            background-position-x: -160px;
+            background-position-y: -140px;
+            /* z-index: 5; */
+        }
+        .three{
+            position:absolute;
+            top:140px;
+            right:0;
+            width: 30%;
+            height: 120px;
+        }
+        .three:hover{
+            background: url("/images/exh/map_three.png");
+            background-position-x: -280px;
+            background-position-y: -140px;
+        }
+        .market{
+            position:absolute;
+            top:200px;
+            right: 130px;
+            width: 55%;
+            height: 50px;
+        }
+        .market:hover{
+            background: url("/images/exh/map_market.png");
+            background-position-x: -450px;
+            background-position-y: -200px;
+        }
+        .mapImg{
+            position:absolute;
+            width:400px;
+            height: 300px;
+        }
+
+        .modal_close{
+            position: relative;
+            right: 10px;
+        }
+        .modal_close a{
+            text-decoration: none;
+            color: #40a798;
+        }
+        .modal_close a:hover{
+            color:#555;
+        }
+        .map_close{
+            position:absolute;
+            right:0px;
+            top:20px;
+            z-index:9;
+        }
+        .map_close a{
+            text-decoration: none;
+            color:#40a798;
+        }
+        .caution{
+            position:absolute;
+            right:0px;
+            bottom:0px;
+            z-index:10;
+            color:#40a798;
+        }
+        /* map css */
+
+        /*    info css  */
+        .info_wrap{
+            display: none;
+            width: 500px;
+            height: 300px;
+            position: absolute;
+            top:50%;
+            left: 50%;
+            margin: -250px 0 0 -250px;
+            background:#40a798;
+            z-index: 2;
+        }
+        .infoBx{
+            background: url("/images/exh/map_info.jpg");
+            width: 100%;
+            height: 100%;
+        }
+        .info_close{
+            position:absolute;
+            right:10px;
+            top:10px;
+            z-index:9;
+        }
+        .info_close a{
+            text-decoration: none;
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <a href="#" id="modal_btn"><i class="fas fa-door-closed"></i>CLOSE</a>
+    <a href="#" id="map_btn"><i class="fas fa-map-signs"></i>MAP</a>
+    <a href="#" id="info_btn"><i class="fas fa-info-circle"></i>INFO</a>
+</div>
+
+<div class="black_bg"></div>
+
+<!-- 안내 modal -->
+<div class="info_wrap">
+    <div class="info_close"><a href="#"><i class="fas fa-times fa-3x"></i></a></div>
+    <div class="infoBx">
+    </div>
+</div>
+
+<!-- 나가기 modal -->
+<div class="modal_wrap">
+    <div class="modalBx">
+
+        <div class="modalContent">
+            정말 나가시겠습니까?
+        </div>
+        <div class="answerBtn">
+            <a th:href="@{/}">네</a>
+            <a  class="modal_close" href="#">아니요</a>
+        </div>
+    </div>
+</div>
+
+<!-- 지도 modal -->
+<div class="map_wrap">
+    <div class="outBx">
+        <div class="map_close"><a href="#"><i class="fas fa-times fa-3x"></i></a></div>
+        <div class="caution"><small>
+            ※ 클릭시 원하는 위치로 이동합니다.</small></div>
+        <div class="mapModal">
+            <img src="/images/exh/maplabeledbg.png">
+            <div class="mapItem">
+                <a class="lobby" th:href="@{/exhibition/exh1}"><img src="/images/exh/map_lobby.png" class="mapImg"></a>
+                <a class="one" th:href="@{/exhibition/theme1}"><img src="/images/exh/map_one.png" class="mapImg"></a>
+                <a class="two" th:href="@{/exhibition/theme2}"><img src="/images/exh/map_two.png" class="mapImg"></a>
+                <a class="market" th:href="@{/market}"><img src="/images/exh/map_market.png" class="mapImg"></a>
+                <a class="three" th:href="@{/exhibition/theme3}"><img src="/images/exh/map_three.png" class="mapImg"></a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<section layout:fragment="exh_content"></section>
+</body>
+
+
+<script>
+    window.onload = function() {
+
+        function onClick() {
+            document.querySelector('.modal_wrap').style.display ='block';
+            document.querySelector('.black_bg').style.display ='block';
+        }
+        function offClick() {
+            document.querySelector('.modal_wrap').style.display ='none';
+            document.querySelector('.black_bg').style.display ='none';
+        }
+        function mapOnClick(){
+            document.querySelector('.map_wrap').style.display ='block';
+            document.querySelector('.black_bg').style.display ='block';
+        }
+        function mapOffClick() {
+            document.querySelector('.map_wrap').style.display ='none';
+            document.querySelector('.black_bg').style.display ='none';
+        }
+        function infoOnClick(){
+            document.querySelector('.info_wrap').style.display ='block';
+            document.querySelector('.black_bg').style.display ='block';
+        }
+        function infoOffClick() {
+            document.querySelector('.info_wrap').style.display ='none';
+            document.querySelector('.black_bg').style.display ='none';
+        }
+        document.getElementById('modal_btn').addEventListener('click', onClick);
+        document.querySelector('.modal_close').addEventListener('click', offClick);
+
+        document.getElementById('map_btn').addEventListener('click', mapOnClick);
+        document.querySelector('.map_close').addEventListener('click', mapOffClick);
+
+        document.getElementById('info_btn').addEventListener('click', infoOnClick);
+        document.querySelector('.info_close').addEventListener('click', infoOffClick);
+
+
+    };
+</script>
+
+</html>
