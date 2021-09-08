@@ -16,7 +16,7 @@
             <table class="table table-sm">
                 <thead>
                 <tr>
-                    <th></th>
+                    <th>번호</th>
                     <th>작품 정보</th>
                     <th>작품 상태</th>
                     <th>
@@ -26,8 +26,8 @@
                 </thead>
 
                 <div class="row" th:if="${status} == 'Exist'">
-                    <td></td>
                     <div th:each="like : ${likeVoList}" class="mx-3">
+                        <td th:text="${like.num}"></td>
 
                         <td>
                             <img th:src="${like.filePath}" style="border: 1px solid black; width: 120px; height: 120px;">

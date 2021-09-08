@@ -14,6 +14,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Optional<List<Comment>> findByWork(Work work);
     Optional<Comment> findByMemberAndContentsAndWork(Member member, String contents, Work work);
-
+    List<Comment> findAllByMember(Member member);
 
 }

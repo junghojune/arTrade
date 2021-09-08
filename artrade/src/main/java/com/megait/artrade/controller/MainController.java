@@ -9,6 +9,7 @@ import com.megait.artrade.authentication.EmailService;
 import com.megait.artrade.authentication.SignUpForm;
 import com.megait.artrade.authentication.SignUpFormValidator;
 import com.megait.artrade.comment.Comment;
+import com.megait.artrade.comment.CommentListVo;
 import com.megait.artrade.comment.CommentService;
 import com.megait.artrade.like.Like;
 import com.megait.artrade.like.LikeRepository;
@@ -203,6 +204,29 @@ public class MainController {
     @GetMapping("/mypage/comment")
     public String mycomment(@AuthenticationMember Member member, Model model){
         memberinfo(member, model);
+        List<Comment> commentList = commentService.getList(member);
+        List<CommentListVo> commentVoList = new ArrayList<>();
+        if(commentList.size() == 0){
+            model.addAttribute("status", "notExist");
+            model.addAttribute("message", "등록한 댓글이 없습니다.");
+        } else {
+            for (int i = 0; i < commentList.size(); i++) {
+                LocalDateTime uploadAt = commentList.get(i).getCreateAt();
+                int year = uploadAt.getYear();
+                int month = uploadAt.getMonthValue();
+                int dayOfMonth = uploadAt.getDayOfMonth();
+                LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+
+                CommentListVo vo = new CommentListVo();
+                vo.setNum(i+1);
+                vo.setContents(commentList.get(i).getContents());
+                vo.setCreatAt(localDate.toString());
+                vo.setWork(commentList.get(i).getWork());
+                commentVoList.add(vo);
+            }
+            model.addAttribute("status", "Exist");
+            model.addAttribute("commentVoList", commentVoList);
+        }
         return "mypage/my_comment";
     }   
     @GetMapping("/mypage/upload")
@@ -216,6 +240,7 @@ public class MainController {
             int month = uploadAt.getMonthValue();
             int dayOfMonth = uploadAt.getDayOfMonth();
             LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+
             WorkVo workVo = new WorkVo();
             workVo.setTitle(workList.get(i).getTitle());
             workVo.setDate(localDate.toString());
@@ -248,6 +273,7 @@ public class MainController {
             int dayOfMonth = uploadAt.getDayOfMonth();
             LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
             LikeVo likeVo = new LikeVo();
+            likeVo.setNum(i+1);
             likeVo.setTitle(likeList.get(i).getWork().getTitle());
             likeVo.setFilePath(likeList.get(i).getWork().getFilePath());
             likeVo.setPopularity(likeList.get(i).getWork().getPopularity());
@@ -307,7 +333,7 @@ public class MainController {
 
        }
         model.addAttribute("workList", workList);
-
+        model.addAttribute("sort","main");
         return "auction/market";
     }
 
@@ -324,7 +350,7 @@ public class MainController {
 
         }
         model.addAttribute("workList", workList);
-
+        model.addAttribute("sort","lates");
 
         return  "auction/market";
     }
@@ -341,7 +367,7 @@ public class MainController {
 
         }
         model.addAttribute("workList", workList);
-
+        model.addAttribute("sort", "popularity");
 
         return  "auction/market";
     }

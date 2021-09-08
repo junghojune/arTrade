@@ -12,37 +12,24 @@
 <div class="mypage-content">
     <div class="container p-5">
         <h2>작성 댓글 보기</h2>
-        <p>Total : 12</p>
 
         <table class="table table-sm">
             <thead class="thead-light">
             <tr>
                 <th>번호</th>
+                <th>작품명</th>
                 <th>내용</th>
                 <th>날짜</th>
-                <th>추천수</th>
             </tr>
             </thead>
-            <tbody>
-            <tr>
-                <td>1</td>
-                <td>댓글 내용~~~~</td>
-                <td>2021.08.11</td>
-                <td>2</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>222222</td>
-                <td>2021.08.11</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>33333333</td>
-                <td>2021.08.11</td>
-                <td>0</td>
-            </tr>
-            </tbody>
+            <div class="row" th:if="${status} == 'Exist'">
+                <div th:each="comment : ${commentVoList}" class="mx-3">
+                    <td th:text="${comment.num}"></td>
+                    <td th:text="${comment.work.title}"></td>
+                    <td th:text="${comment.contents}"></td>
+                    <td th:text="${comment.creatAt}"></td>
+                </div>
+            </div>
         </table>
 
 

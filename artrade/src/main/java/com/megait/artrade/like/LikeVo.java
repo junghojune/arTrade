@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class LikeVo {
 
+    private int num;
     private String title;
     private String filePath;
     private int popularity;

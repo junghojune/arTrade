@@ -38,6 +38,10 @@ public class CommentService {
         return comment;
     }
 
+    public List<Comment> getList(Member member){
+        List<Comment> commentList = commentRepository.findAllByMember(member);
+        return commentList;
+    }
 
 
     // 댓글 저장
