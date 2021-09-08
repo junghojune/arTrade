@@ -94,8 +94,11 @@ public class MainController {
 
         model.addAttribute("member", member);
 
-        List<Work> workList = workService.latesOrder();
-        model.addAttribute("workList", workList);
+        List<Work> latesList = workService.latesOrder();
+        model.addAttribute("latesList", latesList);
+
+        List<Work> popList = workService.topPopularityRanking();
+        model.addAttribute("popList", popList);
 
         return "index";
     }
@@ -163,8 +166,6 @@ public class MainController {
         String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
         String basePath = rootPath + "/testFileUpload";
         String webPath = "/work/list";
-
-
 
         if (!file.isEmpty()) {
             String originalName = file.getOriginalFilename();
@@ -782,4 +783,12 @@ public class MainController {
 
     @GetMapping("/exhibition/theme1")
     public String theme1(){return "/exhibition/theme1";}
+    @GetMapping("/exhibition/theme1_2")
+    public String theme1_2(){return "/exhibition/theme1_2";}
+    @GetMapping("/exhibition/theme1_3")
+    public String theme1_3(){return "/exhibition/theme1_3";}
+    @GetMapping("/exhibition/theme1_4")
+    public String theme1_4(){return "/exhibition/theme1_4";}
+
+
 }

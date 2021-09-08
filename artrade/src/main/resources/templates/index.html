@@ -11,6 +11,12 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script th:src="@{https://code.jquery.com/jquery-1.12.4.js}"></script>
     <script th:src="@{https://code.jquery.com/ui/1.12.1/jquery-ui.js}"></script>
+
+    <script>
+        function itemDetail(itemId){
+            location.href = "/auction/" + itemId;
+        }
+    </script>
 </head>
 
 <body>
@@ -22,7 +28,9 @@
             <div class="title col-4">
                 <h2>지금 가장 인기 있는 작품</h2>
                 <p>
-                    <a class="btn btn-dark" th:href="@{/market/popularity}">인기 작품 보러가기</a>
+                    <a class="btn btn-dark" th:href="@{/market/popularity}">
+                        <i class="fas fa-caret-right"></i>&nbsp;
+                        인기 작품 보러가기</a>
                 </p>
                 <div class="searchBox mx-auto" style="background-color:#fff; width: 350px; border-radius: 10px; height:30px";>
                     <form class="form-inline" th:action="@{/auction/search}">
@@ -34,16 +42,13 @@
                 <script th:src="@{/js/work/workList.js}"></script>
                 <script th:src="@{/js/work/search.js}"></script>
             </div>
-            <!-- 이미지 슬라이드!!!! -->
+            <!-- 인기 작품 슬라이드!!!! -->
             <div class="popwork col-8">
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img src="/images/work_list/img1.jpg"></div>
-                        <div class="swiper-slide"><img src="/images/work_list/img2.jpg"></div>
-                        <div class="swiper-slide"><img src="/images/work_list/img3.jpg"></div>
-                        <div class="swiper-slide"><img src="/images/work_list/img4.jpg"></div>
-                        <div class="swiper-slide"><img src="/images/work_list/img5.jpg"></div>
-                        <div class="swiper-slide"><img src="/images/work_list/img6.jpg"></div>
+                        <div class="swiper-slide" th:each="work : ${popList}">
+                            <img th:src="${work.filePath}">
+                        </div>
                     </div>
                     <!-- Add Pagination -->
                     <!-- <div class="swiper-pagination"></div> -->
@@ -112,10 +117,13 @@
     <section class="work" id="work" style="background-color: lightblue">
         <div class="title white">
             <h2>Recent Work</h2>
-            <a th:href="@{/market/lates}"><p><button>최신 작품 보러가기</button></p></a>
+            <a class="btn btn-dark mt-5" th:href="@{/market/lates}">
+                <i class="fas fa-caret-right"></i>&nbsp;
+                최신 작품 보러가기</a>
         </div>
         <div class="container">
-            <div class="card" th:each="work : ${workList}" th:onclick="itemDetail([[${work.id}]])">
+            <div th:each="work, i : ${latesList}">
+            <div class="card" th:if="${i.count < 7}" style="margin:0;">
                 <div class="imgBx">
                     <img th:src="${work.filePath}">
                 </div>
@@ -123,9 +131,13 @@
                     <div class="content">
                         <h3 th:text="'[ ' +${work.title} + ' ]'">[ 작품 이름 A ]</h3>
                         <p th:text="'작가 : ' + ${work.copyrightHolder.nickname}">작가 : name <br/>작품 설명</p>
-                        <button th:href="@{auction/${work.id}}">자세히 보러가기</button>
+                        <a class="btn btn-dark" th:onclick="itemDetail([[${work.id}]])" style="background:#40a798; border:none;">
+                            <i class="fas fa-caret-right"></i>&nbsp;
+                            자세히 보러가기
+                        </a>
                     </div>
                 </div>
+            </div>
             </div>
         </div>
     </section>

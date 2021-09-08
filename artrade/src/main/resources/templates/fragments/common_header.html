@@ -1,12 +1,12 @@
 <header class="commonheader">
     <a th:href="@{/}" class="logo"><img src="/images/logo_transparent.png"></a>
-    <div class="toggle" onclick="toggleMenu();"></div>
     <ul class="navigation">
         <li><a th:href="@{/}" style="--i:1;">Home</a></li>
         <li><a th:href="@{#services}" style="--i:2;">Menu</a></li>
         <li><a th:href="@{#work}" style="--i:3;">Works</a></li>
         <li><a th:href="@{#about}" style="--i:4;">About</a></li>
     </ul>
+    <div class="toggle" onclick="toggleMenu();"></div>
     <div class="useraction">
         <div class="userprofile" onclick="toggleUser();">
             <i class="far fa-user"></i>
