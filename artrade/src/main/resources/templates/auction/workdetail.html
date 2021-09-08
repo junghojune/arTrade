@@ -93,6 +93,11 @@
       display: flex;
       justify-content: center;
     }
+    .card-body{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
   </style>
 
@@ -176,7 +181,7 @@
                 style="font-size:30px;"> 2ETH</span>
         </div>
 
-        <div  th:if="${!work.timeoutAuction}" class="btn btn-block btn-outline-info col-12" id="suggest">경매가제시하기</div>
+        <div th:if="${!work.timeoutAuction}" class="btn btn-block btn-outline-info col-12" id="suggest">경매가제시하기</div>
         <form th:action="@{/auction/buy}" th:if="${work.timeoutAuction}">
           <input type="hidden" th:value="${work.id}" th:name="id">
           <input type="submit" th:value="구매하기"
@@ -233,7 +238,7 @@
 
 
     <!--  표현식을 넣을 위치 -->
-    <div class="card my-5">
+    <div class="card my-3 mb-5">
       <div class="card-body" th:text="${work.contents}">
         작품에 관한 설명이 없습니다.
       </div>
@@ -261,16 +266,15 @@
             console.log(data);
             $.each(data,function (i, e) {
               html += '<label name = "comment">';
-              html += '<i class="fas fa-user"></i>';
               html += '</label>';
-              html += '<div id = "comments-nickName">';
+              html += '<div id = "comments-nickName" class="ml-3"><b>';
               html += e.nickname;
-              html += '</div>';
-              html += '<div id = "comments-contents" >';
-              html += e.comment;
-              html += '</div>';
-              html += '<div id = "comments-time">';
+              html += '</b></div>';
+              html += '<div id = "comments-time" class="col-10"><small>';
               html += e.time;
+              html += '</small></div>';
+              html += '<div id = "comments-contents" class="col-12 my-2 ml-3 mb-4">';
+              html += e.comment;
               html += '</div>';
 
             });
@@ -326,20 +330,27 @@
     </script>
 
     <div id="comment-count" class="replyCount">댓글 <span id="cnt">0</span></div>
-    <div class="card replyList" id="comments">
+    <div class="card replyList">
+      <div class="row col-12 p-2 m-0 my-2" id="comments">
+
+      </div>
     </div>
 
     <!-- 댓글 달 창 -->
-    <div class="container-comment mb-5">
-      <label name="comment"><i class="fas fa-user"></i></label>
-
+    <div class="container-comment mt-3 mb-5">
       <div>
         <input type="hidden" id="bno" th:value="${work.id}">
       </div>
 
-      <div id="form-commentInfo" class="row">
-        <input type="text" id="comment-input" placeholder="댓글을 입력해 주세요." class="col-8 form-control ml-3">
-        <input type="submit" id="submit" class="btn btn-outline-dark float-right col-3 ml-3" value="댓글 작성">
+      <div id="form-commentInfo" class="row bg-light" style="border:1px solid #ccc; border-radius: 5px; height: 100px; padding:5px; padding-bottom: 15px;">
+        <div class="col-12" style="padding-bottom: 3px;"><small><i class="fas fa-pen"></i>&nbsp;댓글쓰기</small></div>
+        <div class="mx-2 pt-2" style="width:60px; border:1px solid #ddd; border-radius: 5px; background: #eee; color:#555;"><i class="fas fa-user fa-2x col-1"></i></div>
+        <input type="text" id="comment-input" placeholder="댓글을 입력해 주세요." class="col-10 form-control" style="height: 50px;" sec:authorize="isAuthenticated()">
+        <input type="submit" id="submit" class="btn btn-outline-dark float-right col-1 mx-1" value="댓글 작성" sec:authorize="isAuthenticated()">
+
+        <!--  로그인 안했을 때 -->
+        <input type="text" placeholder="로그인이 필요한 서비스입니다." class="col-10 form-control" style="height: 50px;" sec:authorize="!isAuthenticated()" disabled/>
+        <input type="submit" class="btn btn-outline-dark float-right col-1 mx-1" value="댓글 작성" sec:authorize="!isAuthenticated()" disabled/>
       </div>
     </div>
 
