@@ -115,75 +115,15 @@
             <a th:href="@{/market/lates}"><p><button>최신 작품 보러가기</button></p></a>
         </div>
         <div class="container">
-            <div class="card">
+            <div class="card" th:each="work : ${workList}" th:onclick="itemDetail([[${work.id}]])">
                 <div class="imgBx">
-                    <img src="/images/work_list/img1.jpg">
+                    <img th:src="${work.filePath}">
                 </div>
                 <div class="contentBx">
                     <div class="content">
-                        <h3>[ 작품 이름 A ]</h3>
-                        <p>작가 : name <br/>작품 설명</p>
-                        <button href="#">자세히 보러가기</button>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="imgBx">
-                    <img src="/images/work_list/img2.jpg">
-                </div>
-                <div class="contentBx">
-                    <div class="content">
-                        <h3>[ 작품 이름 B ]</h3>
-                        <p>작가 : name <br/>작품 설명</p>
-                        <button>자세히 보러가기</button>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="imgBx">
-                    <img src="/images/work_list/img3.jpg">
-                </div>
-                <div class="contentBx">
-                    <div class="content">
-                        <h3>[ 작품 이름 C ]</h3>
-                        <p>작가 : name <br/>작품 설명</p>
-                        <button>자세히 보러가기</button>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="imgBx">
-                    <img src="/images/work_list/img4.jpg">
-                </div>
-                <div class="contentBx">
-                    <div class="content">
-                        <h3>[ 작품 이름 D ]</h3>
-                        <p>작가 : name <br/>작품 설명</p>
-                        <button>자세히 보러가기</button>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="imgBx">
-                    <img src="/images/work_list/img5.jpg">
-                </div>
-                <div class="contentBx">
-                    <div class="content">
-                        <h3>[ 작품 이름 E ]</h3>
-                        <p>작가 : name <br/>작품 설명</p>
-                        <button>자세히 보러가기</button>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="imgBx">
-                    <img src="/images/work_list/img6.jpg">
-                </div>
-                <div class="contentBx">
-                    <div class="content">
-                        <h3>[ 작품 이름 F ]</h3>
-                        <p>작가 : name <br/>작품 설명</p>
-                        <button>자세히 보러가기</button>
+                        <h3 th:text="'[ ' +${work.title} + ' ]'">[ 작품 이름 A ]</h3>
+                        <p th:text="'작가 : ' + ${work.copyrightHolder.nickname}">작가 : name <br/>작품 설명</p>
+                        <button th:href="@{auction/${work.id}}">자세히 보러가기</button>
                     </div>
                 </div>
             </div>

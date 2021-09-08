@@ -94,6 +94,9 @@ public class MainController {
 
         model.addAttribute("member", member);
 
+        List<Work> workList = workService.latesOrder();
+        model.addAttribute("workList", workList);
+
         return "index";
     }
 
@@ -766,7 +769,7 @@ public class MainController {
         return object.toString();
     }
 
-    // 온라인 전시회 입장
+    // 온라인 전시회
     @GetMapping("/exhibition")
     public String exhibition(){
         return "/exhibition/enterpage";
