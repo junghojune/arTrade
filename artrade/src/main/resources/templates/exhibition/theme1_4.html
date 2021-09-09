@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/exh_layout.html}">
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" crossorigin="anonymous">
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Open+Sans+Condensed:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Yeon+Sung&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&family=Yeon+Sung&display=swap" rel="stylesheet">
+    <title>Document</title>
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+    <meta charset="UTF-8">
+    <title>Go to Market!</title>
+    <style>
+        body{
+            background:#c1b8b3;
+        }
+        section{
+            width: 100%;
+            height: 100vh;
+            padding:100px;
+            margin:0;
+            box-sizing: border-box;
+        }
+        .text{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-size: 30px;
+            font-weight: 300;
+            font-family: 'East Sea Dokdo', cursive;
+        }
+        .text h1{
+            font-weight: 300;
+            line-height: 0px;
+        }
+        .text img{
+            position: fixed;
+            bottom: 100px;
+            right: 100px;
+        }
+        .roomBg{
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height: 100%;
+            background: url("/images/exh/room_bg.jpg");
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .roomChair{
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height: 100%;
+            background: url("/images/exh/room_chair.png");
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+            z-index:1;
+            pointer-events: none;
+        }
+
+        .swiper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top:100px;
+            width: 70%;
+            height: 50vh;
+        }
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+
+            /* Center slide text vertically */
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+
+        .swiper-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+<th:block layout:fragment="exh_content">
+    <section>
+        <div class="roomBg"></div>
+
+        <!-- Swiper -->
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="/images/work_list/img1.jpg"></div>
+                <div class="swiper-slide"><img src="/images/work_list/img2.jpg"></div>
+                <div class="swiper-slide"><img src="/images/work_list/img3.jpg"></div>
+                <div class="swiper-slide"><img src="/images/work_list/img4.jpg"></div>
+                <div class="swiper-slide"><img src="/images/work_list/img5.jpg"></div>
+                <div class="swiper-slide"><img src="/images/work_list/img6.jpg"></div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+
+        <!-- Swiper JS -->
+        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+        <!-- Initialize Swiper -->
+        <script>
+            var swiper = new Swiper(".mySwiper", {
+                slidesPerView: 3,
+                spaceBetween: 30,
+                loop: true,
+                autoplay: {
+                    delay: 2500,
+                    disableOnInteraction: false,
+                },
+            });
+        </script>
+
+        <div class="roomChair"></div>
+    </section>
+    <section class="text">
+        <h1>전시회가 종료되었습니다.</h1>
+        <h1>감상한 작품은 모두 <a th:href="@{/market}">오픈마켓</a>에서 만나볼 수 있습니다.</h1>
+        <h1>앞으로 있을 온라인 전시회도 많은 관심 부탁드립니다.</h1>
+        <img th:src="@{/images/logo_white.png}" style="width: 200px;">
+
+    </section>
+</th:block>
+</body>
+</html>

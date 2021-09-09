@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/exh_layout.html}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" crossorigin="anonymous">
+<!-- fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&family=Yeon+Sung&display=swap" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <title>Bubble!</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing: border-box;
+        }
+        .bground{
+            width:100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding:100px;
+            background: beige;
+        }
+        .container{
+            position: relative;
+            width:100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            overflow:hidden;
+
+        }
+        .container span{
+            position:relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 30px;
+            min-height: 30px;
+        }
+        .container span::before{
+            content:'';
+            position:absolute;
+            width:100%;
+            height: 100%;
+            background: url(/images/work_list/img1.jpg);
+            background-position: center;
+            background-size: contain;
+            background-attachment: fixed;
+            transition: 4s;
+            opacity: 0;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .container span:hover::before{
+            width:600%;
+            height:600%;
+            transition: 0s;
+            opacity: 1;
+        }
+        .nxtBtn{
+            position:absolute;
+            bottom:200px;
+            right:200px;
+            z-index: 5;
+            width:100px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            color:transparent;
+        }
+        .nxtBtn:hover{
+            width:100px;
+            height: 50px;
+            background: #333;
+            border-radius: 10px;
+            color:#fff;
+            font-weight: 800;
+            border: 2px dashed #fff;
+        }
+        .bground h1{
+            font-family: 'East Sea Dokdo', cursive;
+            font-size: 3em;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+<th:block layout:fragment="exh_content">
+    <div class="bground">
+        <h1>버튼을 찾아 다음 단계로 이동하세요</h1>
+        <div>
+            <button></button>
+        </div>
+        <a class="nxtBtn" th:href="@{/exhibition/theme1_4}"><i class="fas fa-thumbs-up fa-2x"></i></a>
+        <section class="container"></section>
+    </div>
+    <script>
+        for (let i = 1; i <= 2500; i++){
+            let box = document.createElement('span');
+            document.querySelector('.container').appendChild(box);
+        }
+    </script>
+</th:block>
+</body>
+</html>

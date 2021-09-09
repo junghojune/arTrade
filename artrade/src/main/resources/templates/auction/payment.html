@@ -10,6 +10,24 @@
     <script th:src="@{/js/web3.min.js}"></script>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <!--bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js}"></script>
+    <script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
+
+    <style>
+        .container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        hr{
+            width:100%;
+        }
+    </style>
 </head>
 <body>
 <section layout:fragment="content">
@@ -19,25 +37,21 @@
         <input id="workId" type="hidden" th:value="${work.id}">
 
         <label class="col-lg-2 control-label"><h3>보유 ETH</h3></label>
-        <p> 내 계좌번호 :</p>
+        내 계좌번호 :
         <input id="Account" type="hidden" th:value="${member.walletId}">
         <div  type="text" th:text="${member.walletId}" th:value="${member.walletId}"></div>
-        <button id="checkBalance">보유 ETH 확인</button>
         <p>Balance : <input id="Balance" type="text"></p>
+        <button id="checkBalance" class="btn btn-dark btn-sm" style="width:400px">보유 ETH 확인</button>
 
 
         <hr>
-
-
-
-
-        <hr>
-        <label class="col-lg-2 control-label"><h3>거래</h3></label>
-        <p>나의 계좌 : &nbsp &nbsp &nbsp <input id="From" type="text" th:value="${member.walletId}" readonly> </p>
-        <p>입금계좌 : &nbsp &nbsp &nbsp &nbsp &nbsp <input id="To" type="text" th:value="${work.seller.walletId}"  readonly > </p>
-        <p>Amount : &nbsp <input id="Amount" type="text"  th:value="${work.auction.winingBid}"  readonly></p>
-        <button id="Transfer">Transfer</button>
+        <label class="control-label"><h3>거래</h3></label>
+        <p>나의 계좌 : &nbsp &nbsp &nbsp <input class="form-control" style="width:400px" id="From" type="text" th:value="${member.walletId}" readonly> </p>
+        <p>입금계좌 : &nbsp &nbsp &nbsp &nbsp &nbsp <input class="form-control" style="width:400px" id="To" type="text" th:value="${work.seller.walletId}"  readonly > </p>
+        <p>Amount : &nbsp <input class="form-control" style="width:400px" id="Amount" type="text"  th:value="${work.auction.winingBid}"  readonly></p>
         <p>Transaction Hash : &nbsp  <span id="Tx"></span></p>
+        <button id="Transfer" class="btn btn-dark btn-sm" style="width:400px">Transfer</button>
+        <hr/>
 
 
 

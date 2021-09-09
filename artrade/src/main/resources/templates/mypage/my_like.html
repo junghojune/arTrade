@@ -26,29 +26,30 @@
                 </thead>
 
                 <div class="row" th:if="${status} == 'Exist'">
-                    <div th:each="like : ${likeVoList}" class="mx-3">
-                        <td th:text="${like.num}"></td>
+                    <tr th:each="like : ${likeVoList}" class="my-auto">
+                        <td th:text="${like.num}" class="py-5">1</td>
 
                         <td>
-                            <img th:src="${like.filePath}" style="border: 1px solid black; width: 120px; height: 120px;">
-                        </td>
-
-                        <td>
-                            <div>
-                                <b th:text="${like.title}"></b>
-                                <br/>
-                            <small th:text="${like.date}"><br/>
-                            </small><br/>
-                                <i class="fas fa-heart"><div th:text="${like.popularity}"></div></i>
-                                <i class="fas fa-comment"><div th:text="${like.comment_cnt}"></div></i>
+                            <div class="row">
+                                <div class="col-3">
+                                    <img th:src="${like.filePath}" style="border: 1px solid black; width: 120px; height: 120px;">
+                                </div>
+                                <div class="col-6 py-3 ml-5">
+                                    <b th:text="'[ ' + ${like.title} + ' ]'" style="font-size:18px;">[ 제목 ]</b>
+                                    <br/>
+                                    <div style="font-size:12px; color:#555;">
+                                        <i class="fas fa-heart">&nbsp;<span class="mr-1" th:text="${like.popularity}">2</span></i>
+                                        <i class="fas fa-comment">&nbsp;<span th:text="${like.comment_cnt}">3</span></i><br/>
+                                        <small th:text="${like.date}">2021-09-09<br/></small>
+                                    </div>
+                                </div>
                             </div>
                         </td>
 
-                        <td th:text="${like.autionType}">
+                        <td th:text="${like.autionType}" class="py-5">경매중
                         </td>
-
-
-                    </div>
+                        <td class="py-5"><input type="checkbox"/></td>
+                    </tr>
                 </div>
                 <div th:unless="${status} == 'notExist'">
                 </div>

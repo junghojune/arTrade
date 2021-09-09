@@ -778,17 +778,17 @@ public class MainController {
 
     @GetMapping("/exhibition/exh1")
     public String exh1(){
-        return "/exhibition/exh1";
+        return "exhibition/exh1";
     }
 
     @GetMapping("/exhibition/theme1")
-    public String theme1(){return "/exhibition/theme1";}
+    public String theme1(){return "exhibition/theme1";}
     @GetMapping("/exhibition/theme1_2")
-    public String theme1_2(){return "/exhibition/theme1_2";}
+    public String theme1_2(){return "exhibition/theme1_2";}
     @GetMapping("/exhibition/theme1_3")
-    public String theme1_3(){return "/exhibition/theme1_3";}
+    public String theme1_3(){return "exhibition/theme1_3";}
     @GetMapping("/exhibition/theme1_4")
-    public String theme1_4(){return "/exhibition/theme1_4";}
+    public String theme1_4(){return "exhibition/theme1_4";}
 
 
 }
